@@ -1,0 +1,15 @@
+using DMS.Modules.Labs.Entities;
+using DMS.Persistence;
+using DMS.Shared.Controllers;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DMS.Modules.Labs.Controllers;
+
+[Route("api/[controller]")]
+public class LabController : BaseController<Lab>
+{
+    public LabController(DMSContext context)
+        : base(context)
+    {
+    }
+}
