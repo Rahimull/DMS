@@ -1,0 +1,16 @@
+# React
+DMSUI/node_modules/
+DMSUI/dist/
+
+# ASP.NET
+DMSAPI/bin/
+DMSAPI/obj/
+
+# Visual Studio
+.vs/
+
+# Environment
+.env
+
+# Logs
+*.log
