@@ -92,9 +92,7 @@ export default function AppSidebar() {
 
       </SidebarContent>
 
-      <SidebarMenu>
-        Heloo
-      </SidebarMenu>
+      
 
       {/* ================= FOOTER ================= */}
       <SidebarFooter className="border-t border-border p-4">

@@ -77,6 +77,15 @@ export const sidebarItems= [
 
         badge: 8,
       },
+      {
+        title: "کلینیک",
+
+        path: "/clinic",
+
+        icon: Calendar,
+
+        badge: 8,
+      },
     ],
   },
 

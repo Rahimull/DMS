@@ -5,36 +5,59 @@ import {
 } from "@/components/dataTable";
 import FormModal from "@/components/modal/FormModal";
 import { Button } from "@/components/ui/button";
-import { patientColumns } from "@/features/patient/columns/patientColumns";
-import { patients } from "@/features/patient/data/patients";
+import ClinicApi from "@/features/clinic/api/ClinicApi";
+import { ClinicColumns } from "@/features/clinic/columns/ClinicColumns";
+import { clinic } from "@/features/clinic/data/clinic";
+import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
+import useLoadData from "@/hooks/useLoadData";
+
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import CreateClinic from "./CreateClinic";
 
-export default function ListPatient() {
-  const [search, setSearch] = useState("");
+export default function Listclinic() {
+  // const [search, setSearch] = useState("");
   const table = useReactTable({
-    data: patients,
-    columns: patientColumns,
+    data: clinic,
+    columns: ClinicColumns,
     getCoreRowModel: getCoreRowModel(),
   });
 
 
 
-//   MODAL SECTION
-const [open, setOpen] = useState(false);
-const [editing, setediting] = useState(null);
+    // for load data
+   // for load data
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const filters = useMemo(
+    () => ({
+      status: filterStatus,
+      fromDate,
+      toDate,
+    }),
+    [filterStatus, fromDate, toDate],
+  );
 
 
-const OpenModal = ()=>{
-    setOpen(true);
-}
+ const curd = useCreatUpdateForm(ClinicApi);
 
-const CloseModal = ()=>{
-    setOpen(false);
+  const {
+    data,
+    totalCount,
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    search,
+    setSearch,
+    dataLoading,
+  } = useLoadData(ClinicApi, { filters, refreshKey:curd.refreshKey });
 
-}
+
+
 
 
 const fields =[
@@ -75,7 +98,7 @@ const fields =[
         <Button 
             size={"sm"} 
             variant={"default"} 
-            onClick={()=> openModal()}
+            onClick={curd.openCreate}
         >
           ثبت بیمار <Plus size={16} />
         </Button>
@@ -84,29 +107,13 @@ const fields =[
      
 
       <div className="space-y-4">
-        <DataTable columns={patientColumns} data={patients} search={search} />
+        <DataTable columns={ClinicColumns} data={clinic} search={search} />
       </div>
 
 
 
-       <FormModal 
-            open={()=> setOpen(true)}
-            onClose={()=> setOpen(false)}
-            fields={fields}
-            title={editing ? "Edit Item" : "Add Item"}
-            submitText={editing ? "Update Item" : "Add Item"}
-       />
 
-      {/* <CrudFormModal
-        open={curd.openModal}
-        onClose={curd.closeModal}
-        title={curd.editing ? "Edit Item" : "Add Item"}
-        onSubmit={curd.handleSubmit}
-        loading={curd.loading}
-        submitText={curd.editing ? "Update Item" : "Add Item"}
-        initialValues={curd.editing}
-        fields={fields}
-      /> */}
+    <CreateClinic curd={curd} />
     </div>
   );
 }

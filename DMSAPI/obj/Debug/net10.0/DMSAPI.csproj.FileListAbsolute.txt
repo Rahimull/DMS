@@ -190,3 +190,4 @@ D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\refint\DMSAPI.dll
 D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\DMSAPI.pdb
 D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\DMSAPI.genruntimeconfig.cache
 D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\ref\DMSAPI.dll
+D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\DMSAPI.sourcelink.json
