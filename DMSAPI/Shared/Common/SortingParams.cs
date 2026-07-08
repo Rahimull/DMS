@@ -1,0 +1,7 @@
+namespace DMS.Models;
+
+public class SortingParams
+{
+    public string? SortBy { get; set; }
+    public bool IsDescending { get; set; }
+}

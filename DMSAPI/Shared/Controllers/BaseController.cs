@@ -2,6 +2,7 @@ using DMS.Persistence;
 using DMS.Shared.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DMS.Models;
 
 namespace DMS.Shared.Controllers;
 
@@ -18,16 +19,53 @@ public abstract class BaseController<TEntity> : ControllerBase
         _db = context.Set<TEntity>();
     }
 
-    [HttpGet]
-    public virtual async Task<IActionResult> GetAll()
+    #region Get Paged
+
+    [HttpPost("paged")]
+    public virtual async Task<IActionResult> GetPaged([FromBody] QueryParams query)
     {
-        return Ok(await _db.ToListAsync());
+        IQueryable<TEntity> data = _db.AsNoTracking()
+                                      .Where(x => !x.IsDeleted);
+
+        // Search
+        if (!string.IsNullOrWhiteSpace(query.Search?.SearchTerm))
+        {
+            var search = query.Search.SearchTerm.ToLower();
+
+            data = data.Where(x =>
+                EF.Property<string>(x, "Name").ToLower().Contains(search));
+        }
+
+        // Total Count
+        var totalCount = await data.CountAsync();
+
+        // Paging
+        var result = await data
+            .Skip(query.Pagination.PageIndex * query.Pagination.PageSize)
+            .Take(query.Pagination.PageSize)
+            .ToListAsync();
+
+        return Ok(new
+        {
+            success = true,
+            data = new
+            {
+                data = result,
+                totalCount
+            }
+        });
     }
+
+    #endregion
+
+    #region GetById
 
     [HttpGet("{id:int}")]
     public virtual async Task<IActionResult> GetById(int id)
     {
-        var entity = await _db.FindAsync(id);
+        var entity = await _db
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
 
         if (entity == null)
             return NotFound();
@@ -35,17 +73,26 @@ public abstract class BaseController<TEntity> : ControllerBase
         return Ok(entity);
     }
 
+    #endregion
+
+    #region Create
+
     [HttpPost]
-    public virtual async Task<IActionResult> Create(TEntity entity)
+    public virtual async Task<IActionResult> Create([FromBody] TEntity entity)
     {
         await _db.AddAsync(entity);
+
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetById), new { id = entity.Id }, entity);
+        return Ok(entity);
     }
 
+    #endregion
+
+    #region Update
+
     [HttpPut("{id:int}")]
-    public virtual async Task<IActionResult> Update(int id, TEntity entity)
+    public virtual async Task<IActionResult> Update(int id, [FromBody] TEntity entity)
     {
         if (id != entity.Id)
             return BadRequest();
@@ -54,8 +101,12 @@ public abstract class BaseController<TEntity> : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        return NoContent();
+        return Ok(entity);
     }
+
+    #endregion
+
+    #region Delete
 
     [HttpDelete("{id:int}")]
     public virtual async Task<IActionResult> Delete(int id)
@@ -69,6 +120,8 @@ public abstract class BaseController<TEntity> : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        return NoContent();
+        return Ok();
     }
+
+    #endregion
 }

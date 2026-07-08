@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import Input from "../common/Input";
 
 
 const From = ({
@@ -9,8 +9,6 @@ const From = ({
   initialValues = null,
   submitText = "Submit",
 }) => {
-
-  
   // ---------------------------
   // 1. Initial State Builder
   // ---------------------------
@@ -102,34 +100,33 @@ const From = ({
 
       console.log("Before Submit");
       await onSubmit(formData);
-      console.log(formData)
+      console.log(formData);
       console.log("After Submit");
 
       if (!initialValues) {
         setFormData(initialState);
       }
     } catch (error) {
-  const response = error.response?.data;
+      const response = error.response?.data;
 
-  console.log("API ERROR:", response);
+      console.log("API ERROR:", response);
 
+      if (response?.errors) {
+        const formattedErrors = {};
 
-  if (response?.errors) {
-    const formattedErrors = {};
+        Object.keys(response.errors).forEach((key) => {
+          formattedErrors[key] = response.errors[key][0];
+        });
 
-    Object.keys(response.errors).forEach((key) => {
-      formattedErrors[key] = response.errors[key][0];
-    });
+        setServerErrors(formattedErrors);
+        return;
+      }
 
-    setServerErrors(formattedErrors);
-    return;
-  }
-
-  setServerErrors({
-    general: response?.message || "Error occurred"
-  });
-  throw error;
-} finally {
+      setServerErrors({
+        general: response?.message || "Error occurred",
+      });
+      throw error;
+    } finally {
       setLoading(false);
     }
   };
@@ -145,51 +142,131 @@ const From = ({
       {/* Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         {fields.map((field) => (
-        
-
           <div
-  key={field.name}
-  className={field.col === 2 ? "col-span-2" : "col-span-1"}
->
-  <div className="flex items-end gap-2">
-    {/* Start Adornment */}
-    {field.startAdornment && (
-      <div className="pb-1">
-        {field.startAdornment}
-      </div>
-    )}
+            key={field.name}
+            className={field.col === 2 ? "col-span-2" : "col-span-1"}
+          >
+            <div className="flex items-end gap-2">
+              {/* Start Adornment */}
+              {field.startAdornment && (
+                <div className="pb-1">{field.startAdornment}</div>
+              )}
 
-    {/* Input */}
-    <div className="flex-1">
-      <Input
-        label={field.label}
-        name={field.name}
-        type={field.type || "text"}
-        autoFocus={field.autoFocus || false}
-        value={formData[field.name] || ""}
-        onChange={handleChange}
-        options={field.options || []}
-        maxLength={field.maxLength || 100}
-        placeholder={field.placeholder}
-        error={serverErrors[field.name] || errors[field.name]}
-      />
-    </div>
+              {/* Input */}
+              <div className="flex-1">
+                <Input
+                  label={field.label}
+                  name={field.name}
+                  type={field.type || "text"}
+                  autoFocus={field.autoFocus || false}
+                  value={formData[field.name] || ""}
+                  onChange={handleChange}
+                  options={field.options || []}
+                  maxLength={field.maxLength || 100}
+                  placeholder={field.placeholder}
+                  error={serverErrors[field.name] || errors[field.name]}
+                />
+              </div>
 
-    {/* End Adornment */}
-    {field.endAdornment && (
-      <div className="pb-1">
-        {field.endAdornment}
-      </div>
-    )}
-  </div>
-</div>
+              {/* End Adornment */}
+              {field.endAdornment && (
+                <div className="pb-1">{field.endAdornment}</div>
+              )}
+            </div>
+          </div>
         ))}
       </div>
 
       {/* Submit Button */}
-      <Button type="submit" variant="primary" disabled={loading}>
+      {/* <Button 
+        type="submit" 
+        variant="primary" 
+        disabled={loading}
+       
+      >
         {loading ? "Loading..." : submitText}
-      </Button>
+      </Button> */}
+
+      {/* Submit Button */}
+      <div className="mt-6 flex items-center justify-end gap-3 border-t border-slate-200 pt-5">
+        {/* Cancel Button */}
+        <Button
+          type="button"
+          onClick={""}
+          disabled={loading}
+          className="
+            rounded-xl  
+            border
+            border-slate-300
+            bg-white
+            px-6
+            py-4
+            text-sm
+            font-semibold
+            text-slate-700
+            shadow-sm
+            transition-all
+            duration-200
+            hover:bg-slate-100
+            hover:shadow-md
+            focus:outline-none
+            focus:ring-4
+            focus:ring-slate-200
+            disabled:cursor-not-allowed
+            disabled:opacity-50
+          "
+        >
+          انصراف
+        </Button>
+
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          disabled={loading}
+          className="
+            flex
+            items-center
+            justify-center
+            gap-2
+            rounded-xl
+            bg-blue-600
+            px-8
+            py-4
+            text-sm
+            font-semibold
+            text-white
+            shadow-md
+            transition-all
+            duration-200
+            hover:bg-blue-700
+            hover:shadow-lg
+            focus:outline-none
+            focus:ring-4
+            focus:ring-blue-200
+            disabled:cursor-not-allowed
+            disabled:opacity-60
+          "
+        >
+          {loading ? (
+            <>
+              <span
+                className="
+                  h-4
+                  w-4
+                  animate-spin
+                  rounded-full
+                  border-2
+                  border-white
+                  border-t-transparent
+                "
+              />
+              در حال ذخیره...
+            </>
+          ) : (
+            <>💾 {submitText || "ذخیره اطلاعات"}</>
+          )}
+        </Button>
+      </div>
     </form>
   );
 };

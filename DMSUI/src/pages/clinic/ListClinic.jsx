@@ -3,7 +3,6 @@ import {
   DataTablePagination,
   DataTableToolbar,
 } from "@/components/dataTable";
-import FormModal from "@/components/modal/FormModal";
 import { Button } from "@/components/ui/button";
 import ClinicApi from "@/features/clinic/api/ClinicApi";
 import { ClinicColumns } from "@/features/clinic/columns/ClinicColumns";
@@ -16,6 +15,7 @@ import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import CreateClinic from "./CreateClinic";
+import ClinicForm from "@/features/clinic/components/ClinicForm";
 
 export default function Listclinic() {
   // const [search, setSearch] = useState("");
@@ -55,6 +55,9 @@ export default function Listclinic() {
     setSearch,
     dataLoading,
   } = useLoadData(ClinicApi, { filters, refreshKey:curd.refreshKey });
+
+
+  console.log("Clinic Data: ",data);
 
 
 
@@ -113,7 +116,7 @@ const fields =[
 
 
 
-    <CreateClinic curd={curd} />
+    <ClinicForm  CURD={curd}/>
     </div>
   );
 }
