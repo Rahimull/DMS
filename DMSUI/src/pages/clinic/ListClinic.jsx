@@ -51,7 +51,9 @@ export default function Listclinic() {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  console.log("Clinic Data: ", data);
+  console.log("Data length: ", data.length)
+
+  
 
   const columns = useMemo(
     () => [
@@ -68,7 +70,7 @@ export default function Listclinic() {
         },
 
         onDelete: (id) => {
-          curd.remove(id);
+          curd.handleDelete(id);
         },
       }),
     ],

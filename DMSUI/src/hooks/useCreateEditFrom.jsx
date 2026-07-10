@@ -15,12 +15,21 @@ const useCreatUpdateForm = (ApiService) => {
     try {
       setLoading(true);
       setError(null);
+      console.log("Sending to API:", data);
 
-      await ApiService.create(data);
+      const res= await ApiService.create(data);
     //   toast.success("Create Successfully");
+    console.log("API Response:", res);
       return true;
     } catch (err) {
       const message = err?.response?.data?.message || "Create failed";
+       console.log("API Error:", err);
+       console.log("STATUS:", err.response?.status);
+
+  console.log(
+    "SERVER ERROR:",
+    err.response?.data
+  );
       setError(message);
     //   toast.error(message);
       return false;
@@ -86,12 +95,16 @@ const useCreatUpdateForm = (ApiService) => {
 
 
   const handleSubmit = async (data)=>{
+
+    console.log("HOOK DATA: ", data)
     let success = false;
 
     if(editing){
+       console.log("UPDATE MODE");
       success = await updateRecord(editing.id, data);
 
     }else{
+       console.log("CREATE MODE");
       success = await createRecord(data);
     }
     if (success){

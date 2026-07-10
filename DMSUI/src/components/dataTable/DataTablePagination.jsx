@@ -41,6 +41,9 @@ export default function DataTablePagination({
 
           <SelectContent>
 
+            <SelectItem value="1">
+              1
+            </SelectItem>
             <SelectItem value="5">
               5
             </SelectItem>

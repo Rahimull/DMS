@@ -50,6 +50,8 @@ const useLoadData = (apiService, { pageSize = 10, filters = {}, refreshKey = 0 }
       const result = res.data.data;
       setData(result.data || []);
       setTotalCount(result.totalCount || 0);
+
+      console.log("res length:",result.data.length)
     } catch (err) {
       console.error(err);
       setError(err?.response?.data?.message || "Failed to fetch data");

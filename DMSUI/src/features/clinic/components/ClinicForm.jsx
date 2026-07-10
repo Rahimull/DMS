@@ -3,6 +3,8 @@ import { clinicFields } from "./ClinicFields";
 
 
 const ClinicForm = ({ CURD }) => {
+  
+
   return (
     <>
       <FormModal

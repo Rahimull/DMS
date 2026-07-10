@@ -1,6 +1,6 @@
 export const clinicFields = [
   {
-    name: "clinic_name",
+    name: "name",
     label: "نام کلینیک",
     type: "text",
     required: true,
@@ -8,7 +8,7 @@ export const clinicFields = [
     placeholder: "نام کلینیک",
   },
   {
-    name: "clinic_address",
+    name: "address",
     label: "ادرس کلینیک",
     type: "text",
     required: true,
@@ -16,18 +16,33 @@ export const clinicFields = [
     placeholder: "ادرس کلینیک",
   },
   {
-    name: "clinic_founder",
+    name: "founderId",
     label: " کلینیک فوندر",
-    type: "text",
+    type: "select",
     required: true,
     maxLength: 100,
     placeholder: " کلینیک فوندر",
+    options: 
+      [
+    { label: "Medicine", value: 1 },
+    { label: "Equipment", value: 2 },
+    { label: "Consumable", value: 3 },
+    { label: "Service", value: 4 },
+  ],
   },
   {
     name: "staffId",
     label: " کلینیک کارمند",
     type: "select",
     required: true,
+    options: 
+      [
+    { label: "Medicine", value: 1 },
+    { label: "Equipment", value: 2 },
+    { label: "Consumable", value: 3 },
+    { label: "Service", value: 4 },
+  ],
+    
     maxLength: 100,
     placeholder: " کلینیک کارمند",
   },
@@ -49,7 +64,7 @@ export const clinicFields = [
   },
 
   {
-    name: "clinic_email",
+    name: "email",
     label: "ایمیل",
     type: "email",
     maxLength: 100,

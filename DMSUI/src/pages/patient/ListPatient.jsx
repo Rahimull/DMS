@@ -89,24 +89,15 @@ const fields =[
 
 
 
-       <FormModal 
+       {/* <FormModal 
             open={()=> setOpen(true)}
             onClose={()=> setOpen(false)}
             fields={fields}
             title={editing ? "Edit Item" : "Add Item"}
             submitText={editing ? "Update Item" : "Add Item"}
-       />
+       /> */}
 
-      {/* <CrudFormModal
-        open={curd.openModal}
-        onClose={curd.closeModal}
-        title={curd.editing ? "Edit Item" : "Add Item"}
-        onSubmit={curd.handleSubmit}
-        loading={curd.loading}
-        submitText={curd.editing ? "Update Item" : "Add Item"}
-        initialValues={curd.editing}
-        fields={fields}
-      /> */}
+      
     </div>
   );
 }
