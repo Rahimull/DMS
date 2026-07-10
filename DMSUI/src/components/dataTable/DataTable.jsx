@@ -70,7 +70,7 @@ export default function DataTable({
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
-         <Table className="min-w-full">
+         <Table className="min-w-[1200px] w-full">
             <TableHeader>
               {table.getHeaderGroups().map((group) => (
                 <TableRow key={group.id}>
