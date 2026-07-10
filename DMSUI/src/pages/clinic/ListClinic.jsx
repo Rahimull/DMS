@@ -1,34 +1,21 @@
 import {
   DataTable,
-  DataTablePagination,
   DataTableToolbar,
 } from "@/components/dataTable";
 import { Button } from "@/components/ui/button";
 import ClinicApi from "@/features/clinic/api/ClinicApi";
 import { ClinicColumns } from "@/features/clinic/columns/ClinicColumns";
-import { clinic } from "@/features/clinic/data/clinic";
 import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
 import useLoadData from "@/hooks/useLoadData";
-
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
-import CreateClinic from "./CreateClinic";
 import ClinicForm from "@/features/clinic/components/ClinicForm";
+import { ClinicActionColumn } from "@/features/clinic/columns/ClinicActionColumn";
 
 export default function Listclinic() {
-  // const [search, setSearch] = useState("");
-  const table = useReactTable({
-    data: clinic,
-    columns: ClinicColumns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
-
-
-    // for load data
-   // for load data
+  // for load data
   const [filterStatus, setFilterStatus] = useState("all");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -41,8 +28,10 @@ export default function Listclinic() {
     [filterStatus, fromDate, toDate],
   );
 
+  // Edit and
+  const [selectedClinic, setSelectedClinic] = useState(null);
 
- const curd = useCreatUpdateForm(ClinicApi);
+  const curd = useCreatUpdateForm(ClinicApi);
 
   const {
     data,
@@ -54,42 +43,41 @@ export default function Listclinic() {
     search,
     setSearch,
     dataLoading,
-  } = useLoadData(ClinicApi, { filters, refreshKey:curd.refreshKey });
+  } = useLoadData(ClinicApi, { filters, refreshKey: curd.refreshKey });
 
+  const table = useReactTable({
+    data: data,
+    columns: ClinicColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
-  console.log("Clinic Data: ",data);
+  console.log("Clinic Data: ", data);
 
+  const columns = useMemo(
+    () => [
+      ...ClinicColumns,
 
+      ClinicActionColumn({
+        onView: (clinic) => {
+          console.log("View:", clinic);
+        },
 
+        onEdit: (clinic) => {
+          setSelectedClinic(clinic);
+          curd.openEdit(clinic);
+        },
 
-
-const fields =[
-      {
-        name: "name",
-        label: "Name [*,  🔑]",
-        type: "text",
-        required: true,
-        maxLength: 100,
-        placeholder:"Suppliers Name"
-      },
-      {
-        name: "contactInfo",
-        label: "Contact Information *",
-        type: "text",
-        placeholder: "Phone / Email",
-        maxLength: 50,
-        required: true,
-      },
-      {
-        name: "address",
-        label: "Address",
-        type: "textarea",
-      },
-    ];
+        onDelete: (id) => {
+          curd.remove(id);
+        },
+      }),
+    ],
+    [curd],
+  );
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت بیماران</h2>
+      <h2 className="text-3xl font-bold text-slate-800">مدیریت کلینیک</h2>
       <DataTableToolbar
         table={table}
         search={search}
@@ -98,25 +86,27 @@ const fields =[
         onExport={() => console.log("Export")}
         onPrint={() => window.print()}
       >
-        <Button 
-            size={"sm"} 
-            variant={"default"} 
-            onClick={curd.openCreate}
+        <Button
+          size={"sm"}
+          variant={"default"}
+          onClick={() => {
+            setSelectedClinic(null);
+            curd.openCreate();
+          }}
         >
-          ثبت بیمار <Plus size={16} />
+          ثبت کلینیک <Plus size={16} />
         </Button>
       </DataTableToolbar>
 
-     
-
       <div className="space-y-4">
-        <DataTable columns={ClinicColumns} data={clinic} search={search} />
+        <DataTable
+          columns={columns}
+          data={data}
+          search={search}
+        />
       </div>
 
-
-
-
-    <ClinicForm  CURD={curd}/>
+      <ClinicForm CURD={curd} />
     </div>
   );
 }

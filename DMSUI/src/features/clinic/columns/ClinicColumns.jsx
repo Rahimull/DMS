@@ -9,138 +9,117 @@ import DataTableColumnHeader from "@/components/dataTable/DataTableColumnHeader"
 
 export const ClinicColumns= [
   {
-  accessorKey: "clinicCode",
+  accessorKey: "name",
 
   header: ({ column }) => (
     <DataTableColumnHeader
       column={column}
-      title="کد بیمار"
+      title="نام کلینیک"
+    />
+  ),
+},
+ 
+  {
+  accessorKey: "address",
+
+  header: ({ column }) => (
+    <DataTableColumnHeader
+      column={column}
+      title="ادرس کلینیک"
     />
   ),
 },
  
 
   {
-    id:"fullName",
-
-    header:({column})=>(
-        <DataTableColumnHeader
-            column={column}
-            title="نام بیمار"
-        />
-    ),
-
-    accessorFn:(row)=>
-        `${row.firstName} ${row.lastName}`,
-
-    filterFn:"includesString",
-
-    cell:({row})=>{
-
-        const clinic=row.original;
-
-        return(
-
-            <div>
-
-                <p className="font-semibold">
-
-                    {clinic.firstName} {clinic.lastName}
-
-                </p>
-
-                <p className="text-xs text-slate-500">
-
-                    {clinic.gender}
-
-                </p>
-
-            </div>
-
-        );
-
-    }
-
-},
-
-  {
-  accessorKey: "phone",
+  accessorKey: "phone1",
 
   header: ({ column }) => (
     <DataTableColumnHeader
       column={column}
-      title="شماره تماس"
+      title="شماره تماس اصلی"
+    />
+  ),
+},
+  {
+  accessorKey: "phone2",
+
+  header: ({ column }) => (
+    <DataTableColumnHeader
+      column={column}
+      title=" شماره تماس دوهم"
     />
   ),
 },
 
+  
   {
-    accessorKey: "doctor",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="داکتر"
-      />
-    ),
-  },
-
-  {
-    accessorKey: "status",
+    accessorKey: "founderId",
 
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="وضعیت"
+        title="تمویل کننده"
       />
     ),
 
-    cell: ({ getValue }) => {
-
-      const status = getValue();
-
-      return (
-        <Badge
-        //   variant={
-        //     status === "Active"
-        //       ? "default"
-        //       : "secondary"
-        //   }
-        >
-          {status}
-        </Badge>
-      );
-    },
   },
-
   {
-    id: "actions",
+    accessorKey: "email",
 
-    header: "عملیات",
-
-    cell: () => (
-
-      <div className="flex gap-2">
-
-        <button className="rounded-lg p-2 hover:bg-slate-100">
-
-          <Eye size={18} />
-
-        </button>
-
-        <button className="rounded-lg p-2 hover:bg-blue-100 text-blue-600">
-
-          <Pencil size={18} />
-
-        </button>
-
-        <button className="rounded-lg p-2 hover:bg-red-100 text-red-600">
-
-          <Trash2 size={18} />
-
-        </button>
-
-      </div>
-
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="ایمیل ادرس"
+      />
     ),
+
   },
+  {
+    accessorKey: "createdAt",
+
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="تاریخ ایجاد"
+      />
+    ),
+
+  },
+
+  // {
+  //   id: "actions",
+
+  //   header: "عملیات",
+
+  //   cell: () => (
+
+  //     <div className="flex gap-2">
+
+  //       <button className="rounded-lg p-2 hover:bg-slate-100">
+
+  //         <Eye size={18} />
+
+  //       </button>
+
+  //       <button 
+  //         className="rounded-lg p-2 hover:bg-blue-100 text-blue-600"
+  //         onClick={()=> console.log("Edit")}
+        
+  //       >
+
+  //         <Pencil size={18} />
+
+  //       </button>
+
+  //       <button className="rounded-lg p-2 hover:bg-red-100 text-red-600">
+
+  //         <Trash2 size={18} />
+
+  //       </button>
+
+  //     </div>
+
+  //   ),
+  // },
 ];

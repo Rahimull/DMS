@@ -16,8 +16,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 
-
 export default function DataTableAction({
+
+  row,
 
   onView,
 
@@ -33,6 +34,9 @@ export default function DataTableAction({
 
 }) {
 
+  const item = row.original;
+
+
   return (
 
     <DropdownMenu>
@@ -42,6 +46,7 @@ export default function DataTableAction({
         <Button
           variant="ghost"
           size="icon"
+          className="hover:bg-slate-100"
         >
 
           <MoreHorizontal className="h-5 w-5"/>
@@ -50,11 +55,15 @@ export default function DataTableAction({
 
       </DropdownMenuTrigger>
 
+
       <DropdownMenuContent align="end">
+
 
         {showView && (
 
-          <DropdownMenuItem onClick={onView}>
+          <DropdownMenuItem
+            onClick={() => onView?.(item)}
+          >
 
             <Eye className="mr-2 h-4 w-4"/>
 
@@ -64,9 +73,13 @@ export default function DataTableAction({
 
         )}
 
+
+
         {showEdit && (
 
-          <DropdownMenuItem onClick={onEdit}>
+          <DropdownMenuItem
+            onClick={() => onEdit?.(item)}
+          >
 
             <Pencil className="mr-2 h-4 w-4"/>
 
@@ -76,15 +89,21 @@ export default function DataTableAction({
 
         )}
 
+
+
         {showDelete && (
 
           <>
 
             <DropdownMenuSeparator/>
 
+
             <DropdownMenuItem
-              onClick={onDelete}
-              className="text-red-600 focus:text-red-600"
+              onClick={() => onDelete?.(item.id)}
+              className="
+                text-red-600
+                focus:text-red-600
+              "
             >
 
               <Trash2 className="mr-2 h-4 w-4"/>
@@ -97,10 +116,11 @@ export default function DataTableAction({
 
         )}
 
+
       </DropdownMenuContent>
+
 
     </DropdownMenu>
 
   );
-
 }

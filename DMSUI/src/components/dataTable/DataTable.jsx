@@ -25,10 +25,9 @@ import DataTablePagination from "./DataTablePagination";
 
 export default function DataTable({
   columns,
+  action,
   data,
-
   loading = false,
-
   pageSize = 10,
 
 }) {
@@ -45,9 +44,12 @@ export default function DataTable({
   const [rowSelection, setRowSelection] =
     useState({});
 
+
+  const finalColumns = action ? [...columns, action] : columns;
+
   const table = useReactTable({
     data,
-    columns,
+    columns:finalColumns,
 
     state: {
       sorting,
@@ -96,10 +98,13 @@ export default function DataTable({
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-
+                  
                   </TableHead>
+                 
 
                 ))}
+
+
 
               </TableRow>
 
@@ -112,7 +117,7 @@ export default function DataTable({
             {loading ? (
 
               <DataTableSkeleton
-                columns={columns.length}
+                columns={finalColumns.length}
                 rows={pageSize}
               />
 
@@ -149,7 +154,7 @@ export default function DataTable({
             ) : (
 
               <DataTableEmpty
-                colSpan={columns.length}
+                colSpan={finalColumns.length}
                 title="اطلاعاتی برای نمایش وجود ندارد"
                 description="هیچ رکوردی یافت نشد."
               />
