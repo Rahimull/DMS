@@ -6,11 +6,11 @@ import AppSidebar from "@/components/layout/sidebar/AppSidebar";
 export default function DashboardLayout() {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-slate-50" dir="rtl">
+      <div className="flex min-h-screen w-full bg-slate-50 overflow-hidden" dir="rtl">
 
         <AppSidebar />
 
-        <main className="flex-1">
+        <main className="flex-1 overflow-auto min-w-0">
 
           <Header />
 

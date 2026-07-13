@@ -3,9 +3,9 @@ import axios from "axios";
 
 const Api = axios.create({
   baseURL: "http://localhost:5223/api",
-  headers: {
-    "Content-Type": "application/json",
-  },
+  // headers: {
+  //   "Content-Type": "application/json",
+  // },
 });
 
 Api.interceptors.request.use(

@@ -30,14 +30,14 @@ public class Clinic : BaseEntity
     [Column("clinic_email")]
     public string? Email { get; set; }
 
-    [Column("clinic_founder")]
-    public int? FounderId { get; set; }
+    // [Column("clinic_founder")]
+    // public int? FounderId { get; set; }
 
     [Column("clinic_logo")]
     public byte[]? Logo { get; set; }
 
     // Navigation Property
 
-    [ForeignKey(nameof(FounderId))]
-    public Staff? Founder { get; set; }
+    // [ForeignKey(nameof(FounderId))]
+    // public Staff? Founder { get; set; }
 }

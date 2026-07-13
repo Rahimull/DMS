@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import Input from "../common/Input";
 
-
 const From = ({
   fields,
   onSubmit,
   initialValues = null,
   submitText = "Submit",
+  onCancel,
 }) => {
   // ---------------------------
   // 1. Initial State Builder
@@ -52,11 +52,12 @@ const From = ({
   // 4. Handle Change
   // ---------------------------
   const handleChange = (e) => {
-    const { name, type, value, checked } = e.target;
+    const { name, type, value, checked, files } = e.target;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:
+        type === "checkbox" ? checked : type === "file" ? files[0] : value,
     }));
   };
 
@@ -178,21 +179,11 @@ const From = ({
       </div>
 
       {/* Submit Button */}
-      {/* <Button 
-        type="submit" 
-        variant="primary" 
-        disabled={loading}
-       
-      >
-        {loading ? "Loading..." : submitText}
-      </Button> */}
-
-      {/* Submit Button */}
       <div className="mt-6 flex items-center justify-end gap-3 border-t border-slate-200 pt-5">
         {/* Cancel Button */}
         <Button
           type="button"
-          onClick={""}
+          onClick={onCancel}
           disabled={loading}
           className="
             rounded-xl  

@@ -21,7 +21,6 @@ const Input = ({
 
   return (
     <div className="flex flex-col space-y-1">
-
       {label && type !== "checkbox" && (
         <label className="text-sm font-medium text-right">{label}</label>
       )}
@@ -45,7 +44,9 @@ const Input = ({
           onChange={onChange}
           disabled={disabled}
         >
-          <option value="" disabled>Select...</option>
+          <option value="" disabled>
+            Select...
+          </option>
           {options.map((opt, index) => (
             <option key={index} value={opt.value}>
               {opt.label}
@@ -67,8 +68,33 @@ const Input = ({
           <span>{label}</span>
         </label>
       )}
+      {type === "file" ? (
+        <input
+          className={baseClass}
+          type="file"
+          name={name}
+          onChange={onChange}
+          disabled={disabled}
+          autoFocus={autoFocus}
+        />
+      ) : (
+        !["textarea", "select", "checkbox"].includes(type) && (
+          <input
+            className={baseClass}
+            type={type}
+            name={name}
+            value={value ?? ""}
+            placeholder={placeholder}
+            onChange={onChange}
+            disabled={disabled}
+            maxLength={maxLength}
+            autoFocus={autoFocus}
+            onKeyDown={onKeyDown}
+          />
+        )
+      )}
 
-      {!["textarea", "select", "checkbox"].includes(type) && (
+      {/* {!["textarea", "select", "checkbox"].includes(type) && (
         <input
           className={baseClass}
           type={type}
@@ -81,9 +107,11 @@ const Input = ({
           autoFocus={autoFocus}
           onKeyDown={onKeyDown}
         />
-      )}
+      )} */}
 
-      {error && <span className="text-red-500 text-xs text-right">{error}</span>}
+      {error && (
+        <span className="text-red-500 text-xs text-right">{error}</span>
+      )}
     </div>
   );
 };

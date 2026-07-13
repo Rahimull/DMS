@@ -10,6 +10,7 @@ const FormModal = ({
   onSubmit,
   loading,
   submitText = "ذخیره",
+  onCancel,
 }) => {
   return (
     <Modal
@@ -23,6 +24,7 @@ const FormModal = ({
         onSubmit={onSubmit}
         loading={loading}
         submitText={submitText}
+        onCancel={onClose}
       />
     </Modal>
   );

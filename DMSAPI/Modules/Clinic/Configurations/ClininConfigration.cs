@@ -37,15 +37,15 @@ public class ClinicConfiguration : IEntityTypeConfiguration<Clinic>
                .HasColumnName("clinic_email")
                .HasMaxLength(150);
 
-        builder.Property(x => x.FounderId)
-               .HasColumnName("clinic_founder");
+       //  builder.Property(x => x.FounderId)
+       //         .HasColumnName("clinic_founder");
 
         builder.Property(x => x.Logo)
                .HasColumnName("clinic_logo");
 
-        builder.HasOne(x => x.Founder)
-               .WithMany()
-               .HasForeignKey(x => x.FounderId)
-               .OnDelete(DeleteBehavior.SetNull);
+       //  builder.HasOne(x => x.Founder)
+       //         .WithMany()
+       //         .HasForeignKey(x => x.FounderId)
+       //         .OnDelete(DeleteBehavior.SetNull);
     }
 }

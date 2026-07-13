@@ -1,12 +1,4 @@
-import { useState } from "react";
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 
 import {
   Table,
@@ -16,123 +8,85 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import DataTableSkeleton from "./DataTableSkeleton";
 import DataTableEmpty from "./DataTableEmpty";
 import DataTablePagination from "./DataTablePagination";
 
-export default function DataTable({
-  columns,
-  action,
-  data,
-  loading = false,
-  pageSize = 10,
-}) {
-  const [sorting, setSorting] = useState([]);
+export default function DataTable({ table, loading = false, pageSize = 10 }) {
+  const getStickyClass = (column) => {
+    const sticky = column.columnDef.meta?.sticky;
 
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize,
-  });
+    switch (sticky) {
+      case "right":
+        return "sticky right-0 z-30 bg-white";
 
-  const [columnFilters, setColumnFilters] = useState([]);
+      case "left":
+        return "sticky left-0 z-30 bg-white";
 
-  const [rowSelection, setRowSelection] = useState({});
+      default:
+        return "";
+    }
+  };
 
-  const finalColumns = action ? [...columns, action] : columns;
-
-  const table = useReactTable({
-    data,
-    columns: finalColumns,
-
-    state: {
-      sorting,
-      pagination,
-      columnFilters,
-      rowSelection,
-    },
-
-    onSortingChange: setSorting,
-    onPaginationChange: setPagination,
-    onColumnFiltersChange: setColumnFilters,
-    onRowSelectionChange: setRowSelection,
-
-    enableRowSelection: true,
-
-    getCoreRowModel: getCoreRowModel(),
-
-    getFilteredRowModel: getFilteredRowModel(),
-
-    getSortedRowModel: getSortedRowModel(),
-
-    getPaginationRowModel: getPaginationRowModel(),
-  });
+  const columnsCount = table.getAllColumns().length;
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
-         <Table className="min-w-[1200px] w-full">
-            <TableHeader>
-              {table.getHeaderGroups().map((group) => (
-                <TableRow key={group.id}>
-                  {group.headers.map((header) => (
-                    <TableHead
-                      key={header.id}
-                      className={
-                        header.column.id === "actions"
-                          ? "sticky right-0 z-50 w-16 min-w-16 bg-white shadow-[-4px_0_6px_rgb(0,0,0,0.05)]"
-                          : ""
-                      }
+      <div className="relative overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((group) => (
+              <TableRow key={group.id}>
+                {group.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className={getStickyClass(header.column)}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+
+          <TableBody>
+            {loading ? (
+              <DataTableSkeleton columns={columnsCount} rows={pageSize} />
+            ) : table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() ? "selected" : undefined}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className={getStickyClass(cell.column)}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
                   ))}
                 </TableRow>
-              ))}
-            </TableHeader>
+              ))
+            ) : (
+              <DataTableEmpty
+                colSpan={columnsCount}
+                title="اطلاعاتی برای نمایش وجود ندارد"
+                description="هیچ رکوردی یافت نشد."
+              />
+            )}
+          </TableBody>
+        </Table>
 
-            <TableBody>
-              {loading ? (
-                <DataTableSkeleton
-                  columns={finalColumns.length}
-                  rows={pageSize}
-                />
-              ) : table.getRowModel().rows.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() ? "selected" : undefined}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className={
-                          cell.column.id === "actions"
-                            ? "sticky right-0 z-50 w-16 min-w-16 bg-white border-l shadow-[-4px_0_6px_rgb(0,0,0,0.05)]"
-                            : ""
-                        }
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <DataTableEmpty
-                  colSpan={finalColumns.length}
-                  title="اطلاعاتی برای نمایش وجود ندارد"
-                  description="هیچ رکوردی یافت نشد."
-                />
-              )}
-            </TableBody>
-          </Table>
         <DataTablePagination table={table} />
       </div>
     </div>

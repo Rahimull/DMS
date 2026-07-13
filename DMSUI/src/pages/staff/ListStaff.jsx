@@ -1,17 +1,17 @@
 import { DataTable, DataTableToolbar } from "@/components/dataTable";
 import { Button } from "@/components/ui/button";
-import ClinicApi from "@/features/clinic/api/ClinicApi";
-import { ClinicColumns } from "@/features/clinic/columns/ClinicColumns";
+import StaffApi from "@/features/staff/api/StaffApi";
+import { StaffColumns } from "@/features/staff/columns/StaffColumns";
 import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
 import useLoadData from "@/hooks/useLoadData";
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
-import ClinicForm from "@/features/clinic/components/ClinicForm";
-import { ClinicActionColumn } from "@/features/clinic/columns/ClinicActionColumn";
+import StaffForm from "@/features/staff/components/StaffForm";
+import { StaffActionColumn } from "@/features/staff/columns/StaffActionColumn";
 
-export default function Listclinic() {
+export default function ListStaff() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -25,15 +25,15 @@ export default function Listclinic() {
     [filterStatus, fromDate, toDate],
   );
 
-  const [selectedClinic, setSelectedClinic] = useState(null);
+  const [selectedStaff, setSelectedStaff] = useState(null);
 
   const messages = {
-    create: "کلینیک با موفقیت ثبت شد.",
-    update: "اطلاعات کلینیک با موفقیت ویرایش شد.",
-    delete: "کلینیک با موفقیت حذف شد.",
+    create: "کارمند با موفقیت ثبت شد.",
+    update: "اطلاعات کارمند با موفقیت ویرایش شد.",
+    delete: "کارمند با موفقیت حذف شد.",
   };
 
-  const curd = useCreatUpdateForm(ClinicApi, messages, {useFormData:false});
+  const curd = useCreatUpdateForm(StaffApi, messages, {useFormData:true});
 
   const {
     data,
@@ -46,7 +46,7 @@ export default function Listclinic() {
     setSearch,
     setRefreshKey,
     loading,
-  } = useLoadData(ClinicApi, {
+  } = useLoadData(StaffApi, {
     filters,
     refreshKey: curd.refreshKey,
   });
@@ -54,16 +54,17 @@ export default function Listclinic() {
   // Columns
   const columns = useMemo(
     () => [
-      ...ClinicColumns,
+      ...StaffColumns,
 
-      ClinicActionColumn({
-        onView: (clinic) => {
-          console.log("View:", clinic);
+      StaffActionColumn({
+        onView: (Staff) => {
+          console.log("View:", Staff);
         },
 
-        onEdit: (clinic) => {
-          setSelectedClinic(clinic);
-          curd.openEdit(clinic);
+        onEdit: (Staff) => {
+          setSelectedStaff(Staff);
+          console.log("Staff: ", Staff)
+          curd.openEdit(Staff);
         },
 
         onDelete: (id) => {
@@ -105,7 +106,7 @@ export default function Listclinic() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت کلینیک</h2>
+      <h2 className="text-3xl font-bold text-slate-800">مدیریت کارمند</h2>
 
       <DataTableToolbar
         table={table}
@@ -120,11 +121,11 @@ export default function Listclinic() {
         <Button
           size="sm"
           onClick={() => {
-            setSelectedClinic(null);
+            setSelectedStaff(null);
             curd.openCreate();
           }}
         >
-          ثبت کلینیک
+          ثبت کارمند
           <Plus size={16} />
         </Button>
       </DataTableToolbar>
@@ -135,7 +136,7 @@ export default function Listclinic() {
         pageSize={pagination.pageSize}
       />
 
-      <ClinicForm CURD={curd} />
+      <StaffForm CURD={curd} />
     </div>
   );
 }

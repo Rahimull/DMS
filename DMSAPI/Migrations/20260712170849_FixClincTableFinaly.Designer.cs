@@ -3,6 +3,7 @@ using System;
 using DMS.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMSAPI.Migrations
 {
     [DbContext(typeof(DMSContext))]
-    partial class DMSContextModelSnapshot : ModelSnapshot
+    [Migration("20260712170849_FixClincTableFinaly")]
+    partial class FixClincTableFinaly
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
@@ -1021,11 +1024,11 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("position");
 
-                    b.Property<decimal?>("Prepayment")
+                    b.Property<decimal>("Prepayment")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("prepayment");
 
-                    b.Property<decimal?>("Salary")
+                    b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("salary");
 

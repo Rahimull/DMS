@@ -10,6 +10,7 @@ import DataTableColumnHeader from "@/components/dataTable/DataTableColumnHeader"
 export const ClinicColumns= [
   {
   accessorKey: "name",
+  meta: {sticky: "right"},
 
   header: ({ column }) => (
     <DataTableColumnHeader
@@ -17,6 +18,7 @@ export const ClinicColumns= [
       title="نام کلینیک"
     />
   ),
+ enableSorting:true,
 },
  
   {
@@ -54,17 +56,6 @@ export const ClinicColumns= [
 
   
   {
-    accessorKey: "founderId",
-
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="تمویل کننده"
-      />
-    ),
-
-  },
-  {
     accessorKey: "email",
 
     header: ({ column }) => (
@@ -83,43 +74,11 @@ export const ClinicColumns= [
         column={column}
         title="تاریخ ایجاد"
       />
+    
     ),
+    cell: ({row}) => new Date(row.original.createdAt).toLocaleDateString("fa-IR"),
 
   },
 
-  // {
-  //   id: "actions",
 
-  //   header: "عملیات",
-
-  //   cell: () => (
-
-  //     <div className="flex gap-2">
-
-  //       <button className="rounded-lg p-2 hover:bg-slate-100">
-
-  //         <Eye size={18} />
-
-  //       </button>
-
-  //       <button 
-  //         className="rounded-lg p-2 hover:bg-blue-100 text-blue-600"
-  //         onClick={()=> console.log("Edit")}
-        
-  //       >
-
-  //         <Pencil size={18} />
-
-  //       </button>
-
-  //       <button className="rounded-lg p-2 hover:bg-red-100 text-red-600">
-
-  //         <Trash2 size={18} />
-
-  //       </button>
-
-  //     </div>
-
-  //   ),
-  // },
 ];

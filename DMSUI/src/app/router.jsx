@@ -3,6 +3,7 @@ import DashboardLayout from "../layouts/DahboardLayout";
 import DashboardPage from "../pages/dashboard/Dashboard";
 import PatientsPage from "../pages/patient/PatientsPage";
 import ClinicPage from "../pages/clinic/ClinicPage";
+import StaffPage from "@/pages/staff/StaffPage";
 
 
 export const router = createBrowserRouter([
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "/clinic",
         element: <ClinicPage />,
+        },
+      {
+        path: "/staff",
+        element: <StaffPage />
         },
     ],
   },

@@ -1,7 +1,7 @@
 import DataTableAction from "@/components/dataTable/DataTableAction";
 
 
-export const ClinicActionColumn = ({
+export const StaffActionColumn = ({
   onView,
   onEdit,
   onDelete,

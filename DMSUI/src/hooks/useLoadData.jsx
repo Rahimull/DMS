@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import useDebounce from "./useDebounce";
+import { toast } from "sonner";
+import { notify } from "@/utils/notify";
 
-const useLoadData = (apiService, { pageSize = 10, filters = {}, refreshKey = 0 } = {}) => {
+const useLoadData = (
+  apiService,
+  { pageSize = 10, filters = {}, refreshKey = 0 } = {},
+) => {
   const [data, setData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [dataLoading, setDataLoading] = useState(false);
@@ -12,10 +17,7 @@ const useLoadData = (apiService, { pageSize = 10, filters = {}, refreshKey = 0 }
     pageSize,
   });
 
-  const [sorting, setSorting] = useState({
-    sortBy: null,
-    sortDir: "asc",
-  });
+  const [sorting, setSorting] = useState([]);
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
@@ -23,8 +25,8 @@ const useLoadData = (apiService, { pageSize = 10, filters = {}, refreshKey = 0 }
   const payload = {
     pagination,
     sorting: {
-      sortBy: sorting.sortBy,
-      isDescending: sorting.sortDir === "desc",
+      sortBy: sorting[0]?.id ?? "",
+      isDescending: sorting[0]?.desc ?? false,
     },
     search: {
       searchTerm: debouncedSearch,
@@ -40,10 +42,14 @@ const useLoadData = (apiService, { pageSize = 10, filters = {}, refreshKey = 0 }
       const res = await apiService.getPaged({
         pagination,
         sorting: {
-          sortBy: sorting.sortBy,
-          isDescending: sorting.sortDir === "desc",
+          sortBy: sorting[0]?.id ?? "",
+          isDescending: sorting[0]?.desc ?? false,
         },
-        search: { searchTerm: debouncedSearch },
+
+        search: {
+          searchTerm: debouncedSearch,
+        },
+
         filters,
       });
 
@@ -51,14 +57,16 @@ const useLoadData = (apiService, { pageSize = 10, filters = {}, refreshKey = 0 }
       setData(result.data || []);
       setTotalCount(result.totalCount || 0);
 
-      console.log("res length:",result.data.length)
+      console.log("res length:", result.data.length);
     } catch (err) {
       console.error(err);
-      setError(err?.response?.data?.message || "Failed to fetch data");
+      const message = err?.response?.data?.message || "Failed to fetch data";
+      setError(message);
+      notify.error(message);
     } finally {
       setDataLoading(false);
     }
-  }, [apiService, pagination, sorting, debouncedSearch, filters, refreshKey,]);
+  }, [apiService, pagination, sorting, debouncedSearch, filters, refreshKey]);
 
   // هر بار pagination / sorting / search عوض شود → fetch
   useEffect(() => {

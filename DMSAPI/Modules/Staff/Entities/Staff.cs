@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DMS.Modules.Clinics.Entities;
 using DMS.Shared.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,10 +25,10 @@ public class Staff : BaseEntity
     public string? Position { get; set; }
 
     [Column("salary")]
-    public decimal Salary { get; set; }
+    public decimal? Salary { get; set; }
 
     [Column("prepayment")]
-    public decimal Prepayment { get; set; }
+    public decimal? Prepayment { get; set; }
 
     [Required, Phone, MaxLength(20)]
     [Column("phone")]
@@ -50,8 +49,14 @@ public class Staff : BaseEntity
     [Column("photo")]
     public byte[]? Photo { get; set; }
 
+    [NotMapped]
+    public IFormFile? PhotoFile { get; set; }
+
     [Column("contract_file")]
     public byte[]? ContractFile { get; set; }
+
+    [NotMapped]
+    public IFormFile? ContractFileUpload { get; set; }
 
     [MaxLength(500)]
     [Column("address")]
@@ -63,5 +68,5 @@ public class Staff : BaseEntity
 
     // Navigation Properties
 
-    public ICollection<Clinic> Clinics { get; set; } = new List<Clinic>();
+    // public ICollection<Clinic> Clinics { get; set; } = new List<Clinic>();
 }
