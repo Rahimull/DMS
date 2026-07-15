@@ -1,15 +1,15 @@
 import { DataTable, DataTableToolbar } from "@/components/dataTable";
 import { Button } from "@/components/ui/button";
 
-import { ServiceRequirmentColumns } from "@/features/ServiceRequirment/columns/ServiceRequirmentColumns";
+import { ServiceRequirmentColumns } from "@/features/serviceRequirment/columns/ServiceRequirmentColumns";
 import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
 import useLoadData from "@/hooks/useLoadData";
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
-import ServiceRequirmentForm from "@/features/ServiceRequirment/components/ServiceRequirmentForm";
-import { ServiceRequirmentActionColumn } from "@/features/ServiceRequirment/columns/ServiceRequirmentActionColumn";
+import ServiceRequirmentForm from "@/features/serviceRequirment/components/ServiceRequirmentForm";
+import { ServiceRequirmentActionColumn } from "@/features/serviceRequirment/columns/ServiceRequirmentActionColumn";
 import ServiceRequirmentApi from "../api/ServiceRequirmentApi";
 
 export default function ListServiceRequirment() {

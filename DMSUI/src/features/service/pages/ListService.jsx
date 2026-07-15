@@ -1,15 +1,15 @@
 import { DataTable, DataTableToolbar } from "@/components/dataTable";
 import { Button } from "@/components/ui/button";
 
-import { ServiceColumns } from "@/features/Service/columns/ServiceColumns";
+import { ServiceColumns } from "@/features/service/columns/ServiceColumns";
 import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
 import useLoadData from "@/hooks/useLoadData";
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
-import ServiceForm from "@/features/Service/components/ServiceForm";
-import { ServiceActionColumn } from "@/features/Service/columns/ServiceActionColumn";
+import ServiceForm from "@/features/service/components/ServiceForm";
+import { ServiceActionColumn } from "@/features/service/columns/ServiceActionColumn";
 import ServiceApi from "../api/ServiceApi";
 
 export default function ListService() {

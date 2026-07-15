@@ -1,15 +1,15 @@
 import { DataTable, DataTableToolbar } from "@/components/dataTable";
 import { Button } from "@/components/ui/button";
 
-import { ConditionColumns } from "@/features/Condition/columns/ConditionColumns";
+import { ConditionColumns } from "@/features/condition/columns/ConditionColumns";
 import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
 import useLoadData from "@/hooks/useLoadData";
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
-import ConditionForm from "@/features/Condition/components/ConditionForm";
-import { ConditionActionColumn } from "@/features/Condition/columns/ConditionActionColumn";
+import ConditionForm from "@/features/condition/components/ConditionForm";
+import { ConditionActionColumn } from "@/features/condition/columns/ConditionActionColumn";
 import ConditionApi from "../api/ConditionApi";
 
 export default function ListCondition() {
