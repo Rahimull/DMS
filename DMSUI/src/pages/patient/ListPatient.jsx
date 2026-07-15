@@ -1,6 +1,6 @@
 import { DataTable, DataTableToolbar } from "@/components/dataTable";
 import { Button } from "@/components/ui/button";
-import PatientApi from "@/features/Patient/api/PatientApi";
+import PatientApi from "@/features/patient/api/PatientApi";
 
 import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
 import useLoadData from "@/hooks/useLoadData";
@@ -9,7 +9,7 @@ import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { PatientActionColumn } from "@/features/Patient/columns/PatientActionColumn";
+import { PatientActionColumn } from "@/features/patient/columns/PatientActionColumn";
 import { PatientColumns } from "@/features/patient/columns/PatientColumns";
 import PatientForm from "@/features/patient/components/PatientForm";
 
