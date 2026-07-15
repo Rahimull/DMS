@@ -18,72 +18,69 @@ const ServiceTable = ({ services = [], onChange, onAdd }) => {
   );
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row justify-between items-center">
-        <CardTitle>🦷 Treatment Services</CardTitle>
+    <Card dir="rtl">
+  <CardHeader className="flex flex-row-reverse justify-between items-center">
+    <CardTitle className="text-right">
+      🦷 خدمات تداوی
+    </CardTitle>
 
-        <Button size="sm" onClick={onAdd}>
-          <Plus size={16} />
-          Add Service
-        </Button>
-      </CardHeader>
+    <Button size="sm" onClick={onAdd}>
+      <Plus size={16} />
+      افزودن خدمت
+    </Button>
+  </CardHeader>
 
-      <CardContent>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b">
-                <th className="p-3 text-left">Service</th>
+  <CardContent>
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm text-right">
+        <thead>
+          <tr className="border-b">
+            <th className="p-3 text-right">خدمت</th>
+            <th className="text-right">فیس</th>
+            <th className="text-right">تعداد</th>
+            <th className="text-right">مجموع</th>
+            <th className="text-right">عملیات</th>
+          </tr>
+        </thead>
 
-                <th>Fee</th>
+        <tbody>
+          {services.map((item) => (
+            <tr key={item.id} className="border-b">
+              <td className="p-3">{item.serviceName}</td>
 
-                <th>Qty</th>
+              <td>
+                {item.fee} افغانی
+              </td>
 
-                <th>Total</th>
+              <td>{item.quantity}</td>
 
-                <th>Action</th>
-              </tr>
-            </thead>
+              <td>
+                {item.total} افغانی
+              </td>
 
-            <tbody>
-              {services.map((item) => (
-                <tr key={item.id} className="border-b">
-                  <td className="p-3">{item.serviceName}</td>
+              <td>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => removeService(item.id)}
+                >
+                  <Trash2 size={16} />
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
 
-                  <td>
-                    {item.fee}
-                    AFN
-                  </td>
-
-                  <td>{item.quantity}</td>
-
-                  <td>
-                    {item.total}
-                    AFN
-                  </td>
-
-                  <td>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      onClick={() => removeService(item.id)}
-                    >
-                      <Trash2 size={16} />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="flex justify-end mt-5 font-bold">
-          Total: &nbsp;
-          {total}
-          AFN
-        </div>
-      </CardContent>
-    </Card>
+    <div className="flex justify-start mt-5 font-bold text-right">
+      مجموع کل:
+      <span className="mr-2">
+        {total} افغانی
+      </span>
+    </div>
+  </CardContent>
+</Card>
   );
 };
 

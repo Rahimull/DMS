@@ -5,6 +5,7 @@ import ClinicPage from "../pages/clinic/ClinicPage";
 import StaffPage from "@/pages/staff/StaffPage";
 import PatientsPage from "@/pages/patient/PatientPage";
 import TreatmentPlanPage from "@/features/treatment/pages/TreatmentPlanPage";
+import ServicePage from "@/features/service/pages/ServicePage";
 
 
 export const router = createBrowserRouter([
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: "/treatmentPlan",
         element: <TreatmentPlanPage />
+        },
+      {
+        path: "/service",
+        element: <ServicePage />
         },
       
     ],

@@ -1,377 +1,110 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-import { Button } from "@/components/ui/button";
-
-import Input from "@/components/common/Input";
-
 import { useEffect, useState } from "react";
 
-import { createCrudApi } from "@/api/crudApi";
+import FormModal from "@/components/modal/FormModal";
+import ConditionApi from "../api/ConditionApi";
 
+const AddConditionModal = ({ open, onClose, onSave, editing }) => {
+  const [conditions, setConditions] = useState([]);
 
+  const [form, setForm] = useState({
+    conditionId: null,
 
-const conditionApi = createCrudApi("/Condition");
+    severity: "",
 
-
-
-const AddConditionModal = ({
-  open,
-  onClose,
-  patientId,
-  onSave,
-  editing=null
-}) => {
-
-
-  const [conditions,setConditions] = useState([]);
-
-
-
-  const [form,setForm] = useState({
-
-    conditionId:"",
-    severity:"",
-    diagnosisDate:"",
-    result:1,
-    notes:""
-
+    notes: "",
   });
 
-
-
-  useEffect(()=>{
-
+  useEffect(() => {
     loadConditions();
+  }, []);
 
-  },[]);
-
-
-
-  useEffect(()=>{
-
-    if(editing)
-    {
+  useEffect(() => {
+    if (editing) {
       setForm(editing);
-    }
+    } else {
+      setForm({
+        conditionId: null,
 
-  },[editing]);
+        severity: "",
 
-
-
-
-  const loadConditions = async()=>{
-
-
-    const data =
-      await conditionApi.lookup({
-
-        value:"id",
-
-        label:(x)=>x.name
-
+        notes: "",
       });
+    }
+  }, [editing]);
 
+  const loadConditions = async () => {
+    const data = await ConditionApi.lookup({
+      value: "id",
 
-    setConditions(data);
-
-  };
-
-
-
-
-
-  const submit = ()=>{
-
-
-    onSave({
-
-      ...form,
-
-      patientId
-
+      label: (x) => x.name,
     });
 
-
+    setConditions(data);
   };
 
-
-
-
-
-return (
-
-<Dialog
- open={open}
- onOpenChange={onClose}
->
-
-
-<DialogContent>
-
-
-<DialogHeader>
-
-<DialogTitle>
-🩺 Add Diagnosis
-</DialogTitle>
-
-</DialogHeader>
-
-
-
-<div className="space-y-4">
-
-
-{/* Condition */}
-
-<div>
-
-<label>
-Condition
-</label>
-
-
-<select
-
-className="w-full border rounded-md p-2"
-
-value={form.conditionId}
-
-onChange={(e)=>
-
-setForm({
-
-...form,
-
-conditionId:e.target.value
-
-})
-
-}
-
->
-
-
-<option>
-Select Condition
-</option>
-
-
-{
-conditions.map(c=>(
-
-<option
-
-key={c.value}
-
-value={c.value}
-
->
-
-{c.label}
-
-</option>
-
-))
-
-}
-
-
-</select>
-
-
-</div>
-
-
-
-
-
-{/* Severity */}
-
-<div>
-
-<label>
-Severity
-</label>
-
-
-<select
-
-className="w-full border rounded-md p-2"
-
-value={form.severity}
-
-onChange={(e)=>
-
-setForm({
-
-...form,
-
-severity:e.target.value
-
-})
-
-}
-
->
-
-
-<option value="">
-Select
-</option>
-
-
-<option value="Low">
-Low
-</option>
-
-
-<option value="Medium">
-Medium
-</option>
-
-
-<option value="High">
-High
-</option>
-
-
-</select>
-
-
-</div>
-
-
-
-
-
-
-<Input
-
-label="Diagnosis Date"
-
-type="date"
-
-value={form.diagnosisDate}
-
-onChange={(e)=>
-
-setForm({
-
-...form,
-
-diagnosisDate:e.target.value
-
-})
-
-}
-
-/>
-
-
-
-
-
-<Input
-
-label="Result"
-
-type="number"
-
-value={form.result}
-
-onChange={(e)=>
-
-setForm({
-
-...form,
-
-result:e.target.value
-
-})
-
-}
-
-/>
-
-
-
-
-
-
-<textarea
-
-className="w-full border rounded-md p-3"
-
-placeholder="Notes"
-
-value={form.notes}
-
-onChange={(e)=>
-
-setForm({
-
-...form,
-
-notes:e.target.value
-
-})
-
-}
-
-/>
-
-
-
-
-
-
-<div className="flex justify-end gap-3">
-
-
-<Button
-
-variant="outline"
-
-onClick={onClose}
-
->
-Cancel
-</Button>
-
-
-
-<Button
-
-onClick={submit}
-
->
-Save
-</Button>
-
-
-</div>
-
-
-
-</div>
-
-
-
-</DialogContent>
-
-
-</Dialog>
-
-);
-
-
+  const submit = () => {
+    onSave({
+      ...form,
+    });
+  };
+
+  const fields = [
+    {
+      name: "conditionId",
+
+      label: "تشخیص",
+
+      type: "select",
+
+      options: conditions,
+
+      required: true,
+    },
+
+    {
+      name: "severity",
+
+      label: "شدت بیماری",
+
+      type: "select",
+
+      options: [
+        {
+          label: "خفیف",
+          value: "Low",
+        },
+
+        {
+          label: "متوسط",
+          value: "Medium",
+        },
+
+        {
+          label: "شدید",
+          value: "High",
+        },
+      ],
+    },
+
+    {
+      name: "notes",
+
+      label: "یادداشت",
+
+      type: "textarea",
+    },
+  ];
+
+  return (
+    <FormModal
+      open={open}
+      onClose={onClose}
+      title={editing ? "ویرایش تشخیص" : "اضافه کردن تشخیص"}
+      fields={fields}
+      initialValues={form}
+      onSubmit={submit}
+    />
+  );
 };
-
 
 export default AddConditionModal;

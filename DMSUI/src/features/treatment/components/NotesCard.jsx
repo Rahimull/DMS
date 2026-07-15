@@ -10,56 +10,65 @@ const NotesCard = ({ notes, notification, endDate, onChange }) => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>📝 Treatment Notes</CardTitle>
-      </CardHeader>
+    <Card dir="rtl">
+  <CardHeader>
+    <CardTitle className="text-right">
+      📝 یادداشت‌های تداوی
+    </CardTitle>
+  </CardHeader>
 
-      <CardContent>
-        <div className="space-y-4">
-          <div>
-            <label className="block mb-2">Notes</label>
+  <CardContent>
+    <div className="space-y-4 text-right">
 
-            <textarea
-              className="
-w-full
-border
-rounded-md
-p-3
-min-h-[120px]
-"
-              placeholder="Treatment notes..."
-              value={notes || ""}
-              onChange={(e) => change("notes", e.target.value)}
-            />
-          </div>
+      <div>
+        <label className="block mb-2">
+          یادداشت‌ها
+        </label>
 
-          <div>
-            <label className="block mb-2">Notification</label>
+        <textarea
+          className="
+            w-full
+            border
+            rounded-md
+            p-3
+            min-h-[120px]
+            text-right
+          "
+          placeholder="یادداشت‌های تداوی..."
+          value={notes || ""}
+          onChange={(e) => change("notes", e.target.value)}
+        />
+      </div>
 
-            <textarea
-              className="
-w-full
-border
-rounded-md
-p-3
-min-h-[100px]
-"
-              placeholder="Notification..."
-              value={notification || ""}
-              onChange={(e) => change("notification", e.target.value)}
-            />
-          </div>
+      <div>
+        <label className="block mb-2">
+          اطلاعیه
+        </label>
 
-          <Input
-            label="Follow Up Date"
-            type="date"
-            value={endDate || ""}
-            onChange={(e) => change("endDate", e.target.value)}
-          />
-        </div>
-      </CardContent>
-    </Card>
+        <textarea
+          className="
+            w-full
+            border
+            rounded-md
+            p-3
+            min-h-[100px]
+            text-right
+          "
+          placeholder="متن اطلاعیه..."
+          value={notification || ""}
+          onChange={(e) => change("notification", e.target.value)}
+        />
+      </div>
+
+      <Input
+        label="تاریخ مراجعه بعدی"
+        type="date"
+        value={endDate || ""}
+        onChange={(e) => change("endDate", e.target.value)}
+      />
+    </div>
+  </CardContent>
+</Card>
   );
 };
 

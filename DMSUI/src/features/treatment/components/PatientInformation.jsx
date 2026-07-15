@@ -10,72 +10,98 @@ const PatientInformation = ({ patient, onEdit }) => {
   }
 
   return (
-    <Card>
-      <CardHeader
-        className="
-flex
-flex-row
-justify-between
-items-center
-"
-      >
-        <CardTitle className="flex gap-2 items-center">
-          <User size={20} />
-          Patient Information
-        </CardTitle>
+    <Card dir="rtl">
+  <CardHeader
+    className="
+      flex
+      flex-row-reverse
+      justify-between
+      items-center
+    "
+  >
+    <CardTitle className="flex flex-row-reverse gap-2 items-center">
+      <User size={20} />
+      معلومات مریض
+    </CardTitle>
 
-        <Button variant="outline" size="sm" onClick={onEdit}>
-          <Edit size={16} />
-          Edit
-        </Button>
-      </CardHeader>
+    <Button variant="outline" size="sm" onClick={onEdit}>
+      <Edit size={16} />
+      ویرایش
+    </Button>
+  </CardHeader>
 
-      <CardContent>
-        <div
-          className="
-grid
-grid-cols-1
-md:grid-cols-2
-gap-4
-"
-        >
-          <InfoItem
-            label="Full Name"
-            value={`${patient.firstName ?? ""} ${patient.lastName ?? ""}`}
-          />
+  <CardContent>
+    <div
+      className="
+        grid
+        grid-cols-1
+        md:grid-cols-2
+        gap-4
+        text-right
+      "
+    >
+      <InfoItem
+        label="نام مکمل"
+        value={`${patient.firstName ?? ""} ${patient.lastName ?? ""}`}
+      />
 
-          <InfoItem label="Father Name" value={patient.fatherName} />
+      <InfoItem
+        label="نام پدر"
+        value={patient.fatherName}
+      />
 
-          <InfoItem label="Gender" value={patient.gender} />
+      <InfoItem
+        label="جنسیت"
+        value={patient.gender}
+      />
 
-          <InfoItem label="Age" value={patient.age} />
+      <InfoItem
+        label="سن"
+        value={patient.age}
+      />
 
-          <InfoItem label="Phone" value={patient.phone} />
+      <InfoItem
+        label="شماره تماس"
+        value={patient.phone}
+      />
 
-          <InfoItem label="Blood Group" value={patient.bloodGroup} />
+      <InfoItem
+        label="گروپ خون"
+        value={patient.bloodGroup}
+      />
 
-          <InfoItem
-            label="Registration Date"
-            value={patient.registrationDate}
-          />
+      <InfoItem
+        label="تاریخ ثبت"
+        value={patient.registrationDate}
+      />
 
-          <InfoItem label="Sponsor" value={patient.sponsorBy} />
+      <InfoItem
+        label="تمویل‌کننده"
+        value={patient.sponsorBy}
+      />
 
-          <div className="md:col-span-2">
-            <InfoItem label="Address" value={patient.address} />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      <div className="md:col-span-2">
+        <InfoItem
+          label="آدرس"
+          value={patient.address}
+        />
+      </div>
+    </div>
+  </CardContent>
+</Card>
   );
 };
 
 const InfoItem = ({ label, value }) => {
   return (
-    <div>
-      <p className="text-sm text-gray-500">{label}</p>
+    <div className="text-right">
+      <p className="text-sm text-gray-500">
+        {label}
+      </p>
 
-      <p className="font-medium">{value || "-"}</p>
+      <p className="font-medium">
+        {value || "-"}
+      </p>
     </div>
   );
 };

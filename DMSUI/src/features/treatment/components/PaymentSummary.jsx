@@ -19,65 +19,65 @@ const PaymentSummary = ({
   const monthlyPayment = finalAmount / Number(installments || 1);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>💰 Payment Summary</CardTitle>
-      </CardHeader>
+    <Card dir="rtl">
+  <CardHeader>
+    <CardTitle className="text-right">
+      💰 خلاصه پرداخت
+    </CardTitle>
+  </CardHeader>
 
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex justify-between">
-            <span>Total Services</span>
+  <CardContent>
+    <div className="space-y-4 text-right">
 
-            <strong>
-              {total}
-              AFN
-            </strong>
-          </div>
+      <div className="flex justify-between">
+        <strong>
+          {total} افغانی
+        </strong>
 
-          <Input
-            label="Discount"
-            type="number"
-            value={discount}
-            onChange={(e) =>
-              onChange({
-                discount: e.target.value,
-              })
-            }
-          />
+        <span>مجموع خدمات</span>
+      </div>
 
-          <div className="flex justify-between">
-            <span>Final Amount</span>
+      <Input
+        label="تخفیف"
+        type="number"
+        value={discount}
+        onChange={(e) =>
+          onChange({
+            discount: e.target.value,
+          })
+        }
+      />
 
-            <strong>
-              {finalAmount}
-              AFN
-            </strong>
-          </div>
+      <div className="flex justify-between">
+        <strong>
+          {finalAmount} افغانی
+        </strong>
 
-          <Input
-            label="Installments"
-            type="number"
-            value={installments}
-            min={1}
-            onChange={(e) =>
-              onChange({
-                installments: e.target.value,
-              })
-            }
-          />
+        <span>مبلغ نهایی</span>
+      </div>
 
-          <div className="flex justify-between">
-            <span>Monthly Payment</span>
+      <Input
+        label="تعداد اقساط"
+        type="number"
+        value={installments}
+        min={1}
+        onChange={(e) =>
+          onChange({
+            installments: e.target.value,
+          })
+        }
+      />
 
-            <strong>
-              {monthlyPayment.toFixed(2)}
-              AFN
-            </strong>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      <div className="flex justify-between">
+        <strong>
+          {monthlyPayment.toFixed(2)} افغانی
+        </strong>
+
+        <span>قسط هر ماه</span>
+      </div>
+    </div>
+  </CardContent>
+</Card>
   );
 };
 

@@ -1,37 +1,43 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-import { Button } from "@/components/ui/button";
-
 import { useEffect, useState } from "react";
 
-import Input from "@/components/common/Input";
+import FormModal from "@/components/modal/FormModal";
 
-import { createCrudApi } from "@/api/crudApi";
-
-const serviceApi = createCrudApi("/Service");
+import ServiceApi from "../../service/api/ServiceApi";
 
 const AddServiceModal = ({ open, onClose, onSave }) => {
   const [services, setServices] = useState([]);
 
   const [form, setForm] = useState({
-    serviceId: "",
-    serviceName: "",
-    fee: 0,
+    serviceId: null,
+
+    serviceFee: 0,
+
     quantity: 1,
-    total: 0,
+
+    totalFee: 0,
   });
 
+
+ 
+
   useEffect(() => {
-    loadServices();
-  }, []);
+    if (open) {
+      loadServices();
+
+      setForm({
+        serviceId: null,
+
+        serviceFee: 0,
+
+        quantity: 1,
+
+        totalFee: 0,
+      });
+    }
+  }, [open]);
 
   const loadServices = async () => {
-    const data = await serviceApi.lookup({
+    const data = await ServiceApi.lookup({
       value: "id",
 
       label: (x) => x.name,
@@ -40,89 +46,111 @@ const AddServiceModal = ({ open, onClose, onSave }) => {
     setServices(data);
   };
 
-  const selectService = (id) => {
+  const changeService = (id) => {
     const service = services.find((x) => x.value == id);
 
-    setForm({
-      ...form,
+    setForm((prev) => ({
+      ...prev,
 
       serviceId: id,
 
-      serviceName: service.label,
+      serviceFee: service?.fee ?? 0,
 
-      fee: service.fee ?? 0,
-
-      total: Number(service.fee ?? 0) * Number(form.quantity),
-    });
+      totalFee: Number(service?.fee ?? 0) * Number(prev.quantity),
+    }));
   };
 
-  const changeQuantity = (value) => {
-    setForm({
-      ...form,
+  const changeQuantity = (qty) => {
+    setForm((prev) => ({
+      ...prev,
 
-      quantity: value,
+      quantity: qty,
 
-      total: Number(form.fee) * Number(value),
-    });
+      totalFee: Number(prev.serviceFee) * Number(qty),
+    }));
   };
 
   const submit = () => {
-    onSave(form);
+    onSave({
+      serviceId: form.serviceId,
 
-    setForm({
-      serviceId: "",
-      serviceName: "",
-      fee: 0,
-      quantity: 1,
-      total: 0,
+      serviceFee: Number(form.serviceFee),
+
+      totalFee: Number(form.totalFee),
+
+      quantity: Number(form.quantity),
     });
   };
 
+  const fields = [
+    {
+      name: "serviceId",
+
+      label: "خدمت",
+
+      type: "select",
+
+      required: true,
+
+      options: services,
+
+      onChange: changeService,
+    },
+
+    {
+      name: "serviceFee",
+
+      label: "قیمت",
+
+      type: "number",
+
+      disabled: true,
+    },
+
+    {
+      name: "quantity",
+
+      label: "تعداد",
+
+      type: "number",
+
+      value: form.quantity,
+
+      onChange: (e) => changeQuantity(e.target.value),
+    },
+
+    {
+      name: "totalFee",
+
+      label: "مجموع",
+
+      type: "number",
+
+      disabled: true,
+    },
+  ];
+
+
+   const selected = services.find(
+  (x) => x.value === Number(serviceId)
+);
+
+// setForm((prev) => ({
+//   ...prev,
+//   serviceId: selected.value,
+//   serviceFee: selected.fee,
+//   totalFee: selected.fee * prev.quantity,
+// }));
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>🦷 Add Treatment Service</DialogTitle>
-        </DialogHeader>
-
-        <div className="space-y-4">
-          <label>Service</label>
-
-          <select
-            className="w-full border rounded-md p-2"
-            value={form.serviceId}
-            onChange={(e) => selectService(e.target.value)}
-          >
-            <option>Select Service</option>
-
-            {services.map((item) => (
-              <option key={item.value} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-
-          <Input label="Service Fee" type="number" value={form.fee} readOnly />
-
-          <Input
-            label="Quantity"
-            type="number"
-            value={form.quantity}
-            onChange={(e) => changeQuantity(e.target.value)}
-          />
-
-          <Input label="Total Fee" type="number" value={form.total} readOnly />
-
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-
-            <Button onClick={submit}>Add</Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <FormModal
+      open={open}
+      onClose={onClose}
+      title="اضافه کردن خدمت"
+      fields={fields}
+      initialValues={form}
+      onSubmit={submit}
+    />
   );
 };
 

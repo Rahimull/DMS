@@ -98,7 +98,7 @@ export const sidebarItems= [
       {
         title: "خدمات",
 
-        path: "/services",
+        path: "/service",
 
         icon: Stethoscope,
       },

@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import TreatmentHeader from "../components/TreatmentHeader";
 import ConditionList from "../components/ConditionList";
 import AddConditionModal from "../components/AddConditionModal";
@@ -9,210 +7,54 @@ import AddServiceModal from "../components/AddServiceModal";
 
 import PaymentSummary from "../components/PaymentSummary";
 import NotesCard from "../components/NotesCard";
+import useTreatmentPlan from "@/hooks/useTreatmentPlan";
 
-import { createCrudApi } from "@/api/crudApi";
 
-const patientApi = createCrudApi("/Patient");
-const staffApi = createCrudApi("/Staff");
-const treatmentApi = createCrudApi("/TreatmentPlan");
 
 const TreatmentPlanPage = () => {
-  const [form, setForm] = useState({
-    patientId: null,
-
-    staffId: null,
-
-    startDate: "",
-
-    endDate: "",
-
-    status: "Draft",
-
-    round: 1,
-
-    installments: 1,
-
-    discount: 0,
-
-    totalFee: 0,
-
-    conditions: [],
-
-    services: [],
-
-    notes: "",
-
-    notification: "",
-  });
-
-  const [patients, setPatients] = useState([]);
-
-  const [doctors, setDoctors] = useState([]);
-
-  const [openCondition, setOpenCondition] = useState(false);
-
-  const [openService, setOpenService] = useState(false);
-
-  const [editingCondition, setEditingCondition] = useState(null);
-
-  useEffect(() => {
-    loadPatients();
-
-    loadDoctors();
-  }, []);
-
-  const loadPatients = async () => {
-    const data = await patientApi.lookup({
-      value: "id",
-
-      label: (x) => `${x.firstName} ${x.lastName}`,
-    });
-
-    setPatients(data);
-  };
-
-  const loadDoctors = async () => {
-    const data = await staffApi.lookup({
-      value: "id",
-
-      label: (x) => `${x.firstName} ${x.lastName}`,
-    });
-
-    setDoctors(data);
-  };
-
-  const updateForm = (data) => {
-    setForm((prev) => ({
-      ...prev,
-
-      ...data,
-    }));
-  };
-
-  // Add Diagnosis
-
-  const addCondition = (condition) => {
-    setForm((prev) => ({
-      ...prev,
-
-      conditions: [
-        ...prev.conditions,
-
-        {
-          ...condition,
-          id: Date.now(),
-        },
-      ],
-    }));
-
-    setOpenCondition(false);
-  };
-
-  const deleteCondition = (id) => {
-    setForm((prev) => ({
-      ...prev,
-
-      conditions: prev.conditions.filter((x) => x.id !== id),
-    }));
-  };
-
-  // Add Service
-
-  const addService = (service) => {
-    setForm((prev) => ({
-      ...prev,
-
-      services: [
-        ...prev.services,
-
-        {
-          ...service,
-          id: Date.now(),
-          total: Number(service.fee) * Number(service.quantity || 1),
-        },
-      ],
-    }));
-
-    setOpenService(false);
-  };
-
-  const saveTreatment = async () => {
-    const payload = {
-      patientId: form.patientId,
-
-      staffId: form.staffId,
-
-      startDate: form.startDate,
-
-      endDate: form.endDate,
-
-      status: form.status,
-
-      round: form.round,
-
-      installments: form.installments,
-
-      discount: form.discount,
-
-      notes: form.notes,
-
-      notification: form.notification,
-
-      conditions: form.conditions,
-
-      services: form.services,
-    };
-
-    console.log("TREATMENT PAYLOAD", payload);
-
-    // await treatmentApi.create(payload)
-  };
+  const treatment = useTreatmentPlan();
 
   return (
-    <div className="space-y-6 p-6">
+    <div dir="rtl" className="space-y-6 p-6 text-right">
       <TreatmentHeader
-        form={form}
-        setForm={setForm}
-        patientOptions={patients}
-        staffOptions={doctors}
+        form={treatment.form}
+        updateForm={treatment.updateForm}
+        patientOptions={treatment.patients}
+        staffOptions={treatment.doctors}
       />
 
       <ConditionList
-        conditions={form.conditions}
-        onAdd={() => setOpenCondition(true)}
-        onEdit={(item) => {
-          setEditingCondition(item);
-
-          setOpenCondition(true);
-        }}
-        onDelete={deleteCondition}
+        conditions={treatment.form.conditions}
+        onAdd={() => treatment.setOpenCondition(true)}
+        onEdit={treatment.editCondition}
+        onDelete={treatment.deleteCondition}
       />
 
       <ServiceTable
-        services={form.services}
-        onAdd={() => setOpenService(true)}
+        services={treatment.form.services}
+        onAdd={() => treatment.setOpenService(true)}
         onChange={(items) =>
-          updateForm({
+          treatment.updateForm({
             services: items,
           })
         }
       />
 
       <PaymentSummary
-        services={form.services}
-        discount={form.discount}
-        installments={form.installments}
-        onChange={updateForm}
+        services={treatment.form.services}
+        discount={treatment.form.discount}
+        installments={treatment.form.installments}
+        onChange={treatment.updateForm}
       />
 
       <NotesCard
-        notes={form.notes}
-        notification={form.notification}
-        endDate={form.endDate}
-        onChange={updateForm}
+        notes={treatment.form.notes}
+        notification={treatment.form.notification}
+        endDate={treatment.form.endDate}
+        onChange={treatment.updateForm}
       />
 
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-start gap-3">
         <button
           className="
 px-5
@@ -221,9 +63,9 @@ rounded-md
 bg-primary
 text-white
 "
-          onClick={saveTreatment}
+          onClick={treatment.save}
         >
-          Save Treatment
+          ذخیره پلان تداوی
         </button>
 
         <button
@@ -234,26 +76,22 @@ rounded-md
 border
 "
         >
-          Cancel
+          انصراف
         </button>
       </div>
 
       <AddConditionModal
-        open={openCondition}
-        onClose={() => {
-          setOpenCondition(false);
-
-          setEditingCondition(null);
-        }}
-        patientId={form.patientId}
-        editing={editingCondition}
-        onSave={addCondition}
+        open={treatment.openCondition}
+        onClose={treatment.closeCondition}
+        patientId={treatment.form.patientId}
+        editing={treatment.editingCondition}
+        onSave={treatment.addCondition}
       />
 
       <AddServiceModal
-        open={openService}
-        onClose={() => setOpenService(false)}
-        onSave={addService}
+        open={treatment.openService}
+        onClose={treatment.closeService}
+        onSave={treatment.addService}
       />
     </div>
   );
