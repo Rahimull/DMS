@@ -1,103 +1,143 @@
-import {
-  DataTable,
-  DataTablePagination,
-  DataTableToolbar,
-} from "@/components/dataTable";
-import FormModal from "@/components/modal/FormModal";
+import { DataTable, DataTableToolbar } from "@/components/dataTable";
 import { Button } from "@/components/ui/button";
-import { patientColumns } from "@/features/patient/columns/patientColumns";
-import { patients } from "@/features/patient/data/patients";
+import PatientApi from "@/features/Patient/api/PatientApi";
+
+import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
+import useLoadData from "@/hooks/useLoadData";
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+
+import { PatientActionColumn } from "@/features/Patient/columns/PatientActionColumn";
+import { PatientColumns } from "@/features/patient/columns/PatientColumns";
+import PatientForm from "@/features/patient/components/PatientForm";
 
 export default function ListPatient() {
-  const [search, setSearch] = useState("");
-  const table = useReactTable({
-    data: patients,
-    columns: patientColumns,
-    getCoreRowModel: getCoreRowModel(),
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+  const filters = useMemo(
+    () => ({
+      status: filterStatus,
+      fromDate,
+      toDate,
+    }),
+    [filterStatus, fromDate, toDate],
+  );
+
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  const messages = {
+    create: "بیمار با موفقیت ثبت شد.",
+    update: "اطلاعات بیمار با موفقیت ویرایش شد.",
+    delete: "بیمار با موفقیت حذف شد.",
+  };
+
+  const curd = useCreatUpdateForm(PatientApi, messages, {useFormData:false});
+
+  const {
+    data,
+    totalCount,
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    search,
+    setSearch,
+    setRefreshKey,
+    loading,
+  } = useLoadData(PatientApi, {
+    filters,
+    refreshKey: curd.refreshKey,
   });
 
+  // Columns
+  const columns = useMemo(
+    () => [
+      ...PatientColumns,
 
+      PatientActionColumn({
+        onView: (Patient) => {
+          console.log("View:", Patient);
+        },
 
-//   MODAL SECTION
-const [open, setOpen] = useState(false);
-const [editing, setediting] = useState(null);
+        onEdit: (Patient) => {
+          setSelectedPatient(Patient);
+          curd.openEdit(Patient);
+        },
 
+        onDelete: (id) => {
+          curd.handleDelete(id);
+        },
+      }),
+    ],
+    [curd],
+  );
 
-const OpenModal = ()=>{
-    setOpen(true);
-}
+  // Table
+  const table = useReactTable({
+    data,
+    columns,
 
-const CloseModal = ()=>{
-    setOpen(false);
+    getCoreRowModel: getCoreRowModel(),
 
-}
+    manualPagination: true,
+    manualSorting: true,
 
+    pageCount: Math.ceil(totalCount / pagination.pageSize),
 
-const fields =[
-      {
-        name: "name",
-        label: "Name [*,  🔑]",
-        type: "text",
-        required: true,
-        maxLength: 100,
-        placeholder:"Suppliers Name"
-      },
-      {
-        name: "contactInfo",
-        label: "Contact Information *",
-        type: "text",
-        placeholder: "Phone / Email",
-        maxLength: 50,
-        required: true,
-      },
-      {
-        name: "address",
-        label: "Address",
-        type: "textarea",
-      },
-    ];
+    state: {
+      pagination,
+      sorting,
+    },
+
+    onPaginationChange: setPagination,
+
+    onSortingChange: (updater) => {
+      setSorting(updater);
+
+      setPagination((prev) => ({
+        ...prev,
+        pageIndex: 0,
+      }));
+    },
+  });
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت بیماران</h2>
+      <h2 className="text-3xl font-bold text-slate-800">مدیریت بیمار</h2>
+
       <DataTableToolbar
         table={table}
         search={search}
         onSearchChange={setSearch}
-        onRefresh={() => console.log("Referesh")}
+        onRefresh={() => {
+          curd.setRefreshKey((x) => x + 1);
+        }}
         onExport={() => console.log("Export")}
         onPrint={() => window.print()}
       >
-        <Button 
-            size={"sm"} 
-            variant={"default"} 
-            onClick={()=> openModal()}
+        <Button
+          size="sm"
+          onClick={() => {
+            setSelectedPatient(null);
+            curd.openCreate();
+          }}
         >
-          ثبت بیمار <Plus size={16} />
+          ثبت بیمار
+          <Plus size={16} />
         </Button>
       </DataTableToolbar>
 
-     
+      <DataTable
+        table={table}
+        loading={loading}
+        pageSize={pagination.pageSize}
+      />
 
-      <div className="space-y-4">
-        <DataTable columns={patientColumns} data={patients} search={search} />
-      </div>
-
-
-
-       {/* <FormModal 
-            open={()=> setOpen(true)}
-            onClose={()=> setOpen(false)}
-            fields={fields}
-            title={editing ? "Edit Item" : "Add Item"}
-            submitText={editing ? "Update Item" : "Add Item"}
-       /> */}
-
-      
+      <PatientForm CURD={curd} />
     </div>
   );
 }

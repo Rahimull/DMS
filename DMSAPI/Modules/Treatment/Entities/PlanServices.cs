@@ -11,19 +11,13 @@ public class PlanService : BaseEntity
     [Column("service_ID")]
     public int ServiceId { get; set; }
 
-    [Column("qty")]
-    public int Quantity { get; set; } = 1;
+    [Column("service_fee")]
+    public decimal ServiceFee { get; set; }=0;
 
-    [Column("unit_price")]
-    public decimal UnitPrice { get; set; }
+    [Column("total_fee")]
+    public decimal TotalFee { get; set; }=0;
 
-    [Column("discount")]
-    public decimal Discount { get; set; }
+    public TreatmentPlan? TreatmentPlan { get; set; }
 
-    [Column("total")]
-    public decimal Total { get; set; }
-
-    public TreatmentPlan TreatmentPlan { get; set; } = null!;
-
-    public Service Service { get; set; } = null!;
+    public Service? Service { get; set; }
 }

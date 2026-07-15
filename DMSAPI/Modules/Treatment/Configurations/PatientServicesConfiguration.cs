@@ -15,18 +15,6 @@ public class PatientServiceConfiguration : IEntityTypeConfiguration<PatientServi
         builder.Property(x => x.Id)
             .HasColumnName("patient_service_ID");
 
-        builder.Property(x => x.Fee)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Discount)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Paid)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Remaining)
-            .HasColumnType("decimal(18,2)");
-
         builder.HasOne(x => x.Patient)
             .WithMany()
             .HasForeignKey(x => x.PatientId);
@@ -42,5 +30,9 @@ public class PatientServiceConfiguration : IEntityTypeConfiguration<PatientServi
         builder.HasOne(x => x.Service)
             .WithMany(x => x.PatientServices)
             .HasForeignKey(x => x.ServiceId);
+
+        builder.HasOne(x => x.ServiceRequirement)
+            .WithMany()
+            .HasForeignKey(x => x.ServiceRequirementId);
     }
 }

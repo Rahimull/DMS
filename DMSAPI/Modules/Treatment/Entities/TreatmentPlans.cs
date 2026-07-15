@@ -21,7 +21,7 @@ public class TreatmentPlan : BaseEntity
     public DateOnly? EndDate { get; set; }
 
     [Column("total_fee")]
-    public decimal TotalFee { get; set; }
+    public decimal TotalFee { get; set; }=0;
 
     [Column("installments")]
     public int Installments { get; set; } = 1;
@@ -34,7 +34,7 @@ public class TreatmentPlan : BaseEntity
     public string? Status { get; set; }
 
     [Column("discount")]
-    public decimal Discount { get; set; }
+    public decimal Discount { get; set; }=0;
 
     [MaxLength(1000)]
     [Column("notes")]
@@ -47,4 +47,8 @@ public class TreatmentPlan : BaseEntity
     public Patient? Patient { get; set; }
 
     public Staff? Staff { get; set; }
+
+    public ICollection<PatientService> PatientServices { get; set; } = new List<PatientService>();
+
+    public ICollection<PlanService> PlanServices { get; set; } = new List<PlanService>();
 }

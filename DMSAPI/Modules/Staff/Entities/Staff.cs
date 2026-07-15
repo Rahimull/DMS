@@ -1,5 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DMS.Modules.Appointments.Entities;
+using DMS.Modules.Patients.Entities;
+using DMS.Modules.Treatments.Entities;
 using DMS.Shared.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -68,5 +71,10 @@ public class Staff : BaseEntity
 
     // Navigation Properties
 
-    // public ICollection<Clinic> Clinics { get; set; } = new List<Clinic>();
+    public ICollection<TreatmentPlan> TreatmentPlans { get; set; } = new List<TreatmentPlan>();
+    public ICollection<Patient> Patients { get; set; } = new List<Patient>();
+
+     public ICollection<Retreatment> Retreatments { get; set; } = new List<Retreatment>();
+
+      public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 }

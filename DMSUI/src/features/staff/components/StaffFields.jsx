@@ -1,4 +1,4 @@
-export const clinicFields = [
+export const StaffFields = [
   {
     name: "firstName",
     label: "اسم کارمند ",

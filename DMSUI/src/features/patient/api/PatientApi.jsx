@@ -1,25 +1,15 @@
-import Api from "./Api";
+import Api from "@/api/Api";
 
-const endpoint = "/patient";
+
+const endpoint = "/Patient";
 
 const PatientApi = {
+  getPaged: (queryParams) =>
+    Api.post(`${endpoint}/paged`, queryParams),
 
-    // Paged - Get with QueryString
-    // getPaged: (pagination) =>
-    //     Api.get(endpoint,{
-    //         params:{
-    //             pageIndex: pagination.pageIndex,
-    //             pageSize: pagination.pageSize
-    //         }
-    //     }),
-
-    // CRUD
-    get: () => Api.get(endpoint),
-    get: (id) => Api.get(`${endpoint}/${id}`),
-    create: (data) => Api.post(endpoint, data),
-    update: (id, data) => Api.put(`${endpoint}/${id}`, data),
-    delete: (id) => Api.delete(`${endpoint}/${id}`),
-}
+  create: (data) => Api.post(endpoint, data),
+  update: (id, data) => Api.put(`${endpoint}/${id}`, data),
+  delete: (id) => Api.delete(`${endpoint}/${id}`),
+};
 
 export default PatientApi;
-

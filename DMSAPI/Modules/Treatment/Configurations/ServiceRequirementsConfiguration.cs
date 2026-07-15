@@ -15,12 +15,6 @@ public class ServiceRequirementConfiguration : IEntityTypeConfiguration<ServiceR
         builder.Property(x => x.Id)
             .HasColumnName("requirement_ID");
 
-        builder.Property(x => x.Quantity)
-            .HasColumnType("decimal(18,2)");
-
-        builder.HasOne(x => x.Service)
-            .WithMany()
-            .HasForeignKey(x => x.ServiceId)
-            .OnDelete(DeleteBehavior.Cascade);
+       
     }
 }

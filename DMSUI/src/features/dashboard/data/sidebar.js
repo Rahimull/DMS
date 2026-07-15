@@ -106,7 +106,7 @@ export const sidebarItems= [
       {
         title: "پلان درمان",
 
-        path: "/treatment-plans",
+        path: "/treatmentPlan",
 
         icon: ClipboardList,
       },
@@ -114,7 +114,7 @@ export const sidebarItems= [
       {
         title: "درمان مجدد",
 
-        path: "/retreatments",
+        path: "/retreatment",
 
         icon: RefreshCcw,
       },

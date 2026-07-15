@@ -24,5 +24,22 @@ public class RetreatmentConfiguration : IEntityTypeConfiguration<Retreatment>
             .WithMany()
             .HasForeignKey(x => x.StaffId)
             .OnDelete(DeleteBehavior.Restrict);
+            
+        builder.HasOne(x => x.Service)
+            .WithMany()
+            .HasForeignKey(x => x.HelpServiceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.Service)
+            .WithMany()
+            .HasForeignKey(x => x.DamageServiceId);
+
+        builder.HasOne(x => x.TreatmentPlan)
+            .WithMany()
+            .HasForeignKey(x => x.TreatmentPlanId);
+
+        builder.HasOne(x => x.Appointment)
+            .WithMany()
+            .HasForeignKey(x => x.AppointmentId);
     }
 }

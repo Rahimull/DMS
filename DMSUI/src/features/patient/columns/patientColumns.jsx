@@ -1,146 +1,92 @@
-
-import {
-    Badge,
-  Eye,
-  Pencil,
-  Trash2,
-} from "lucide-react";
+import { Badge, Eye, Pencil, Trash2 } from "lucide-react";
 import DataTableColumnHeader from "@/components/dataTable/DataTableColumnHeader";
 
-export const patientColumns= [
+export const PatientColumns = [
   {
-  accessorKey: "patientCode",
+    accessorKey: "firstName",
+    meta: { sticky: "right" },
 
-  header: ({ column }) => (
-    <DataTableColumnHeader
-      column={column}
-      title="کد بیمار"
-    />
-  ),
-},
- 
-
-  {
-    id:"fullName",
-
-    header:({column})=>(
-        <DataTableColumnHeader
-            column={column}
-            title="نام بیمار"
-        />
-    ),
-
-    accessorFn:(row)=>
-        `${row.firstName} ${row.lastName}`,
-
-    filterFn:"includesString",
-
-    cell:({row})=>{
-
-        const patient=row.original;
-
-        return(
-
-            <div>
-
-                <p className="font-semibold">
-
-                    {patient.firstName} {patient.lastName}
-
-                </p>
-
-                <p className="text-xs text-slate-500">
-
-                    {patient.gender}
-
-                </p>
-
-            </div>
-
-        );
-
-    }
-
-},
-
-  {
-  accessorKey: "phone",
-
-  header: ({ column }) => (
-    <DataTableColumnHeader
-      column={column}
-      title="شماره تماس"
-    />
-  ),
-},
-
-  {
-    accessorKey: "doctor",
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="داکتر"
-      />
+      <DataTableColumnHeader column={column} title="نام " />
+    ),
+    enableSorting: true,
+  },
+  {
+    accessorKey: "lastName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="تخلص " />
+    ),
+    enableSorting: true,
+  },
+  {
+    accessorKey: "fatherName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="اسم پدر " />
+    ),
+    enableSorting: true,
+  },
+  {
+    accessorKey: "gender",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="جنسیت" />
+    ),
+  },
+  {
+    accessorKey: "age",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="عمر" />
+    ),
+  },
+  {
+    accessorKey: "maritalStatus",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="حالت مدنی" />
     ),
   },
 
   {
-    accessorKey: "status",
+    accessorKey: "address",
 
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="وضعیت"
-      />
+      <DataTableColumnHeader column={column} title="ادرس بیمار" />
     ),
+  },
+  {
+    accessorKey: "phone",
 
-    cell: ({ getValue }) => {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="شماره تماس اصلی" />
+    ),
+  },
+  {
+    accessorKey: "registrationDate",
 
-      const status = getValue();
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="شماره تماس اصلی" />
+    ),
+  },
+  {
+    accessorKey: "bloodGroup",
 
-      return (
-        <Badge
-        //   variant={
-        //     status === "Active"
-        //       ? "default"
-        //       : "secondary"
-        //   }
-        >
-          {status}
-        </Badge>
-      );
-    },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title=" شماره تماس دوهم" />
+    ),
   },
 
   {
-    id: "actions",
+    accessorKey: "sponsorBy",
 
-    header: "عملیات",
-
-    cell: () => (
-
-      <div className="flex gap-2">
-
-        <button className="rounded-lg p-2 hover:bg-slate-100">
-
-          <Eye size={18} />
-
-        </button>
-
-        <button className="rounded-lg p-2 hover:bg-blue-100 text-blue-600">
-
-          <Pencil size={18} />
-
-        </button>
-
-        <button className="rounded-lg p-2 hover:bg-red-100 text-red-600">
-
-          <Trash2 size={18} />
-
-        </button>
-
-      </div>
-
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ایمیل ادرس" />
     ),
+  },
+  {
+    accessorKey: "createdAt",
+
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="تاریخ ایجاد" />
+    ),
+    cell: ({ row }) =>
+      new Date(row.original.createdAt).toLocaleDateString("fa-IR"),
   },
 ];

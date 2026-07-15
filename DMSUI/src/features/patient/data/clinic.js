@@ -1,4 +1,4 @@
-export const patients= [
+export const clinic= [
   {
     id: 1,
     patientCode: "PT-1001",

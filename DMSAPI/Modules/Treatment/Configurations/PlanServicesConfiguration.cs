@@ -15,15 +15,6 @@ public class PlanServiceConfiguration : IEntityTypeConfiguration<PlanService>
         builder.Property(x => x.Id)
             .HasColumnName("ps_ID");
 
-        builder.Property(x => x.UnitPrice)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Discount)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Total)
-            .HasColumnType("decimal(18,2)");
-
         builder.HasOne(x => x.TreatmentPlan)
             .WithMany()
             .HasForeignKey(x => x.TreatmentPlanId)

@@ -19,30 +19,19 @@ public class PatientService : BaseEntity
 
     [Column("service_ID")]
     public int ServiceId { get; set; }
+    [Column("ser_req_ID")]
+    public int ServiceRequirementId { get; set; }
 
-    [Column("service_date")]
-    public DateOnly ServiceDate { get; set; }
+    [Column("value")]
+    public string Value { get; set; } = null!;
 
-    [Column("qty")]
-    public int Quantity { get; set; } = 1;
 
-    [Column("fee")]
-    public decimal Fee { get; set; }
-
-    [Column("discount")]
-    public decimal Discount { get; set; }
-
-    [Column("paid")]
-    public decimal Paid { get; set; }
-
-    [Column("remaining")]
-    public decimal Remaining { get; set; }
-
-    public Patient Patient { get; set; } = null!;
+    public Patient? Patient { get; set; }
 
     public Appointment? Appointment { get; set; }
 
     public TreatmentPlan? TreatmentPlan { get; set; }
 
-    public Service Service { get; set; } = null!;
+    public Service? Service { get; set; }
+    public ServiceRequirement? ServiceRequirement { get; set; }
 }

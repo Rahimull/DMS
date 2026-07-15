@@ -9,4 +9,30 @@ export const createCrudApi = (endpoint) => ({
   update: (id, data) => Api.put(`${endpoint}/${id}`, data),
 
   delete: (id) => Api.delete(`${endpoint}/${id}`),
+
+   lookup: async ({
+    label,
+    value = "id",
+    query = {
+      pageNumber: 1,
+      pageSize: 1000,
+    },
+  }) => {
+    const res = await Api.post(`${endpoint}/paged`, query);
+
+    console.log(res.data);
+
+    const items = 
+      res.data?.data?.data ?? 
+      res.data?.data ??
+      res.data ?? [];
+
+    return items.map((item) => ({
+      value: item[value],
+      label:
+        typeof label === "function"
+          ? label(item)
+          : item[label],
+    }));
+  },
 });

@@ -1,5 +1,5 @@
 import FormModal from "@/components/modal/FormModal";
-import { clinicFields } from "./StaffFields";
+import { StaffFields } from "./StaffFields";
 
 
 const StaffForm = ({ CURD }) => {
@@ -15,7 +15,7 @@ const StaffForm = ({ CURD }) => {
         loading={CURD.loading}
         submitText={CURD.editing ? "اپدیت کارمند" : "اضاف کردن کارمند"}
         initialValues={CURD.editing}
-        fields={clinicFields}
+        fields={StaffFields}
       />
     </>
   );

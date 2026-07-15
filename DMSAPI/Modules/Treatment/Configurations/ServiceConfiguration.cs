@@ -27,12 +27,5 @@ public class ServiceConfiguration : IEntityTypeConfiguration<Service>
         builder.Property(x => x.Fee)
             .HasColumnName("fee")
             .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Duration)
-            .HasColumnName("duration");
-
-        builder.Property(x => x.IsActive)
-            .HasColumnName("is_active")
-            .HasDefaultValue(true);
     }
 }

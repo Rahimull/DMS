@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import DashboardLayout from "../layouts/DahboardLayout";
 import DashboardPage from "../pages/dashboard/Dashboard";
-import PatientsPage from "../pages/patient/PatientsPage";
 import ClinicPage from "../pages/clinic/ClinicPage";
 import StaffPage from "@/pages/staff/StaffPage";
+import PatientsPage from "@/pages/patient/PatientPage";
+import TreatmentPlanPage from "@/features/treatment/pages/TreatmentPlanPage";
 
 
 export const router = createBrowserRouter([
@@ -27,6 +28,11 @@ export const router = createBrowserRouter([
         path: "/staff",
         element: <StaffPage />
         },
+      {
+        path: "/treatmentPlan",
+        element: <TreatmentPlanPage />
+        },
+      
     ],
   },
 ]);

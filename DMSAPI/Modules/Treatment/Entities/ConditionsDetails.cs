@@ -13,17 +13,20 @@ public class ConditionDetail : BaseEntity
     [Column("pat_ID")]
     public int PatientId { get; set; }
 
-    [Column("tooth_no")]
-    public int ToothNo { get; set; }
+    [Column("severty")]
+    public string? Severty { get; set; }
 
-    [Column("condition_date")]
-    public DateOnly ConditionDate { get; set; }
+    [Column("result")]
+    public int Result { get; set; } = 1;
+
+    [Column("diagnosis_date")]
+    public DateOnly? DaignosisDate { get; set; }
 
     [MaxLength(1000)]
     [Column("notes")]
     public string? Notes { get; set; }
 
-    public Condition Condition { get; set; } = null!;
+    public Condition? Condition { get; set; }
 
-    public Patient Patient { get; set; } = null!;
+    public Patient? Patient { get; set; }
 }

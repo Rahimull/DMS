@@ -55,4 +55,9 @@ public class Appointment : BaseEntity
     public Service? Service { get; set; }
 
     public Staff? Staff { get; set; }
+
+
+    public ICollection<PatientService> PatientServices { get; set; } = new List<PatientService>();
+
+     public ICollection<Retreatment> Retreatments { get; set; } = new List<Retreatment>();
 }

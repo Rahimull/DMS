@@ -24,7 +24,7 @@ public class TreatmentPlanConfiguration : IEntityTypeConfiguration<TreatmentPlan
         builder.HasOne(x => x.Patient)
             .WithMany()
             .HasForeignKey(x => x.PatientId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasOne(x => x.Staff)
             .WithMany()
