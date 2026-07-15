@@ -102,6 +102,20 @@ export const sidebarItems= [
 
         icon: Stethoscope,
       },
+      {
+        title: "نیاز مندی خدامات",
+
+        path: "/serviceRequirment",
+
+        icon: Stethoscope,
+      },
+      {
+        title: "عارضه یا تشخیص",
+
+        path: "/condition",
+
+        icon: Stethoscope,
+      },
 
       {
         title: "پلان درمان",
