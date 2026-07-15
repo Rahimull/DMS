@@ -125,6 +125,9 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
 
+                    b.Property<int?>("PatientId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Round")
                         .HasColumnType("INTEGER")
                         .HasColumnName("round");
@@ -137,9 +140,15 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("service_ID");
 
+                    b.Property<int?>("ServiceId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("StaffId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("staff_ID");
+
+                    b.Property<int?>("StaffId1")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
                         .HasMaxLength(50)
@@ -154,9 +163,15 @@ namespace DMSAPI.Migrations
 
                     b.HasIndex("PatientId");
 
+                    b.HasIndex("PatientId1");
+
                     b.HasIndex("ServiceId");
 
+                    b.HasIndex("ServiceId1");
+
                     b.HasIndex("StaffId");
+
+                    b.HasIndex("StaffId1");
 
                     b.ToTable("appointments", (string)null);
                 });
@@ -1104,6 +1119,9 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
 
+                    b.Property<int?>("PatientId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Result")
                         .HasColumnType("INTEGER")
                         .HasColumnName("result");
@@ -1117,6 +1135,8 @@ namespace DMSAPI.Migrations
                     b.HasIndex("ConditionId");
 
                     b.HasIndex("PatientId");
+
+                    b.HasIndex("PatientId1");
 
                     b.ToTable("condition_details", (string)null);
                 });
@@ -1132,6 +1152,9 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("apt_ID");
 
+                    b.Property<int?>("AppointmentId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
@@ -1142,20 +1165,26 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
 
+                    b.Property<int?>("PatientId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ServiceId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("service_ID");
 
-                    b.Property<int?>("ServiceRequirementId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ServiceRequirmentId")
+                    b.Property<int>("ServiceRequirementId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("ser_req_ID");
+
+                    b.Property<int?>("ServiceRequirementId1")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("TreatmentPlanId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("tp_ID");
+
+                    b.Property<int?>("TreatmentPlanId1")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -1166,13 +1195,21 @@ namespace DMSAPI.Migrations
 
                     b.HasIndex("AppointmentId");
 
+                    b.HasIndex("AppointmentId1");
+
                     b.HasIndex("PatientId");
+
+                    b.HasIndex("PatientId1");
 
                     b.HasIndex("ServiceId");
 
                     b.HasIndex("ServiceRequirementId");
 
+                    b.HasIndex("ServiceRequirementId1");
+
                     b.HasIndex("TreatmentPlanId");
+
+                    b.HasIndex("TreatmentPlanId1");
 
                     b.ToTable("patient_services", (string)null);
                 });
@@ -1206,11 +1243,16 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("tp_ID");
 
+                    b.Property<int?>("TreatmentPlanId1")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ServiceId");
 
                     b.HasIndex("TreatmentPlanId");
+
+                    b.HasIndex("TreatmentPlanId1");
 
                     b.ToTable("plan_services", (string)null);
                 });
@@ -1225,6 +1267,9 @@ namespace DMSAPI.Migrations
                     b.Property<int>("AppointmentId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("apt_ID");
+
+                    b.Property<int?>("AppointmentId1")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -1249,6 +1294,9 @@ namespace DMSAPI.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
+
+                    b.Property<int?>("PatientId1")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Reason")
                         .HasMaxLength(100)
@@ -1275,6 +1323,9 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("staff_ID");
 
+                    b.Property<int?>("StaffId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TreatmentPlanId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("tp_ID");
@@ -1283,11 +1334,19 @@ namespace DMSAPI.Migrations
 
                     b.HasIndex("AppointmentId");
 
+                    b.HasIndex("AppointmentId1");
+
+                    b.HasIndex("DamageServiceId");
+
                     b.HasIndex("PatientId");
+
+                    b.HasIndex("PatientId1");
 
                     b.HasIndex("ServiceId");
 
                     b.HasIndex("StaffId");
+
+                    b.HasIndex("StaffId1");
 
                     b.HasIndex("TreatmentPlanId");
 
@@ -1309,7 +1368,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("description");
 
-                    b.Property<decimal>("Fee")
+                    b.Property<decimal?>("Fee")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("fee");
 
@@ -1613,15 +1672,27 @@ namespace DMSAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DMS.Modules.Patients.Entities.Patient", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId1");
+
                     b.HasOne("DMS.Modules.Treatments.Entities.Service", "Service")
                         .WithMany()
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("DMS.Modules.Treatments.Entities.Service", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("ServiceId1");
+
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
                         .WithMany()
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("DMS.Modules.Staffs.Entities.Staff", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("StaffId1");
 
                     b.Navigation("Patient");
 
@@ -1765,9 +1836,9 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Patients.Entities.Patient", b =>
                 {
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("Patients")
                         .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Staff");
@@ -1812,6 +1883,10 @@ namespace DMSAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DMS.Modules.Patients.Entities.Patient", null)
+                        .WithMany("ConditionDetails")
+                        .HasForeignKey("PatientId1");
+
                     b.Navigation("Condition");
 
                     b.Navigation("Patient");
@@ -1823,11 +1898,19 @@ namespace DMSAPI.Migrations
                         .WithMany()
                         .HasForeignKey("AppointmentId");
 
+                    b.HasOne("DMS.Modules.Appointments.Entities.Appointment", null)
+                        .WithMany("PatientServices")
+                        .HasForeignKey("AppointmentId1");
+
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DMS.Modules.Patients.Entities.Patient", null)
+                        .WithMany("PatientServices")
+                        .HasForeignKey("PatientId1");
 
                     b.HasOne("DMS.Modules.Treatments.Entities.Service", "Service")
                         .WithMany("PatientServices")
@@ -1837,11 +1920,21 @@ namespace DMSAPI.Migrations
 
                     b.HasOne("DMS.Modules.Treatments.Entities.ServiceRequirement", "ServiceRequirement")
                         .WithMany()
-                        .HasForeignKey("ServiceRequirementId");
+                        .HasForeignKey("ServiceRequirementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DMS.Modules.Treatments.Entities.ServiceRequirement", null)
+                        .WithMany("PatientServices")
+                        .HasForeignKey("ServiceRequirementId1");
 
                     b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", "TreatmentPlan")
                         .WithMany()
                         .HasForeignKey("TreatmentPlanId");
+
+                    b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", null)
+                        .WithMany("PatientServices")
+                        .HasForeignKey("TreatmentPlanId1");
 
                     b.Navigation("Appointment");
 
@@ -1868,6 +1961,10 @@ namespace DMSAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", null)
+                        .WithMany("PlanServices")
+                        .HasForeignKey("TreatmentPlanId1");
+
                     b.Navigation("Service");
 
                     b.Navigation("TreatmentPlan");
@@ -1881,14 +1978,28 @@ namespace DMSAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DMS.Modules.Appointments.Entities.Appointment", null)
+                        .WithMany("Retreatments")
+                        .HasForeignKey("AppointmentId1");
+
+                    b.HasOne("DMS.Modules.Treatments.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("DamageServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DMS.Modules.Treatments.Entities.Service", "Service")
-                        .WithMany()
+                    b.HasOne("DMS.Modules.Patients.Entities.Patient", null)
+                        .WithMany("Retreatments")
+                        .HasForeignKey("PatientId1");
+
+                    b.HasOne("DMS.Modules.Treatments.Entities.Service", null)
+                        .WithMany("Retreatments")
                         .HasForeignKey("ServiceId");
 
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
@@ -1896,6 +2007,10 @@ namespace DMSAPI.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("DMS.Modules.Staffs.Entities.Staff", null)
+                        .WithMany("Retreatments")
+                        .HasForeignKey("StaffId1");
 
                     b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", "TreatmentPlan")
                         .WithMany()
@@ -1917,12 +2032,12 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.TreatmentPlan", b =>
                 {
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("TreatmentPlans")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("TreatmentPlans")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.SetNull);
 
@@ -1993,6 +2108,13 @@ namespace DMSAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DMS.Modules.Appointments.Entities.Appointment", b =>
+                {
+                    b.Navigation("PatientServices");
+
+                    b.Navigation("Retreatments");
+                });
+
             modelBuilder.Entity("DMS.Modules.Finances.Entities.Expense", b =>
                 {
                     b.Navigation("Details");
@@ -2023,9 +2145,33 @@ namespace DMSAPI.Migrations
                     b.Navigation("Payments");
                 });
 
+            modelBuilder.Entity("DMS.Modules.Patients.Entities.Patient", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("ConditionDetails");
+
+                    b.Navigation("PatientServices");
+
+                    b.Navigation("Retreatments");
+
+                    b.Navigation("TreatmentPlans");
+                });
+
             modelBuilder.Entity("DMS.Modules.Pharmacy.Entities.MedicineInventory", b =>
                 {
                     b.Navigation("Sales");
+                });
+
+            modelBuilder.Entity("DMS.Modules.Staffs.Entities.Staff", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Patients");
+
+                    b.Navigation("Retreatments");
+
+                    b.Navigation("TreatmentPlans");
                 });
 
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.Condition", b =>
@@ -2034,6 +2180,22 @@ namespace DMSAPI.Migrations
                 });
 
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.Service", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("PatientServices");
+
+                    b.Navigation("PlanServices");
+
+                    b.Navigation("Retreatments");
+                });
+
+            modelBuilder.Entity("DMS.Modules.Treatments.Entities.ServiceRequirement", b =>
+                {
+                    b.Navigation("PatientServices");
+                });
+
+            modelBuilder.Entity("DMS.Modules.Treatments.Entities.TreatmentPlan", b =>
                 {
                     b.Navigation("PatientServices");
 

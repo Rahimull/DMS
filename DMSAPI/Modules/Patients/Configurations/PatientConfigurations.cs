@@ -73,8 +73,8 @@ public class PatientConfiguration : IEntityTypeConfiguration<Patient>
             .HasMaxLength(200);
 
         builder.HasOne(x => x.Staff)
-            .WithMany()
+            .WithMany(x => x.Patients)
             .HasForeignKey(x => x.StaffId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

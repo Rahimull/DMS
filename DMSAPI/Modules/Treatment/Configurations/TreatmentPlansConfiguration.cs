@@ -20,14 +20,16 @@ public class TreatmentPlanConfiguration : IEntityTypeConfiguration<TreatmentPlan
 
         builder.Property(x => x.Discount)
             .HasColumnType("decimal(18,2)");
-
+         // Patient -> TreatmentPlans
         builder.HasOne(x => x.Patient)
-            .WithMany()
+            .WithMany(x => x.TreatmentPlans)
             .HasForeignKey(x => x.PatientId)
             .OnDelete(DeleteBehavior.SetNull);
 
+
+        // Staff -> TreatmentPlans
         builder.HasOne(x => x.Staff)
-            .WithMany()
+            .WithMany(x => x.TreatmentPlans)
             .HasForeignKey(x => x.StaffId)
             .OnDelete(DeleteBehavior.SetNull);
     }
