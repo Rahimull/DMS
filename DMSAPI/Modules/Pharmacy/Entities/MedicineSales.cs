@@ -7,30 +7,29 @@ namespace DMS.Modules.Pharmacy.Entities;
 
 public class MedicineSale : BaseEntity
 {
-    [Column("medicine_ID")]
+    [Column("med_ID")]
     public int MedicineInventoryId { get; set; }
 
-    [Column("pat_ID")]
+    [Column("patient_ID")]
     public int? PatientId { get; set; }
 
     [Column("staff_ID")]
     public int StaffId { get; set; }
+     
 
-    [Column("qty")]
+    [Column("qty_sold")]
     public decimal Quantity { get; set; }
-
-    [Column("unit_price")]
-    public decimal UnitPrice { get; set; }
-
-    [Column("total")]
-    public decimal Total { get; set; }
-
     [Column("sale_date")]
     public DateOnly SaleDate { get; set; }
 
-    public MedicineInventory MedicineInventory { get; set; } = null!;
+    [Column("total_price")]
+    public decimal TotalPrice { get; set; }
+
+   
+
+    public MedicineInventory? MedicineInventory { get; set; }
 
     public Patient? Patient { get; set; }
 
-    public Staff Staff { get; set; } = null!;
+    public Staff? Staff { get; set; }
 }

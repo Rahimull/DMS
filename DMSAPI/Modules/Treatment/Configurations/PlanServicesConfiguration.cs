@@ -16,7 +16,7 @@ public class PlanServiceConfiguration : IEntityTypeConfiguration<PlanService>
             .HasColumnName("ps_ID");
 
         builder.HasOne(x => x.TreatmentPlan)
-            .WithMany()
+            .WithMany(x => x.PlanServices)
             .HasForeignKey(x => x.TreatmentPlanId)
             .OnDelete(DeleteBehavior.Cascade);
 

@@ -124,6 +124,13 @@ export const sidebarItems= [
 
         icon: ClipboardList,
       },
+      {
+        title: "لیست پلان درمان",
+
+        path: "/treatmentPlanList",
+
+        icon: ClipboardList,
+      },
 
       {
         title: "درمان مجدد",

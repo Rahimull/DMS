@@ -9,7 +9,7 @@ const PaymentSummary = ({
   onChange,
 }) => {
   const total = services.reduce(
-    (sum, item) => sum + Number(item.total || 0),
+    (sum, item) => sum + Number(item.totalFee || 0),
 
     0,
   );

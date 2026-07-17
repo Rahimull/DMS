@@ -13,10 +13,8 @@ public class LabPaymentConfiguration : IEntityTypeConfiguration<LabPayment>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("payment_ID");
+            .HasColumnName("lab_payment_ID");
 
-        builder.Property(x => x.Amount)
-            .HasColumnType("decimal(18,2)");
 
         builder.HasOne(x => x.LabCase)
             .WithMany(x => x.Payments)
@@ -24,8 +22,12 @@ public class LabPaymentConfiguration : IEntityTypeConfiguration<LabPayment>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Staff)
-            .WithMany()
+            .WithMany(x => x.Payments)
             .HasForeignKey(x => x.StaffId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.Lab)
+            .WithMany(x => x.Payments)
+            .HasForeignKey(x => x.LabId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DMS.Modules.Finances.Entities;
 using DMS.Modules.Patients.Entities;
 using DMS.Modules.Staffs.Entities;
 using DMS.Shared.Common;
@@ -51,4 +52,7 @@ public class TreatmentPlan : BaseEntity
     public ICollection<PatientService> PatientServices { get; set; } = new List<PatientService>();
 
     public ICollection<PlanService> PlanServices { get; set; } = new List<PlanService>();
+    public ICollection<ConditionDetail> ConditionDetails { get; set; } = new List<ConditionDetail>();
+    public ICollection<Retreatment> Retreatments { get; set; } = new List<Retreatment>();
+     public ICollection<FeePayment> FeePayments { get; set; } = new List<FeePayment>();
 }

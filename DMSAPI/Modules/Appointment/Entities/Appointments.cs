@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DMS.Modules.Finances.Entities;
 using DMS.Modules.Patients.Entities;
 using DMS.Modules.Staffs.Entities;
 using DMS.Modules.Treatments.Entities;
@@ -42,11 +43,11 @@ public class Appointment : BaseEntity
     [Column("status")]
     public string? Status { get; set; }
 
-    [MaxLength(500)]
+    [MaxLength(200)]
     [Column("notification")]
     public string? Notification { get; set; }
 
-    [MaxLength(1000)]
+    [MaxLength(200)]
     [Column("details")]
     public string? Details { get; set; }
 
@@ -60,4 +61,5 @@ public class Appointment : BaseEntity
     public ICollection<PatientService> PatientServices { get; set; } = new List<PatientService>();
 
      public ICollection<Retreatment> Retreatments { get; set; } = new List<Retreatment>();
+     public ICollection<FeePayment> FeePayments { get; set; } = new List<FeePayment>();
 }

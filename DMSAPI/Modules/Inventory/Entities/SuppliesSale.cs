@@ -7,30 +7,28 @@ namespace DMS.Modules.Inventory.Entities;
 
 public class SupplySale : BaseEntity
 {
-    [Column("item_ID")]
-    public int SupplyInventoryId { get; set; }
+    [Column("supply_ID")]
+    public int? SupplyInventoryId { get; set; }
 
-    [Column("pat_ID")]
+    [Column("patient_ID")]
     public int? PatientId { get; set; }
 
     [Column("staff_ID")]
-    public int StaffId { get; set; }
+    public int? StaffId { get; set; }
 
-    [Column("qty")]
-    public decimal Quantity { get; set; }
-
-    [Column("unit_price")]
-    public decimal UnitPrice { get; set; }
-
-    [Column("total")]
-    public decimal Total { get; set; }
-
+    [Column("qty_sold")]
+    public decimal QuantitySold { get; set; }
     [Column("sale_date")]
     public DateOnly SaleDate { get; set; }
 
-    public SupplyInventory SupplyInventory { get; set; } = null!;
+    [Column("total_price")]
+    public decimal TotalPrice { get; set; }
+
+    
+
+    public SupplyInventory? SupplyInventory { get; set; }
 
     public Patient? Patient { get; set; }
 
-    public Staff Staff { get; set; } = null!;
+    public Staff? Staff { get; set; }
 }

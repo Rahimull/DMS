@@ -1,8 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DMS.Modules.Appointments.Entities;
+using DMS.Modules.Inventory.Entities;
+using DMS.Modules.Labs.Entities;
+using DMS.Modules.Pharmacy.Entities;
 using DMS.Modules.Staffs.Entities;
 using DMS.Modules.Treatments.Entities;
+using DMS.Modules.Xrays.Entities;
 using DMS.Shared.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -83,4 +87,9 @@ public class Patient : BaseEntity
      public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
       public ICollection<ConditionDetail> ConditionDetails { get; set; } = new List<ConditionDetail>();
+      public ICollection<LabCase> LabCases { get; set; } = new List<LabCase>();
+
+      public ICollection<SupplySale> SupplySales { get; set; } = new List<SupplySale>();
+      public ICollection<MedicineSale> MedicineSales { get; set; } = new List<MedicineSale>();
+      public ICollection<PatientXray> PatientXrays { get; set; } = new List<PatientXray>();
 }

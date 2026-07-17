@@ -16,7 +16,7 @@ public class PatientXrayConfiguration : IEntityTypeConfiguration<PatientXray>
             .HasColumnName("xray_ID");
 
         builder.HasOne(x => x.Patient)
-            .WithMany()
+            .WithMany(x => x.PatientXrays)
             .HasForeignKey(x => x.PatientId)
             .OnDelete(DeleteBehavior.Cascade);
     }

@@ -8,27 +8,24 @@ namespace DMS.Modules.Inventory.Entities;
 [Index(nameof(Name), IsUnique = true)]
 public class SupplyInventory : BaseEntity
 {
-    [Required]
+    
     [MaxLength(150)]
-    [Column("item_name")]
-    public string Name { get; set; } = null!;
+    [Column("name")]
+    public string? Name { get; set; }
+     [Column("qty_in_stock")]
+    public int QtyInStock { get; set; }
 
     [MaxLength(50)]
-    [Column("unit")]
-    public string? Unit { get; set; }
-
-    [Column("quantity")]
-    public decimal Quantity { get; set; }
-
     [Column("unit_price")]
-    public decimal UnitPrice { get; set; }
+    public decimal? UnitPrice { get; set; }
 
-    [Column("reorder_level")]
-    public decimal ReorderLevel { get; set; }
 
-    [MaxLength(500)]
+    [MaxLength(200)]
     [Column("description")]
     public string? Description { get; set; }
+
+    [Column("reg_date")]
+    public DateOnly RegDate { get; set; }
 
     public ICollection<SupplySale> Sales { get; set; } = new List<SupplySale>();
 }

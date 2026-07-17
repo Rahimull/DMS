@@ -13,15 +13,15 @@ public class PatientXray : BaseEntity
     [Required]
     [MaxLength(150)]
     [Column("xray_name")]
-    public string Name { get; set; } = null!;
+    public string XrayName { get; set; } = null!;
 
-    [Column("xray_date")]
-    public DateOnly XrayDate { get; set; }
+    [Column("xray_type")]
+    public string Xraytype { get; set; } = null!;
 
-    [Column("image")]
-    public string? Image { get; set; }
+    [Column("reg_date")]
+    public DateOnly RegDate { get; set; }
 
-    [MaxLength(500)]
+    [MaxLength(200)]
     [Column("description")]
     public string? Description { get; set; }
 

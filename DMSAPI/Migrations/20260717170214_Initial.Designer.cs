@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMSAPI.Migrations
 {
     [DbContext(typeof(DMSContext))]
-    [Migration("20260715125616_FixTreatmentPlanRelations")]
-    partial class FixTreatmentPlanRelations
+    [Migration("20260717170214_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,11 +96,11 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("apt_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Details")
-                        .HasMaxLength(1000)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT")
                         .HasColumnName("details");
 
@@ -120,16 +120,13 @@ namespace DMSAPI.Migrations
                         .HasColumnName("meet_date");
 
                     b.Property<string>("Notification")
-                        .HasMaxLength(500)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT")
                         .HasColumnName("notification");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
-
-                    b.Property<int?>("PatientId1")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Round")
                         .HasColumnType("INTEGER")
@@ -143,15 +140,9 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("service_ID");
 
-                    b.Property<int?>("ServiceId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("StaffId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("staff_ID");
-
-                    b.Property<int?>("StaffId1")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
                         .HasMaxLength(50)
@@ -166,15 +157,9 @@ namespace DMSAPI.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("PatientId1");
-
                     b.HasIndex("ServiceId");
 
-                    b.HasIndex("ServiceId1");
-
                     b.HasIndex("StaffId");
-
-                    b.HasIndex("StaffId1");
 
                     b.ToTable("appointments", (string)null);
                 });
@@ -192,7 +177,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("clinic_address");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -239,28 +224,63 @@ namespace DMSAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("class_ID");
+                        .HasColumnName("class_rev_ID");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("amount");
+                    b.Property<decimal>("AmountDue")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("amount_due");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<decimal>("AmountReceived")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("amount_received");
+
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
+                    b.Property<string>("FaterName")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT")
-                        .HasColumnName("description");
+                        .HasColumnName("student_fathername");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("student_firstname");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("invoice_ID");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
+                    b.Property<string>("LastName")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT")
-                        .HasColumnName("class_name");
+                        .HasColumnName("student_lastname");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("notes");
+
+                    b.Property<DateOnly?>("RegisterDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("reg_date");
+
+                    b.Property<string>("Subject")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("subject");
+
+                    b.Property<string>("TeacherFullName")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("teacher_fullname");
+
+                    b.Property<decimal>("TotalFee")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("total_fee");
 
                     b.HasKey("Id");
 
@@ -272,15 +292,10 @@ namespace DMSAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("expense_ID");
+                        .HasColumnName("exp_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("description");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
@@ -301,33 +316,57 @@ namespace DMSAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("detail_ID");
+                        .HasColumnName("exp_detail_ID");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("amount");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
-
-                    b.Property<DateOnly>("ExpenseDate")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("expense_date");
 
                     b.Property<int>("ExpenseId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("expense_ID");
+                        .HasColumnName("exp_ID");
 
                     b.Property<int?>("ExpenseInvoiceId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("invoice_ID");
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Inoice")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("invoice");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("item_name");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("note");
+
+                    b.Property<DateOnly>("PurchaseDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("purchase_date");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("quantity");
+
+                    b.Property<string>("QuantityUnit")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("qty_unit");
+
                     b.Property<int>("StaffId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("staff_ID");
+                        .HasColumnName("purchased_by");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("total");
+
+                    b.Property<int>("UnitPrice")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("unit_price");
 
                     b.HasKey("Id");
 
@@ -345,28 +384,35 @@ namespace DMSAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("invoice_ID");
+                        .HasColumnName("exp_inv_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("file_path");
 
                     b.Property<DateOnly>("InvoiceDate")
                         .HasColumnType("TEXT")
                         .HasColumnName("invoice_date");
 
-                    b.Property<string>("InvoiceNo")
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("invoice_no");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total_amount");
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("notes");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("created_by");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StaffId");
 
                     b.ToTable("expense_invoices", (string)null);
                 });
@@ -378,46 +424,31 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("payment_ID");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("amount");
-
                     b.Property<int?>("AppointmentId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("apt_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("discount");
+                    b.Property<decimal>("DueAmount")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("due_amount");
+
+                    b.Property<int>("InstallmentCounter")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("installment_counter");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("PaidAmount")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("paid_amount");
+
                     b.Property<DateOnly>("PaymentDate")
                         .HasColumnType("TEXT")
                         .HasColumnName("payment_date");
-
-                    b.Property<string>("PaymentType")
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("payment_type");
-
-                    b.Property<string>("ReferenceNo")
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("reference_no");
-
-                    b.Property<decimal>("Remaining")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("remaining");
-
-                    b.Property<string>("Remarks")
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("remarks");
 
                     b.Property<int>("StaffId")
                         .HasColumnType("INTEGER")
@@ -426,6 +457,10 @@ namespace DMSAPI.Migrations
                     b.Property<int?>("TreatmentPlanId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("tp_ID");
+
+                    b.Property<decimal>("WholeFeePaid")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("whole_fee_paid");
 
                     b.HasKey("Id");
 
@@ -438,39 +473,6 @@ namespace DMSAPI.Migrations
                     b.ToTable("fee_payments", (string)null);
                 });
 
-            modelBuilder.Entity("DMS.Modules.Finances.Entities.Tax", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("tax_ID");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("description");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("tax_name");
-
-                    b.Property<decimal>("Percentage")
-                        .HasColumnType("decimal(5,2)")
-                        .HasColumnName("percentage");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("taxes", (string)null);
-                });
-
             modelBuilder.Entity("DMS.Modules.Finances.Entities.TaxPayment", b =>
                 {
                     b.Property<int>("Id")
@@ -480,43 +482,87 @@ namespace DMSAPI.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("amount");
+                        .HasColumnName("paid_amount");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("DuePaid")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("due_paid");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("PaymentDate")
+                    b.Property<DateOnly>("ModifiedAt")
                         .HasColumnType("TEXT")
-                        .HasColumnName("payment_date");
+                        .HasColumnName("modified_at");
 
-                    b.Property<string>("ReferenceNo")
-                        .HasMaxLength(100)
+                    b.Property<string>("Note")
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT")
-                        .HasColumnName("reference_no");
+                        .HasColumnName("note");
 
-                    b.Property<string>("Remarks")
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("remarks");
-
-                    b.Property<int>("StaffId")
+                    b.Property<int>("PaidBy")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("staff_ID");
+                        .HasColumnName("paid_by");
 
-                    b.Property<int>("TaxId")
+                    b.Property<DateOnly>("PaidDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("paid_date");
+
+                    b.Property<int>("TaxesId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("tax_ID");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StaffId");
+                    b.HasIndex("PaidBy");
 
-                    b.HasIndex("TaxId");
+                    b.HasIndex("TaxesId");
 
-                    b.ToTable("tax_payments", (string)null);
+                    b.ToTable("tax_pay_ID", (string)null);
+                });
+
+            modelBuilder.Entity("DMS.Modules.Finances.Entities.Taxes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("tax_ID");
+
+                    b.Property<decimal>("AnnualIncome")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("annual_income");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TIN")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("TIN");
+
+                    b.Property<decimal>("TaxForYear")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("tax_for_year");
+
+                    b.Property<decimal>("TaxRate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("tax_rate");
+
+                    b.Property<decimal>("TotalAnnualTax")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("total_annual_tax");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("taxes", (string)null);
                 });
 
             modelBuilder.Entity("DMS.Modules.Inventory.Entities.SupplyInventory", b =>
@@ -524,13 +570,13 @@ namespace DMSAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("item_ID");
+                        .HasColumnName("supply_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT")
                         .HasColumnName("description");
 
@@ -538,25 +584,20 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("TEXT")
-                        .HasColumnName("item_name");
+                        .HasColumnName("name");
 
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("quantity");
+                    b.Property<int>("QtyInStock")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("qty_in_stock");
 
-                    b.Property<decimal>("ReorderLevel")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("reorder_level");
-
-                    b.Property<string>("Unit")
-                        .HasMaxLength(50)
+                    b.Property<DateOnly>("RegDate")
                         .HasColumnType("TEXT")
-                        .HasColumnName("unit");
+                        .HasColumnName("reg_date");
 
-                    b.Property<decimal>("UnitPrice")
+                    b.Property<decimal?>("UnitPrice")
+                        .HasMaxLength(50)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("unit_price");
 
@@ -573,9 +614,9 @@ namespace DMSAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("sale_ID");
+                        .HasColumnName("ssale_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -583,31 +624,27 @@ namespace DMSAPI.Migrations
 
                     b.Property<int?>("PatientId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("pat_ID");
+                        .HasColumnName("patient_ID");
 
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("qty");
+                    b.Property<decimal>("QuantitySold")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("qty_sold");
 
                     b.Property<DateOnly>("SaleDate")
                         .HasColumnType("TEXT")
                         .HasColumnName("sale_date");
 
-                    b.Property<int>("StaffId")
+                    b.Property<int?>("StaffId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("staff_ID");
 
-                    b.Property<int>("SupplyInventoryId")
+                    b.Property<int?>("SupplyInventoryId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("item_ID");
+                        .HasColumnName("supply_ID");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("unit_price");
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("total_price");
 
                     b.HasKey("Id");
 
@@ -632,16 +669,16 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("address");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("description");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("LabManager")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("lab_manager");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -649,10 +686,17 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("lab_name");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("Phone1")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("TEXT")
-                        .HasColumnName("phone");
+                        .HasColumnName("phone1");
+
+                    b.Property<string>("Phone2")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("phone2");
 
                     b.HasKey("Id");
 
@@ -669,26 +713,25 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("case_ID");
 
-                    b.Property<DateOnly>("CaseDate")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("case_date");
-
-                    b.Property<string>("CaseName")
+                    b.Property<string>("CaseStatus")
                         .IsRequired()
-                        .HasMaxLength(150)
                         .HasColumnType("TEXT")
-                        .HasColumnName("case_name");
+                        .HasColumnName("case_status");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<int>("CaseType")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("case_type");
+
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateOnly?>("DeliveryDate")
+                    b.Property<DateOnly>("DateReceived")
                         .HasColumnType("TEXT")
-                        .HasColumnName("delivery_date");
+                        .HasColumnName("date_received");
 
-                    b.Property<decimal>("Fee")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("fee");
+                    b.Property<DateOnly>("DateSent")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("date_sent");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
@@ -697,25 +740,50 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("lab_ID");
 
+                    b.Property<string>("Material")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("material");
+
                     b.Property<string>("Notes")
-                        .HasMaxLength(500)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT")
                         .HasColumnName("notes");
 
+                    b.Property<string>("OtherServiceDetails")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("otherService_details");
+
                     b.Property<int>("PatientId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("pat_ID");
+                        .HasColumnName("patient_ID");
 
-                    b.Property<string>("Status")
-                        .HasMaxLength(50)
+                    b.Property<decimal>("Quantity")
                         .HasColumnType("TEXT")
-                        .HasColumnName("status");
+                        .HasColumnName("quantity");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("staff_ID");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("total_price");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("unit_price");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CaseType");
 
                     b.HasIndex("LabId");
 
                     b.HasIndex("PatientId");
+
+                    b.HasIndex("StaffId");
 
                     b.ToTable("lab_cases", (string)null);
                 });
@@ -725,13 +793,17 @@ namespace DMSAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("payment_ID");
+                        .HasColumnName("lab_payment_ID");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("amount");
+                    b.Property<decimal>("AmountDue")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("amount_due");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<decimal>("AmountPaid")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("amount_paid");
+
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -741,19 +813,17 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("case_ID");
 
+                    b.Property<int>("LabId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("lab_ID");
+
                     b.Property<DateOnly>("PaymentDate")
                         .HasColumnType("TEXT")
                         .HasColumnName("payment_date");
 
-                    b.Property<string>("ReferenceNo")
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("reference_no");
-
-                    b.Property<string>("Remarks")
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("remarks");
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("payment_status");
 
                     b.Property<int>("StaffId")
                         .HasColumnType("INTEGER")
@@ -762,6 +832,8 @@ namespace DMSAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LabCaseId");
+
+                    b.HasIndex("LabId");
 
                     b.HasIndex("StaffId");
 
@@ -789,7 +861,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("blood_group");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("CustomerPatientId")
@@ -869,50 +941,64 @@ namespace DMSAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("medicine_ID");
+                        .HasColumnName("med_ID");
 
-                    b.Property<string>("Company")
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Dosage")
                         .HasMaxLength(100)
                         .HasColumnType("TEXT")
-                        .HasColumnName("company");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnName("dosage");
 
                     b.Property<DateOnly?>("ExpireDate")
                         .HasColumnType("TEXT")
                         .HasColumnName("expire_date");
 
-                    b.Property<string>("GenericName")
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("generic_name");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<DateOnly?>("IssueDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("issue_date");
+
+                    b.Property<string>("Name1")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("TEXT")
-                        .HasColumnName("medicine_name");
+                        .HasColumnName("name1");
 
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("quantity");
+                    b.Property<string>("Name2")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("name2");
 
-                    b.Property<string>("Unit")
+                    b.Property<int>("QtyInStock")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("qty_in_stock");
+
+                    b.Property<string>("Strength")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("strength");
+
+                    b.Property<string>("Type")
                         .HasMaxLength(50)
                         .HasColumnType("TEXT")
-                        .HasColumnName("unit");
+                        .HasColumnName("type");
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("unit_price");
 
+                    b.Property<string>("notes")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("notes");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Name1")
                         .IsUnique();
 
                     b.ToTable("medicine_inventory", (string)null);
@@ -923,9 +1009,9 @@ namespace DMSAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("sale_ID");
+                        .HasColumnName("msale_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -933,15 +1019,15 @@ namespace DMSAPI.Migrations
 
                     b.Property<int>("MedicineInventoryId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("medicine_ID");
+                        .HasColumnName("med_ID");
 
                     b.Property<int?>("PatientId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("pat_ID");
+                        .HasColumnName("patient_ID");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("qty");
+                        .HasColumnName("qty_sold");
 
                     b.Property<DateOnly>("SaleDate")
                         .HasColumnType("TEXT")
@@ -951,13 +1037,9 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("staff_ID");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("unit_price");
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("total_price");
 
                     b.HasKey("Id");
 
@@ -986,7 +1068,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("BLOB")
                         .HasColumnName("contract_file");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FamilyPhone1")
@@ -1070,7 +1152,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("condition_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1103,7 +1185,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("condition_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<DateOnly?>("DaignosisDate")
@@ -1122,9 +1204,6 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
 
-                    b.Property<int?>("PatientId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Result")
                         .HasColumnType("INTEGER")
                         .HasColumnName("result");
@@ -1133,13 +1212,16 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("severty");
 
+                    b.Property<int>("TreatmentPlanId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ConditionId");
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("PatientId1");
+                    b.HasIndex("TreatmentPlanId");
 
                     b.ToTable("condition_details", (string)null);
                 });
@@ -1155,10 +1237,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("apt_ID");
 
-                    b.Property<int?>("AppointmentId1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -1168,26 +1247,17 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
 
-                    b.Property<int?>("PatientId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("ServiceId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("service_ID");
+                        .HasColumnName("ser_ID");
 
                     b.Property<int>("ServiceRequirementId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("ser_req_ID");
-
-                    b.Property<int?>("ServiceRequirementId1")
-                        .HasColumnType("INTEGER");
+                        .HasColumnName("req_ID");
 
                     b.Property<int?>("TreatmentPlanId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("tp_ID");
-
-                    b.Property<int?>("TreatmentPlanId1")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -1198,21 +1268,13 @@ namespace DMSAPI.Migrations
 
                     b.HasIndex("AppointmentId");
 
-                    b.HasIndex("AppointmentId1");
-
                     b.HasIndex("PatientId");
-
-                    b.HasIndex("PatientId1");
 
                     b.HasIndex("ServiceId");
 
                     b.HasIndex("ServiceRequirementId");
 
-                    b.HasIndex("ServiceRequirementId1");
-
                     b.HasIndex("TreatmentPlanId");
-
-                    b.HasIndex("TreatmentPlanId1");
 
                     b.ToTable("patient_services", (string)null);
                 });
@@ -1224,7 +1286,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("ps_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -1246,16 +1308,11 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("tp_ID");
 
-                    b.Property<int?>("TreatmentPlanId1")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ServiceId");
 
                     b.HasIndex("TreatmentPlanId");
-
-                    b.HasIndex("TreatmentPlanId1");
 
                     b.ToTable("plan_services", (string)null);
                 });
@@ -1271,10 +1328,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("apt_ID");
 
-                    b.Property<int?>("AppointmentId1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("DamageServiceId")
@@ -1298,9 +1352,6 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
 
-                    b.Property<int?>("PatientId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Reason")
                         .HasMaxLength(100)
                         .HasColumnType("TEXT")
@@ -1319,15 +1370,9 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("retreatment_outcome");
 
-                    b.Property<int?>("ServiceId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("StaffId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("staff_ID");
-
-                    b.Property<int?>("StaffId1")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TreatmentPlanId")
                         .HasColumnType("INTEGER")
@@ -1337,19 +1382,11 @@ namespace DMSAPI.Migrations
 
                     b.HasIndex("AppointmentId");
 
-                    b.HasIndex("AppointmentId1");
-
                     b.HasIndex("DamageServiceId");
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("PatientId1");
-
-                    b.HasIndex("ServiceId");
-
                     b.HasIndex("StaffId");
-
-                    b.HasIndex("StaffId1");
 
                     b.HasIndex("TreatmentPlanId");
 
@@ -1363,7 +1400,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("service_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1399,7 +1436,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("requirement_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -1423,7 +1460,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("tp_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Discount")
@@ -1492,34 +1529,35 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("xray_ID");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT")
                         .HasColumnName("description");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("image");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("xray_name");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
 
-                    b.Property<DateOnly>("XrayDate")
+                    b.Property<DateOnly>("RegDate")
                         .HasColumnType("TEXT")
-                        .HasColumnName("xray_date");
+                        .HasColumnName("reg_date");
+
+                    b.Property<string>("XrayName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("xray_name");
+
+                    b.Property<string>("Xraytype")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("xray_type");
 
                     b.HasKey("Id");
 
@@ -1670,32 +1708,20 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Appointments.Entities.Appointment", b =>
                 {
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DMS.Modules.Patients.Entities.Patient", null)
-                        .WithMany("Appointments")
-                        .HasForeignKey("PatientId1");
-
                     b.HasOne("DMS.Modules.Treatments.Entities.Service", "Service")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DMS.Modules.Treatments.Entities.Service", null)
-                        .WithMany("Appointments")
-                        .HasForeignKey("ServiceId1");
-
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("DMS.Modules.Staffs.Entities.Staff", null)
-                        .WithMany("Appointments")
-                        .HasForeignKey("StaffId1");
 
                     b.Navigation("Patient");
 
@@ -1707,24 +1733,33 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Finances.Entities.ExpenseDetail", b =>
                 {
                     b.HasOne("DMS.Modules.Finances.Entities.Expense", "Expense")
-                        .WithMany("Details")
+                        .WithMany("ExpenseDetail")
                         .HasForeignKey("ExpenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DMS.Modules.Finances.Entities.ExpenseInvoice", "ExpenseInvoice")
+                    b.HasOne("DMS.Modules.Finances.Entities.ExpenseInvoice", null)
                         .WithMany("Details")
                         .HasForeignKey("ExpenseInvoiceId");
 
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("ExpenseDetails")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Expense");
 
-                    b.Navigation("ExpenseInvoice");
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("DMS.Modules.Finances.Entities.ExpenseInvoice", b =>
+                {
+                    b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
+                        .WithMany("ExpenseInvoices")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Staff");
                 });
@@ -1732,18 +1767,18 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Finances.Entities.FeePayment", b =>
                 {
                     b.HasOne("DMS.Modules.Appointments.Entities.Appointment", "Appointment")
-                        .WithMany()
+                        .WithMany("FeePayments")
                         .HasForeignKey("AppointmentId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("FeePayments")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", "TreatmentPlan")
-                        .WithMany()
+                        .WithMany("FeePayments")
                         .HasForeignKey("TreatmentPlanId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -1757,39 +1792,35 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Finances.Entities.TaxPayment", b =>
                 {
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("TaxPayments")
+                        .HasForeignKey("PaidBy")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DMS.Modules.Finances.Entities.Tax", "Tax")
-                        .WithMany("Payments")
-                        .HasForeignKey("TaxId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("DMS.Modules.Finances.Entities.Taxes", "Taxes")
+                        .WithMany("TaxPayments")
+                        .HasForeignKey("TaxesId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Staff");
 
-                    b.Navigation("Tax");
+                    b.Navigation("Taxes");
                 });
 
             modelBuilder.Entity("DMS.Modules.Inventory.Entities.SupplySale", b =>
                 {
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("SupplySales")
                         .HasForeignKey("PatientId");
 
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("SupplySales")
+                        .HasForeignKey("StaffId");
 
                     b.HasOne("DMS.Modules.Inventory.Entities.SupplyInventory", "SupplyInventory")
                         .WithMany("Sales")
-                        .HasForeignKey("SupplyInventoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SupplyInventoryId");
 
                     b.Navigation("Patient");
 
@@ -1800,6 +1831,12 @@ namespace DMSAPI.Migrations
 
             modelBuilder.Entity("DMS.Modules.Labs.Entities.LabCase", b =>
                 {
+                    b.HasOne("DMS.Modules.Treatments.Entities.Service", "Service")
+                        .WithMany("LabCases")
+                        .HasForeignKey("CaseType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DMS.Modules.Labs.Entities.Lab", "Lab")
                         .WithMany("LabCases")
                         .HasForeignKey("LabId")
@@ -1807,14 +1844,24 @@ namespace DMSAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("LabCases")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
+                        .WithMany("LabCases")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Lab");
 
                     b.Navigation("Patient");
+
+                    b.Navigation("Service");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("DMS.Modules.Labs.Entities.LabPayment", b =>
@@ -1825,11 +1872,19 @@ namespace DMSAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DMS.Modules.Labs.Entities.Lab", "Lab")
+                        .WithMany("Payments")
+                        .HasForeignKey("LabId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("Payments")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Lab");
 
                     b.Navigation("LabCase");
 
@@ -1856,11 +1911,11 @@ namespace DMSAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("MedicineSales")
                         .HasForeignKey("PatientId");
 
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("MedicineSales")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1881,39 +1936,35 @@ namespace DMSAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("ConditionDetails")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DMS.Modules.Patients.Entities.Patient", null)
+                    b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", "TreatmentPlan")
                         .WithMany("ConditionDetails")
-                        .HasForeignKey("PatientId1");
+                        .HasForeignKey("TreatmentPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Condition");
 
                     b.Navigation("Patient");
+
+                    b.Navigation("TreatmentPlan");
                 });
 
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.PatientService", b =>
                 {
                     b.HasOne("DMS.Modules.Appointments.Entities.Appointment", "Appointment")
-                        .WithMany()
+                        .WithMany("PatientServices")
                         .HasForeignKey("AppointmentId");
 
-                    b.HasOne("DMS.Modules.Appointments.Entities.Appointment", null)
-                        .WithMany("PatientServices")
-                        .HasForeignKey("AppointmentId1");
-
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("PatientServices")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DMS.Modules.Patients.Entities.Patient", null)
-                        .WithMany("PatientServices")
-                        .HasForeignKey("PatientId1");
 
                     b.HasOne("DMS.Modules.Treatments.Entities.Service", "Service")
                         .WithMany("PatientServices")
@@ -1922,22 +1973,14 @@ namespace DMSAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("DMS.Modules.Treatments.Entities.ServiceRequirement", "ServiceRequirement")
-                        .WithMany()
+                        .WithMany("PatientServices")
                         .HasForeignKey("ServiceRequirementId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DMS.Modules.Treatments.Entities.ServiceRequirement", null)
-                        .WithMany("PatientServices")
-                        .HasForeignKey("ServiceRequirementId1");
-
                     b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", "TreatmentPlan")
-                        .WithMany()
-                        .HasForeignKey("TreatmentPlanId");
-
-                    b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", null)
                         .WithMany("PatientServices")
-                        .HasForeignKey("TreatmentPlanId1");
+                        .HasForeignKey("TreatmentPlanId");
 
                     b.Navigation("Appointment");
 
@@ -1959,14 +2002,10 @@ namespace DMSAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", "TreatmentPlan")
-                        .WithMany()
+                        .WithMany("PlanServices")
                         .HasForeignKey("TreatmentPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", null)
-                        .WithMany("PlanServices")
-                        .HasForeignKey("TreatmentPlanId1");
 
                     b.Navigation("Service");
 
@@ -1976,47 +2015,31 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.Retreatment", b =>
                 {
                     b.HasOne("DMS.Modules.Appointments.Entities.Appointment", "Appointment")
-                        .WithMany()
+                        .WithMany("Retreatments")
                         .HasForeignKey("AppointmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DMS.Modules.Appointments.Entities.Appointment", null)
-                        .WithMany("Retreatments")
-                        .HasForeignKey("AppointmentId1");
-
                     b.HasOne("DMS.Modules.Treatments.Entities.Service", "Service")
-                        .WithMany()
+                        .WithMany("Retreatments")
                         .HasForeignKey("DamageServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("Retreatments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DMS.Modules.Patients.Entities.Patient", null)
-                        .WithMany("Retreatments")
-                        .HasForeignKey("PatientId1");
-
-                    b.HasOne("DMS.Modules.Treatments.Entities.Service", null)
-                        .WithMany("Retreatments")
-                        .HasForeignKey("ServiceId");
-
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("Retreatments")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DMS.Modules.Staffs.Entities.Staff", null)
-                        .WithMany("Retreatments")
-                        .HasForeignKey("StaffId1");
-
                     b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", "TreatmentPlan")
-                        .WithMany()
+                        .WithMany("Retreatments")
                         .HasForeignKey("TreatmentPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2052,7 +2075,7 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Xrays.Entities.PatientXray", b =>
                 {
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("PatientXrays")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2113,6 +2136,8 @@ namespace DMSAPI.Migrations
 
             modelBuilder.Entity("DMS.Modules.Appointments.Entities.Appointment", b =>
                 {
+                    b.Navigation("FeePayments");
+
                     b.Navigation("PatientServices");
 
                     b.Navigation("Retreatments");
@@ -2120,7 +2145,7 @@ namespace DMSAPI.Migrations
 
             modelBuilder.Entity("DMS.Modules.Finances.Entities.Expense", b =>
                 {
-                    b.Navigation("Details");
+                    b.Navigation("ExpenseDetail");
                 });
 
             modelBuilder.Entity("DMS.Modules.Finances.Entities.ExpenseInvoice", b =>
@@ -2128,9 +2153,9 @@ namespace DMSAPI.Migrations
                     b.Navigation("Details");
                 });
 
-            modelBuilder.Entity("DMS.Modules.Finances.Entities.Tax", b =>
+            modelBuilder.Entity("DMS.Modules.Finances.Entities.Taxes", b =>
                 {
-                    b.Navigation("Payments");
+                    b.Navigation("TaxPayments");
                 });
 
             modelBuilder.Entity("DMS.Modules.Inventory.Entities.SupplyInventory", b =>
@@ -2141,6 +2166,8 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Labs.Entities.Lab", b =>
                 {
                     b.Navigation("LabCases");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("DMS.Modules.Labs.Entities.LabCase", b =>
@@ -2154,9 +2181,17 @@ namespace DMSAPI.Migrations
 
                     b.Navigation("ConditionDetails");
 
+                    b.Navigation("LabCases");
+
+                    b.Navigation("MedicineSales");
+
                     b.Navigation("PatientServices");
 
+                    b.Navigation("PatientXrays");
+
                     b.Navigation("Retreatments");
+
+                    b.Navigation("SupplySales");
 
                     b.Navigation("TreatmentPlans");
                 });
@@ -2170,9 +2205,25 @@ namespace DMSAPI.Migrations
                 {
                     b.Navigation("Appointments");
 
+                    b.Navigation("ExpenseDetails");
+
+                    b.Navigation("ExpenseInvoices");
+
+                    b.Navigation("FeePayments");
+
+                    b.Navigation("LabCases");
+
+                    b.Navigation("MedicineSales");
+
                     b.Navigation("Patients");
 
+                    b.Navigation("Payments");
+
                     b.Navigation("Retreatments");
+
+                    b.Navigation("SupplySales");
+
+                    b.Navigation("TaxPayments");
 
                     b.Navigation("TreatmentPlans");
                 });
@@ -2185,6 +2236,8 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.Service", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("LabCases");
 
                     b.Navigation("PatientServices");
 
@@ -2200,9 +2253,15 @@ namespace DMSAPI.Migrations
 
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.TreatmentPlan", b =>
                 {
+                    b.Navigation("ConditionDetails");
+
+                    b.Navigation("FeePayments");
+
                     b.Navigation("PatientServices");
 
                     b.Navigation("PlanServices");
+
+                    b.Navigation("Retreatments");
                 });
 #pragma warning restore 612, 618
         }

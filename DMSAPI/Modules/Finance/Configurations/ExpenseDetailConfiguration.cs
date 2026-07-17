@@ -13,21 +13,17 @@ public class ExpenseDetailConfiguration : IEntityTypeConfiguration<ExpenseDetail
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("detail_ID");
+            .HasColumnName("exp_detail_ID");
 
-        builder.Property(x => x.Amount)
-            .HasColumnType("decimal(18,2)");
 
         builder.HasOne(x => x.Expense)
-            .WithMany(x => x.Details)
+            .WithMany(x => x.ExpenseDetail)
             .HasForeignKey(x => x.ExpenseId);
 
         builder.HasOne(x => x.Staff)
-            .WithMany()
+            .WithMany(x => x.ExpenseDetails)
             .HasForeignKey(x => x.StaffId);
 
-        builder.HasOne(x => x.ExpenseInvoice)
-            .WithMany(x => x.Details)
-            .HasForeignKey(x => x.ExpenseInvoiceId);
+       
     }
 }

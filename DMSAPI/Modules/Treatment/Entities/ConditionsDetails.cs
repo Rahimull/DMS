@@ -22,6 +22,8 @@ public class ConditionDetail : BaseEntity
     [Column("diagnosis_date")]
     public DateOnly? DaignosisDate { get; set; }
 
+    public int TreatmentPlanId { get; set; }
+
     [MaxLength(1000)]
     [Column("notes")]
     public string? Notes { get; set; }
@@ -29,4 +31,5 @@ public class ConditionDetail : BaseEntity
     public Condition? Condition { get; set; }
 
     public Patient? Patient { get; set; }
+    public TreatmentPlan? TreatmentPlan { get; set; }
 }

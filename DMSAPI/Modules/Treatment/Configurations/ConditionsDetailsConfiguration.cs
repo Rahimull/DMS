@@ -20,9 +20,15 @@ public class ConditionDetailConfiguration : IEntityTypeConfiguration<ConditionDe
             .HasForeignKey(x => x.ConditionId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Property(x => x.PatientId).HasColumnName("pat_ID");
         builder.HasOne(x => x.Patient)
-            .WithMany()
+            .WithMany(x => x.ConditionDetails)
             .HasForeignKey(x => x.PatientId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.TreatmentPlan)
+            .WithMany(x => x.ConditionDetails)
+            .HasForeignKey(x => x.TreatmentPlanId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

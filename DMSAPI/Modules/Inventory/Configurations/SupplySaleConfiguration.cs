@@ -13,27 +13,18 @@ public class SupplySaleConfiguration : IEntityTypeConfiguration<SupplySale>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("sale_ID");
-
-        builder.Property(x => x.Quantity)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.UnitPrice)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Total)
-            .HasColumnType("decimal(18,2)");
+            .HasColumnName("ssale_ID");
 
         builder.HasOne(x => x.SupplyInventory)
             .WithMany(x => x.Sales)
             .HasForeignKey(x => x.SupplyInventoryId);
 
         builder.HasOne(x => x.Patient)
-            .WithMany()
+            .WithMany(x=> x.SupplySales)
             .HasForeignKey(x => x.PatientId);
 
         builder.HasOne(x => x.Staff)
-            .WithMany()
+            .WithMany(x => x.SupplySales)
             .HasForeignKey(x => x.StaffId);
     }
 }

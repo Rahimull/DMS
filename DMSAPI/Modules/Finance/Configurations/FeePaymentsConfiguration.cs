@@ -15,27 +15,18 @@ public class FeePaymentConfiguration : IEntityTypeConfiguration<FeePayment>
         builder.Property(x => x.Id)
             .HasColumnName("payment_ID");
 
-        builder.Property(x => x.Amount)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Discount)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Remaining)
-            .HasColumnType("decimal(18,2)");
-
         builder.HasOne(x => x.Appointment)
-            .WithMany()
+            .WithMany(x => x.FeePayments)
             .HasForeignKey(x => x.AppointmentId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.TreatmentPlan)
-            .WithMany()
+            .WithMany(x => x.FeePayments)
             .HasForeignKey(x => x.TreatmentPlanId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Staff)
-            .WithMany()
+            .WithMany(x => x.FeePayments)
             .HasForeignKey(x => x.StaffId)
             .OnDelete(DeleteBehavior.Restrict);
     }

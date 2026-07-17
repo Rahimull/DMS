@@ -16,30 +16,30 @@ public class RetreatmentConfiguration : IEntityTypeConfiguration<Retreatment>
             .HasColumnName("retreatment_ID");
 
         builder.HasOne(x => x.Patient)
-            .WithMany()
+            .WithMany(x => x.Retreatments)
             .HasForeignKey(x => x.PatientId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Staff)
-            .WithMany()
+            .WithMany(x => x.Retreatments)
             .HasForeignKey(x => x.StaffId)
             .OnDelete(DeleteBehavior.Restrict);
             
         builder.HasOne(x => x.Service)
-            .WithMany()
+            .WithMany(x => x.Retreatments)
             .HasForeignKey(x => x.HelpServiceId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Service)
-            .WithMany()
+            .WithMany(x => x.Retreatments)
             .HasForeignKey(x => x.DamageServiceId);
 
         builder.HasOne(x => x.TreatmentPlan)
-            .WithMany()
+            .WithMany(x => x.Retreatments)
             .HasForeignKey(x => x.TreatmentPlanId);
 
         builder.HasOne(x => x.Appointment)
-            .WithMany()
+            .WithMany(x => x.Retreatments)
             .HasForeignKey(x => x.AppointmentId);
     }
 }

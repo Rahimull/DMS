@@ -51,14 +51,29 @@ const From = ({
   // ---------------------------
   // 4. Handle Change
   // ---------------------------
+  // const handleChange = (e) => {
+  //   const { name, type, value, checked, files } = e.target;
+
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]:
+  //       type === "checkbox" ? checked : type === "file" ? files[0] : value,
+  //   }));
+  // };
+
   const handleChange = (e) => {
     const { name, type, value, checked, files } = e.target;
 
+    const newValue =
+      type === "checkbox" ? checked : type === "file" ? files[0] : value;
+
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        type === "checkbox" ? checked : type === "file" ? files[0] : value,
+
+      [name]: newValue,
     }));
+
+    console.log("FORM CHANGE:", name, newValue);
   };
 
   // ---------------------------
@@ -160,7 +175,7 @@ const From = ({
                   name={field.name}
                   type={field.type || "text"}
                   autoFocus={field.autoFocus || false}
-                  value={formData[field.name] || ""}
+                  value={formData[field.name] ?? ""}
                   onChange={handleChange}
                   options={field.options || []}
                   maxLength={field.maxLength || 100}

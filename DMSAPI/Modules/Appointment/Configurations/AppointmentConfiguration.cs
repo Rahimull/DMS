@@ -25,17 +25,17 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
             .HasColumnType("decimal(18,2)");
 
         builder.HasOne(x => x.Patient)
-            .WithMany()
+            .WithMany(x => x.Appointments)
             .HasForeignKey(x => x.PatientId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Service)
-            .WithMany()
+            .WithMany(x => x.Appointments)
             .HasForeignKey(x => x.ServiceId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Staff)
-            .WithMany()
+            .WithMany(x => x.Appointments)
             .HasForeignKey(x => x.StaffId)
             .OnDelete(DeleteBehavior.SetNull);
     }

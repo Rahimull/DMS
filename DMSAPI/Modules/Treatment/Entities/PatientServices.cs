@@ -17,9 +17,9 @@ public class PatientService : BaseEntity
     [Column("tp_ID")]
     public int? TreatmentPlanId { get; set; }
 
-    [Column("service_ID")]
+    [Column("ser_ID")]
     public int ServiceId { get; set; }
-    [Column("ser_req_ID")]
+    [Column("req_ID")]
     public int ServiceRequirementId { get; set; }
 
     [Column("value")]

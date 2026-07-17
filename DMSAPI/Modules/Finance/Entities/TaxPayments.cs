@@ -8,26 +8,29 @@ namespace DMS.Modules.Finances.Entities;
 public class TaxPayment : BaseEntity
 {
     [Column("tax_ID")]
-    public int TaxId { get; set; }
+    public int TaxesId { get; set; }
+    [Column("paid_date")]
+    public DateOnly PaidDate { get; set; }
 
-    [Column("staff_ID")]
-    public int StaffId { get; set; }
+    [Required]
+    [Column("paid_by")]
+    public int PaidBy { get; set; }
 
-    [Column("amount")]
+    [Required]
+    [Column("paid_amount")]
     public decimal Amount { get; set; }
+    [Required]
+    [Column("due_paid")]
+    public decimal DuePaid { get; set; }
 
-    [Column("payment_date")]
-    public DateOnly PaymentDate { get; set; }
+    [MaxLength(200)]
+    [Column("note")]
+    public string? Note { get; set; }
 
-    [MaxLength(100)]
-    [Column("reference_no")]
-    public string? ReferenceNo { get; set; }
+    [Column("modified_at")]
+    public DateOnly ModifiedAt { get; set; }
 
-    [MaxLength(500)]
-    [Column("remarks")]
-    public string? Remarks { get; set; }
-
-    public Tax Tax { get; set; } = null!;
+    public Taxes Taxes { get; set; } = null!;
 
     public Staff Staff { get; set; } = null!;
 }

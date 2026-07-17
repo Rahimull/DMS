@@ -12,7 +12,7 @@ const ServiceTable = ({ services = [], onChange, onAdd }) => {
   };
 
   const total = services.reduce(
-    (sum, item) => sum + Number(item.total || 0),
+    (sum, item) => sum + Number(item.totalFee || 0),
 
     0,
   );
@@ -49,13 +49,13 @@ const ServiceTable = ({ services = [], onChange, onAdd }) => {
               <td className="p-3">{item.serviceName}</td>
 
               <td>
-                {item.fee} افغانی
+                {item.serviceFee} افغانی
               </td>
 
               <td>{item.quantity}</td>
 
               <td>
-                {item.total} افغانی
+                {item.totalFee} افغانی
               </td>
 
               <td>

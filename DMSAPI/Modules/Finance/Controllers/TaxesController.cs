@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace DMS.Modules.Finances.Controllers;
 
 [Route("api/[controller]")]
-public class TaxController : BaseController<Tax>
+public class TaxesController : BaseController<Taxes>
 {
-    public TaxController(DMSContext context)
+    public TaxesController(DMSContext context)
         : base(context)
     {
     }

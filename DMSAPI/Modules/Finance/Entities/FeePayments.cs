@@ -9,6 +9,20 @@ namespace DMS.Modules.Finances.Entities;
 
 public class FeePayment : BaseEntity
 {
+    [Column("installment_counter")]
+    public int InstallmentCounter { get; set; }
+
+     [Required]
+    [Column("payment_date")]
+    public DateOnly PaymentDate { get; set; }
+    [Column("paid_amount")]
+    public decimal PaidAmount { get; set; }
+
+    [Column("due_amount")]
+    public decimal DueAmount { get; set; }
+
+    [Column("whole_fee_paid")]
+    public decimal WholeFeePaid { get; set; }
     [Column("apt_ID")]
     public int? AppointmentId { get; set; }
 
@@ -17,30 +31,6 @@ public class FeePayment : BaseEntity
 
     [Column("staff_ID")]
     public int StaffId { get; set; }
-
-    [Column("amount")]
-    public decimal Amount { get; set; }
-
-    [Column("discount")]
-    public decimal Discount { get; set; }
-
-    [Column("remaining")]
-    public decimal Remaining { get; set; }
-
-    [Column("payment_date")]
-    public DateOnly PaymentDate { get; set; }
-
-    [MaxLength(50)]
-    [Column("payment_type")]
-    public string? PaymentType { get; set; }
-
-    [MaxLength(100)]
-    [Column("reference_no")]
-    public string? ReferenceNo { get; set; }
-
-    [MaxLength(500)]
-    [Column("remarks")]
-    public string? Remarks { get; set; }
 
     public Appointment? Appointment { get; set; }
 

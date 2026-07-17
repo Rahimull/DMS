@@ -34,7 +34,7 @@ const ConditionList = ({ conditions = [], onAdd, onEdit, onDelete }) => {
           {conditions.map((item) => (
             <tr key={item.id} className="border-b">
               <td className="p-3">
-                {item.conditionName}
+                {item.name}
               </td>
 
               <td>

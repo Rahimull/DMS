@@ -16,15 +16,15 @@ public class PatientServiceConfiguration : IEntityTypeConfiguration<PatientServi
             .HasColumnName("patient_service_ID");
 
         builder.HasOne(x => x.Patient)
-            .WithMany()
+            .WithMany(x => x.PatientServices)
             .HasForeignKey(x => x.PatientId);
 
         builder.HasOne(x => x.Appointment)
-            .WithMany()
+            .WithMany(x => x.PatientServices)
             .HasForeignKey(x => x.AppointmentId);
 
         builder.HasOne(x => x.TreatmentPlan)
-            .WithMany()
+            .WithMany(x => x.PatientServices)
             .HasForeignKey(x => x.TreatmentPlanId);
 
         builder.HasOne(x => x.Service)
@@ -32,7 +32,7 @@ public class PatientServiceConfiguration : IEntityTypeConfiguration<PatientServi
             .HasForeignKey(x => x.ServiceId);
 
         builder.HasOne(x => x.ServiceRequirement)
-            .WithMany()
+            .WithMany(x => x.PatientServices)
             .HasForeignKey(x => x.ServiceRequirementId);
     }
 }

@@ -13,9 +13,6 @@ public class ClassRevenueConfiguration : IEntityTypeConfiguration<ClassRevenue>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("class_ID");
-
-        builder.Property(x => x.Amount)
-            .HasColumnType("decimal(18,2)");
+            .HasColumnName("class_rev_ID");
     }
 }

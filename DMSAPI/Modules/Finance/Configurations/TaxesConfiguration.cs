@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DMS.Modules.Finances.Configurations;
 
-public class TaxConfiguration : IEntityTypeConfiguration<Tax>
+public class TaxConfiguration : IEntityTypeConfiguration<Taxes>
 {
-    public void Configure(EntityTypeBuilder<Tax> builder)
+    public void Configure(EntityTypeBuilder<Taxes> builder)
     {
         builder.ToTable("taxes");
 
@@ -14,8 +14,5 @@ public class TaxConfiguration : IEntityTypeConfiguration<Tax>
 
         builder.Property(x => x.Id)
             .HasColumnName("tax_ID");
-
-        builder.Property(x => x.Percentage)
-            .HasColumnType("decimal(5,2)");
     }
 }

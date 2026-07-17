@@ -13,15 +13,11 @@ public class SupplyInventoryConfiguration : IEntityTypeConfiguration<SupplyInven
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("item_ID");
-
-        builder.Property(x => x.Quantity)
-            .HasColumnType("decimal(18,2)");
+            .HasColumnName("supply_ID");
 
         builder.Property(x => x.UnitPrice)
             .HasColumnType("decimal(18,2)");
 
-        builder.Property(x => x.ReorderLevel)
-            .HasColumnType("decimal(18,2)");
+        
     }
 }

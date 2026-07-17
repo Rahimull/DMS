@@ -8,6 +8,7 @@ import TreatmentPlanPage from "@/features/treatment/pages/TreatmentPlanPage";
 import ServicePage from "@/features/service/pages/ServicePage";
 import ConditionPage from "@/features/condition/pages/ConditionPage";
 import ServiceRequirmentPage from "@/features/serviceRequirment/pages/ServiceRequirmentPage";
+import TreatmentPlanList from "@/features/treatment/pages/TreatmentPlanList";
 
 
 export const router = createBrowserRouter([
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: "/treatmentPlan",
         element: <TreatmentPlanPage />
+        },
+      {
+        path: "/treatmentPlanList",
+        element: <TreatmentPlanList />
         },
       {
         path: "/service",

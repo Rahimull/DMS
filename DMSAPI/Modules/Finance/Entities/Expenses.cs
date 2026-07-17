@@ -11,9 +11,5 @@ public class Expense : BaseEntity
     [Column("expense_name")]
     public string Name { get; set; } = null!;
 
-    [MaxLength(500)]
-    [Column("description")]
-    public string? Description { get; set; }
-
-    public ICollection<ExpenseDetail> Details { get; set; } = new List<ExpenseDetail>();
+    public ICollection<ExpenseDetail> ExpenseDetail { get; set; } = new List<ExpenseDetail>();
 }

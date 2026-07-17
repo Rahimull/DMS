@@ -13,9 +13,10 @@ public class ExpenseInvoiceConfiguration : IEntityTypeConfiguration<ExpenseInvoi
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("invoice_ID");
-
-        builder.Property(x => x.TotalAmount)
-            .HasColumnType("decimal(18,2)");
+            .HasColumnName("exp_inv_ID");
+        
+        builder.HasOne(x => x.Staff)
+            .WithMany(x => x.ExpenseInvoices)
+            .HasForeignKey(x => x.StaffId);
     }
 }

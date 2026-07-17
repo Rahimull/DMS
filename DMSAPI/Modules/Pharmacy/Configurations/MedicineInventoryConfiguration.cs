@@ -13,10 +13,7 @@ public class MedicineInventoryConfiguration : IEntityTypeConfiguration<MedicineI
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("medicine_ID");
-
-        builder.Property(x => x.Quantity)
-            .HasColumnType("decimal(18,2)");
+            .HasColumnName("med_ID");
 
         builder.Property(x => x.UnitPrice)
             .HasColumnType("decimal(18,2)");

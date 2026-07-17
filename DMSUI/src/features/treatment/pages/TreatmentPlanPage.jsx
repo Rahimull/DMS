@@ -9,8 +9,6 @@ import PaymentSummary from "../components/PaymentSummary";
 import NotesCard from "../components/NotesCard";
 import useTreatmentPlan from "@/hooks/useTreatmentPlan";
 
-
-
 const TreatmentPlanPage = () => {
   const treatment = useTreatmentPlan();
 

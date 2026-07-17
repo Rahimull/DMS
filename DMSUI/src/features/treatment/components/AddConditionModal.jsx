@@ -15,12 +15,20 @@ const AddConditionModal = ({ open, onClose, onSave, editing }) => {
   });
 
   useEffect(() => {
-    loadConditions();
-  }, []);
+    if (open) {
+      loadConditions();
+    }
+  }, [open]);
 
   useEffect(() => {
     if (editing) {
-      setForm(editing);
+      setForm({
+        conditionId: editing.conditionId,
+
+        severity: editing.severity,
+
+        notes: editing.notes,
+      });
     } else {
       setForm({
         conditionId: null,
@@ -30,21 +38,39 @@ const AddConditionModal = ({ open, onClose, onSave, editing }) => {
         notes: "",
       });
     }
-  }, [editing]);
+  }, [editing, open]);
 
   const loadConditions = async () => {
-    const data = await ConditionApi.lookup({
-      value: "id",
+    try {
+      const data = await ConditionApi.lookup({
+        value: "id",
 
-      label: (x) => x.name,
-    });
+        label: (x) => x.name,
+      });
+      console.log("Condiation name: ", data);
 
-    setConditions(data);
+      setConditions(data);
+    } catch (error) {
+      console.log("LOAD CONDITION ERROR", error);
+    }
   };
 
-  const submit = () => {
+  const submit = (data) => {
+    
+
+    if (!data.conditionId) {
+      alert("لطفاً تشخیص را انتخاب کنید");
+
+      return;
+    }
+    const selected = conditions.find((x)=> x.value === Number(data.conditionId))
+
     onSave({
-      ...form,
+      conditionId: Number(data.conditionId),
+
+      severity: data.severity,
+      name: selected?.label,
+      notes: data.notes,
     });
   };
 

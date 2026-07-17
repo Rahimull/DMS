@@ -14,16 +14,20 @@ public class Lab : BaseEntity
     public string Name { get; set; } = null!;
 
     [MaxLength(20)]
-    [Column("phone")]
-    public string? Phone { get; set; }
+    [Column("phone1")]
+    public string Phone1 { get; set; } = null!;
+    [MaxLength(20)]
+    [Column("phone2")]
+    public string Phone2 { get; set; }= null!;
 
-    [MaxLength(500)]
+    [MaxLength(200)]
     [Column("address")]
     public string? Address { get; set; }
 
-    [MaxLength(500)]
-    [Column("description")]
-    public string? Description { get; set; }
+    [MaxLength(150)]
+    [Column("lab_manager")]
+    public string? LabManager { get; set; }
 
     public ICollection<LabCase> LabCases { get; set; } = new List<LabCase>();
+     public ICollection<LabPayment> Payments { get; set; } = new List<LabPayment>();
 }

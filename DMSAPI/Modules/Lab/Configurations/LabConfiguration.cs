@@ -20,16 +20,8 @@ public class LabConfiguration : IEntityTypeConfiguration<Lab>
             .HasMaxLength(150)
             .IsRequired();
 
-        builder.Property(x => x.Phone)
-            .HasColumnName("phone")
-            .HasMaxLength(20);
-
         builder.Property(x => x.Address)
             .HasColumnName("address")
-            .HasMaxLength(500);
-
-        builder.Property(x => x.Description)
-            .HasColumnName("description")
             .HasMaxLength(500);
     }
 }

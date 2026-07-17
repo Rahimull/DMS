@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 import { createCrudApi } from "@/api/crudApi";
 
 import TreatmentPlanApi from "@/features/treatment/api/TreatmentPlanApi";
-import PlanServiceApi from "@/features/treatment/api/PlanServiceApi";
-import ConditionDetailApi from "@/features/treatment/api/ConditionDetailApi";
-
+import { toast } from "sonner";
 
 const patientApi = createCrudApi("/Patient");
 const staffApi = createCrudApi("/Staff");
@@ -38,7 +36,7 @@ const useTreatmentPlan = () => {
 
     endDate: "",
 
-    status: "پیش‌نویس",
+    status: "Draft",
 
     round: 1,
 
@@ -66,44 +64,48 @@ const useTreatmentPlan = () => {
   }, []);
 
   const loadData = async () => {
-    const [patientData, staffData, conditionData, serviceData] =
-      await Promise.all([
-        patientApi.lookup({
-          value: "id",
+    try {
+      const [patientData, staffData, conditionData, serviceData] =
+        await Promise.all([
+          patientApi.lookup({
+            value: "id",
 
-          label: (x) => `${x.firstName} ${x.lastName}`,
-        }),
+            label: (x) => `${x.firstName} ${x.lastName}`,
+          }),
 
-        staffApi.lookup({
-          value: "id",
+          staffApi.lookup({
+            value: "id",
 
-          label: (x) => `${x.firstName} ${x.lastName}`,
-        }),
+            label: (x) => `${x.firstName} ${x.lastName}`,
+          }),
 
-        conditionApi.lookup({
-          value: "id",
+          conditionApi.lookup({
+            value: "id",
 
-          label: (x) => x.name,
-        }),
+            label: (x) => x.name,
+          }),
 
-        serviceApi.lookup({
-          value: "id",
+          serviceApi.lookup({
+            value: "id",
 
-          label: (x) => x.name,
-        }),
-      ]);
+            label: (x) => x.name,
+          }),
+        ]);
 
-    setPatients(patientData);
+      setPatients(patientData);
 
-    setDoctors(staffData);
+      setDoctors(staffData);
 
-    setConditions(conditionData);
+      setConditions(conditionData);
 
-    setServices(serviceData);
+      setServices(serviceData);
+    } catch (error) {
+      console.log("LOOKUP ERROR", error);
+    }
   };
 
   // =========================
-  // Form Update
+  // Update Form
   // =========================
 
   const updateForm = (data) => {
@@ -115,10 +117,12 @@ const useTreatmentPlan = () => {
   };
 
   // =========================
-  // Condition
+  // Conditions
   // =========================
 
   const addCondition = (item) => {
+   console.log("Add Conition: ", item)
+
     setForm((prev) => ({
       ...prev,
 
@@ -127,6 +131,7 @@ const useTreatmentPlan = () => {
 
         {
           ...item,
+          conditionId: Number(item.conditionId),
 
           id: Date.now(),
         },
@@ -157,10 +162,18 @@ const useTreatmentPlan = () => {
   };
 
   // =========================
-  // Service
+  // Services
   // =========================
 
   const addService = (item) => {
+    if (!item.serviceId) {
+      alert("لطفاً خدمت را انتخاب کنید");
+
+      return;
+    }
+
+    const totalFee = Number(item.totalFee || 0);
+
     setForm((prev) => ({
       ...prev,
 
@@ -171,21 +184,27 @@ const useTreatmentPlan = () => {
           ...item,
 
           id: Date.now(),
-
-          totalFee: Number(item.serviceFee) * Number(item.quantity || 1),
         },
       ],
+
+      totalFee: prev.totalFee + totalFee,
     }));
 
     setOpenService(false);
   };
 
   const deleteService = (id) => {
-    setForm((prev) => ({
-      ...prev,
+    setForm((prev) => {
+      const item = prev.services.find((x) => x.id === id);
 
-      services: prev.services.filter((x) => x.id !== id),
-    }));
+      return {
+        ...prev,
+
+        services: prev.services.filter((x) => x.id !== id),
+
+        totalFee: prev.totalFee - Number(item?.totalFee || 0),
+      };
+    });
   };
 
   const closeService = () => {
@@ -193,68 +212,117 @@ const useTreatmentPlan = () => {
   };
 
   // =========================
-  // Save Treatment
+  // Save Treatment Plan
+  // =========================
+  const resetForm = () => {
+  setForm({
+    patientId: null,
+    staffId: null,
+    startDate: "",
+    endDate: "",
+    status: "Draft",
+    round: 1,
+    installments: 1,
+    discount: 0,
+    totalFee: 0,
+    conditions: [],
+    services: [],
+    notes: "",
+    notification: "",
+  });
+
+  setEditingCondition(null);
+
+  setOpenCondition(false);
+
+  setOpenService(false);
+};
+
+  // =========================
+  // Save Treatment Plan
   // =========================
 
   const save = async () => {
     try {
+      if (!form.patientId) {
+        alert("بیمار انتخاب نشده است");
+
+        return false;
+      }
+
+      if (!form.staffId) {
+        alert("داکتر انتخاب نشده است");
+
+        return false;
+      }
+
+      if (!form.startDate) {
+        alert("تاریخ شروع وارد نشده است");
+
+        return false;
+      }
+
+      if (form.conditions.some((x) => !x.conditionId)) {
+        alert("تشخیص نامعتبر است");
+
+        return false;
+      }
+
+      if (form.services.some((x) => !x.serviceId)) {
+        alert("خدمت نامعتبر است");
+
+        return false;
+      }
+
       setLoading(true);
 
-      const planResponse = await TreatmentPlanApi.create({
-        patientId: form.patientId,
+      const payload = {
+        patientId: Number(form.patientId),
 
-        staffId: form.staffId,
+        staffId: Number(form.staffId),
 
         startDate: form.startDate,
 
-        endDate: form.endDate,
+        endDate: form.endDate || null,
 
         status: form.status,
 
-        round: form.round,
+        round: Number(form.round),
 
-        installments: form.installments,
+        installments: Number(form.installments),
 
-        discount: form.discount,
+        discount: Number(form.discount || 0),
 
         notes: form.notes,
 
         notification: form.notification,
-      });
 
-      const planId = planResponse.data.id;
+        services: form.services.map((item) => ({
+          serviceId: Number(item.serviceId),
 
-      // Save Services
+          serviceFee: Number(item.serviceFee || 0),
 
-      for (const item of form.services) {
-        await PlanServiceApi.create({
-          treatmentPlanId: planId,
+          totalFee: Number(item.totalFee || 0),
+        })),
 
-          serviceId: item.serviceId,
+        conditions: form.conditions.map((item) => ({
+          conditionId: Number(item.conditionId),
 
-          serviceFee: item.serviceFee,
+          severity: item.severity || "",
 
-          totalFee: item.totalFee,
-        });
-      }
+          notes: item.notes || "",
+        })),
+      };
 
-      // Save Conditions
+      console.log("PAYLOAD:", JSON.stringify(payload, null, 2));
 
-      for (const item of form.conditions) {
-        await ConditionDetailApi.create({
-          patientId: form.patientId,
-
-          conditionId: item.conditionId,
-
-          severty: item.severty,
-
-          notes: item.notes,
-        });
-      }
-
-      return true;
+      const response = await TreatmentPlanApi.save(payload);
+      toast.success(response.data.message || "پلان تداوی با موفقیت ثبت شد.");
+      resetForm();
+      return response.data;
     } catch (error) {
-      console.log("SAVE ERROR", error);
+      console.log("SAVE TREATMENT ERROR", error);
+      toast.error(error.response?.data?.message ?? "خطا در ثبت پلان تداوی")
 
       return false;
     } finally {
@@ -304,6 +372,7 @@ const useTreatmentPlan = () => {
     deleteService,
 
     save,
+    resetForm,
   };
 };
 

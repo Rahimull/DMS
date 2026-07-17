@@ -4,15 +4,14 @@ import Input from "@/components/common/Input";
 
 const TreatmentHeader = ({
   form,
-  setForm,
-  patientOptions = [],
-  staffOptions = [],
+  updateForm,
+  patientOptions,
+  staffOptions,
 }) => {
   const change = (key, value) => {
-    setForm((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    updateForm({
+      [key]: value
+    });
   };
 
   return (

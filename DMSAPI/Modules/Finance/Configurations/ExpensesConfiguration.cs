@@ -13,15 +13,11 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("expense_ID");
+            .HasColumnName("exp_ID");
 
         builder.Property(x => x.Name)
             .HasColumnName("expense_name")
             .HasMaxLength(150)
             .IsRequired();
-
-        builder.Property(x => x.Description)
-            .HasColumnName("description")
-            .HasMaxLength(500);
     }
 }

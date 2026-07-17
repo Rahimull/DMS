@@ -91,7 +91,7 @@ public class DMSContext : IdentityDbContext<ApplicationUser>
     #endregion
 
     #region Tax
-    public DbSet<Tax> Taxes => Set<Tax>();
+    public DbSet<Taxes> Taxes => Set<Taxes>();
     public DbSet<TaxPayment> TaxPayments => Set<TaxPayment>();
     #endregion
 

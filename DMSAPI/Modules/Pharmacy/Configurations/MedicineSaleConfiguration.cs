@@ -13,27 +13,22 @@ public class MedicineSaleConfiguration : IEntityTypeConfiguration<MedicineSale>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("sale_ID");
+            .HasColumnName("msale_ID");
 
         builder.Property(x => x.Quantity)
             .HasColumnType("decimal(18,2)");
 
-        builder.Property(x => x.UnitPrice)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(x => x.Total)
-            .HasColumnType("decimal(18,2)");
 
         builder.HasOne(x => x.MedicineInventory)
             .WithMany(x => x.Sales)
             .HasForeignKey(x => x.MedicineInventoryId);
 
         builder.HasOne(x => x.Patient)
-            .WithMany()
+            .WithMany(x => x.MedicineSales)
             .HasForeignKey(x => x.PatientId);
 
         builder.HasOne(x => x.Staff)
-            .WithMany()
+            .WithMany(x => x.MedicineSales)
             .HasForeignKey(x => x.StaffId);
     }
 }

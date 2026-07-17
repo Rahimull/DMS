@@ -1,152 +1,115 @@
 import { useEffect, useState } from "react";
 
 import FormModal from "@/components/modal/FormModal";
-
 import ServiceApi from "../../service/api/ServiceApi";
 
-const AddServiceModal = ({ open, onClose, onSave }) => {
+const AddServiceModal = ({ open, onClose, onSave, editing }) => {
   const [services, setServices] = useState([]);
 
   const [form, setForm] = useState({
     serviceId: null,
-
     serviceFee: 0,
-
     quantity: 1,
-
     totalFee: 0,
   });
 
-
- 
+  // ==========================
+  // Load Services
+  // ==========================
 
   useEffect(() => {
     if (open) {
       loadServices();
-
-      setForm({
-        serviceId: null,
-
-        serviceFee: 0,
-
-        quantity: 1,
-
-        totalFee: 0,
-      });
     }
   }, [open]);
 
+  // ==========================
+  // Edit Mode
+  // ==========================
+
+  useEffect(() => {
+    if (editing) {
+      setForm({
+        serviceId: editing.serviceId,
+        serviceFee: editing.serviceFee,
+        quantity: editing.quantity,
+        totalFee: editing.totalFee,
+      });
+    } else {
+      setForm({
+        serviceId: null,
+        serviceFee: 0,
+        quantity: 1,
+        totalFee: 0,
+      });
+    }
+  }, [editing, open]);
+
+  // ==========================
+  // Load Lookup
+  // ==========================
+
   const loadServices = async () => {
-    const data = await ServiceApi.lookup({
-      value: "id",
+    try {
+      const data = await ServiceApi.lookup({
+        value: "id",
+        label: (x) => x.name,
+        extra: ["fee"],
+      });
 
-      label: (x) => x.name,
-    });
-
-    setServices(data);
+      setServices(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const changeService = (id) => {
-    const service = services.find((x) => x.value == id);
+  // ==========================
+  // Submit
+  // ==========================
 
-    setForm((prev) => ({
-      ...prev,
+  const submit = (data) => {
+    const selected = services.find((x) => x.value === Number(data.serviceId));
 
-      serviceId: id,
+    if (!selected) {
+      alert("لطفاً خدمت را انتخاب کنید");
+      return;
+    }
 
-      serviceFee: service?.fee ?? 0,
+    const serviceFee = Number(selected.fee);
+    const quantity = Number(data.quantity || 1);
 
-      totalFee: Number(service?.fee ?? 0) * Number(prev.quantity),
-    }));
-  };
-
-  const changeQuantity = (qty) => {
-    setForm((prev) => ({
-      ...prev,
-
-      quantity: qty,
-
-      totalFee: Number(prev.serviceFee) * Number(qty),
-    }));
-  };
-
-  const submit = () => {
     onSave({
-      serviceId: form.serviceId,
-
-      serviceFee: Number(form.serviceFee),
-
-      totalFee: Number(form.totalFee),
-
-      quantity: Number(form.quantity),
+      serviceId: Number(selected.value),
+      serviceName: selected.label,
+      serviceFee,
+      quantity,
+      totalFee: serviceFee * quantity,
     });
+
+    onClose();
   };
 
   const fields = [
     {
       name: "serviceId",
-
       label: "خدمت",
-
       type: "select",
-
       required: true,
-
       options: services,
-
-      onChange: changeService,
-    },
-
-    {
-      name: "serviceFee",
-
-      label: "قیمت",
-
-      type: "number",
-
-      disabled: true,
     },
 
     {
       name: "quantity",
-
       label: "تعداد",
-
       type: "number",
-
-      value: form.quantity,
-
-      onChange: (e) => changeQuantity(e.target.value),
-    },
-
-    {
-      name: "totalFee",
-
-      label: "مجموع",
-
-      type: "number",
-
-      disabled: true,
     },
   ];
-
-
-   const selected = services.find(
-  (x) => x.value === Number(serviceId)
-);
-
-// setForm((prev) => ({
-//   ...prev,
-//   serviceId: selected.value,
-//   serviceFee: selected.fee,
-//   totalFee: selected.fee * prev.quantity,
-// }));
 
   return (
     <FormModal
       open={open}
       onClose={onClose}
-      title="اضافه کردن خدمت"
+      title={editing ? "ویرایش خدمت" : "اضافه کردن خدمت"}
       fields={fields}
       initialValues={form}
       onSubmit={submit}
