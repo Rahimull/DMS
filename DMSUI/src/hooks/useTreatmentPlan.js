@@ -10,7 +10,7 @@ const staffApi = createCrudApi("/Staff");
 const conditionApi = createCrudApi("/Condition");
 const serviceApi = createCrudApi("/Service");
 
-const useTreatmentPlan = () => {
+const useTreatmentPlan = (initialData) => {
   const [loading, setLoading] = useState(false);
 
   const [patients, setPatients] = useState([]);
@@ -55,6 +55,30 @@ const useTreatmentPlan = () => {
     notification: "",
   });
 
+  // =========================
+  // Edit Treatment plan
+  // =========================
+  useEffect(() => {
+    if (!initialData) return;
+    
+    
+      setForm({
+        id: initialData.id,
+        patientId: initialData.patientId,
+        staffId: initialData.staffId,
+        startDate: initialData.startDate,
+        endDate: initialData.endDate,
+        status: initialData.status,
+        round: initialData.round,
+        installments: initialData.installments,
+        notes: initialData.notes,
+        notification: initialData.notification,
+
+    conditions: initialData.conditions ?? [],
+    services: initialData.services ?? [],
+      });
+    
+  }, [initialData]);
   // =========================
   // Load Lookup Data
   // =========================
@@ -121,7 +145,7 @@ const useTreatmentPlan = () => {
   // =========================
 
   const addCondition = (item) => {
-   console.log("Add Conition: ", item)
+    console.log("Add Conition: ", item);
 
     setForm((prev) => ({
       ...prev,
@@ -215,28 +239,28 @@ const useTreatmentPlan = () => {
   // Save Treatment Plan
   // =========================
   const resetForm = () => {
-  setForm({
-    patientId: null,
-    staffId: null,
-    startDate: "",
-    endDate: "",
-    status: "Draft",
-    round: 1,
-    installments: 1,
-    discount: 0,
-    totalFee: 0,
-    conditions: [],
-    services: [],
-    notes: "",
-    notification: "",
-  });
+    setForm({
+      patientId: null,
+      staffId: null,
+      startDate: "",
+      endDate: "",
+      status: "Draft",
+      round: 1,
+      installments: 1,
+      discount: 0,
+      totalFee: 0,
+      conditions: [],
+      services: [],
+      notes: "",
+      notification: "",
+    });
 
-  setEditingCondition(null);
+    setEditingCondition(null);
 
-  setOpenCondition(false);
+    setOpenCondition(false);
 
-  setOpenService(false);
-};
+    setOpenService(false);
+  };
 
   // =========================
   // Save Treatment Plan
@@ -316,13 +340,22 @@ const useTreatmentPlan = () => {
 
       console.log("PAYLOAD:", JSON.stringify(payload, null, 2));
 
-      const response = await TreatmentPlanApi.save(payload);
-      toast.success(response.data.message || "پلان تداوی با موفقیت ثبت شد.");
-      resetForm();
+      if (form.id) {
+        const response = await TreatmentPlanApi.update(form.id, payload);
+        toast.success(
+          response.data.message || "پلان تداوی با موفقیت ویرایش شد.",
+        );
+        resetForm();
+        return response.data;
+      } else {
+        const response = await TreatmentPlanApi.save(payload);
+        toast.success(response.data.message || "پلان تداوی با موفقیت ثبت شد.");
+        resetForm();
+      }
       return response.data;
     } catch (error) {
       console.log("SAVE TREATMENT ERROR", error);
-      toast.error(error.response?.data?.message ?? "خطا در ثبت پلان تداوی")
+      toast.error(error.response?.data?.message ?? "خطا در ثبت پلان تداوی");
 
       return false;
     } finally {

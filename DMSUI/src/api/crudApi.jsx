@@ -6,6 +6,7 @@ export const createCrudApi = (endpoint) => ({
   create: (data) =>
     Api.post(endpoint, data),
 
+  getById: (id, data) => Api.get(`${endpoint}/${id}`),
   update: (id, data) => Api.put(`${endpoint}/${id}`, data),
 
   delete: (id) => Api.delete(`${endpoint}/${id}`),
@@ -14,9 +15,12 @@ export const createCrudApi = (endpoint) => ({
     label,
     value = "id",
     query = {
-      pageNumber: 1,
-      pageSize: 1000,
-    },
+  pagination: {
+    pageIndex: 0,
+    pageSize: 1000,
+  },
+},
+   
   }) => {
     const res = await Api.post(`${endpoint}/paged`, query);
 

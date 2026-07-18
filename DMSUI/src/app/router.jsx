@@ -9,6 +9,7 @@ import ServicePage from "@/features/service/pages/ServicePage";
 import ConditionPage from "@/features/condition/pages/ConditionPage";
 import ServiceRequirmentPage from "@/features/serviceRequirment/pages/ServiceRequirmentPage";
 import TreatmentPlanList from "@/features/treatment/pages/TreatmentPlanList";
+import EditTreatmentPlanPage from "@/features/treatment/pages/EditTreatmentPlan";
 
 
 export const router = createBrowserRouter([
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
       {
         path: "/treatmentPlanList",
         element: <TreatmentPlanList />
+        },
+      {
+        path: "/treatmentPlan/update/:id",
+        element: <EditTreatmentPlanPage />
         },
       {
         path: "/service",

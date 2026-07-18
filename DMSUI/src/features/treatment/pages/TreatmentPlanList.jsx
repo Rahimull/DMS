@@ -10,11 +10,13 @@ import { useMemo, useState } from "react";
 import TreatmentPlanApi from "../api/TreatmentPlanApi";
 import { TreatmentPlanColumns } from "../columns/TreatmentPlanColumns";
 import { TreatmentPlanActionColumn } from "../columns/TreatmentPlanActionColumn";
+import { useNavigate } from "react-router-dom";
 
 export default function TreatmentPlanList() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const navigate = useNavigate();
 
   const filters = useMemo(
     () => ({
@@ -63,9 +65,7 @@ export default function TreatmentPlanList() {
           console.log("View:", TreatmentPlan);
         },
 
-        onEdit: (TreatmentPlan) => {
-          setSelectedTreatmentPlan(TreatmentPlan);
-          curd.openEdit(TreatmentPlan);
+        onEdit: (row) => { navigate(`/treatmentPlan/update/${row.id}`);
         },
 
         onDelete: (id) => {

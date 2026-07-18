@@ -1,4 +1,5 @@
 using System.Text.Json;
+using DMS.Models;
 using DMS.Modules.Treatments.Entities;
 using DMS.Persistence;
 using DMS.Shared.Controllers;
@@ -14,6 +15,44 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
         : base(context)
     {
     }
+
+  
+     public override async Task<IActionResult> GetPaged([FromBody] QueryParams query)
+    {
+        IQueryable<TreatmentPlan> data = _context.TreatmentPlans.AsNoTracking()
+                .Include(x => x.Patient)
+                .Include(x => x.Staff)
+                .Where(x => !x.IsDeleted);
+
+        // Search
+        if (!string.IsNullOrWhiteSpace(query.Search?.SearchTerm))
+        {
+            var search = query.Search.SearchTerm.ToLower();
+
+            data = data.Where(x =>
+                EF.Property<string>(x, "Name").ToLower().Contains(search));
+        }
+
+        // Total Count
+        var totalCount = await data.CountAsync();
+
+        // Paging
+        var result = await data
+            .Skip(query.Pagination.PageIndex * query.Pagination.PageSize)
+            .Take(query.Pagination.PageSize)
+            .ToListAsync();
+
+        return Ok(new
+        {
+            success = true,
+            data = new
+            {
+                data = result,
+                totalCount
+            }
+        });
+    }
+
 
     [HttpPost("save")]
     public async Task<IActionResult> SaveTreatment([FromBody] JsonElement model)
@@ -37,12 +76,12 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
                 PatientId = model.GetProperty("patientId").GetInt32(),
                 StaffId = model.GetProperty("staffId").GetInt32(),
 
-                StartDate = DateOnly.Parse(
+                StartDate = DateTime.Parse(
                     model.GetProperty("startDate").GetString()!
                 ),
 
                 EndDate = model.GetProperty("endDate").GetString() is { Length: > 0 } endDate
-                    ? DateOnly.Parse(endDate)
+                    ? DateTime.Parse(endDate)
                     : null,
 
                 Status = model.GetProperty("status").GetString(),
@@ -281,7 +320,7 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
 
 
             plan.StartDate =
-                DateOnly.Parse(
+                DateTime.Parse(
                     model.GetProperty("startDate").GetString()!
                 );
 
@@ -289,7 +328,7 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
             plan.EndDate =
                 model.GetProperty("endDate").GetString()
                 is { Length: > 0 } endDate
-                ? DateOnly.Parse(endDate)
+                ? DateTime.Parse(endDate)
                 : null;
 
 

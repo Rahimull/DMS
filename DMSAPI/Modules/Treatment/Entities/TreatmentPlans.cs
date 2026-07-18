@@ -16,10 +16,10 @@ public class TreatmentPlan : BaseEntity
     public int? StaffId { get; set; }
 
     [Column("start_date")]
-    public DateOnly? StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
 
     [Column("end_date")]
-    public DateOnly? EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
 
     [Column("total_fee")]
     public decimal TotalFee { get; set; }=0;

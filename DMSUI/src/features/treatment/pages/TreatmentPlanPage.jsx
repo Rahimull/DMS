@@ -8,10 +8,29 @@ import AddServiceModal from "../components/AddServiceModal";
 import PaymentSummary from "../components/PaymentSummary";
 import NotesCard from "../components/NotesCard";
 import useTreatmentPlan from "@/hooks/useTreatmentPlan";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import TreatmentPlanApi from "../api/TreatmentPlanApi";
 
 const TreatmentPlanPage = () => {
-  const treatment = useTreatmentPlan();
+  
+  const {id} = useParams();
+  const [initialData, setInitialData] = useState(null);
 
+  useEffect(()=>{
+    if(id){
+      loadTreatmentPlan();
+    }
+  },[id]);
+
+  const loadTreatmentPlan = async ()=>{
+    const res = await TreatmentPlanApi.getById(id);
+    setInitialData(res.data);
+  }
+  const treatment = useTreatmentPlan(initialData);
+  if(id && !initialData){
+    return <div> در حال باگذاری .........</div>
+  }
   return (
     <div dir="rtl" className="space-y-6 p-6 text-right">
       <TreatmentHeader
