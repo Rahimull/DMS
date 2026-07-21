@@ -2,11 +2,11 @@
 export const PatientFields = [
   {
     name: "firstName",
-    label: "نام  *",
+    label: "اسم  *",
     type: "text",
     required: true,
     maxLength: 100,
-    placeholder: "نام بیمار",
+    placeholder: "اسم مریض",
   },
   {
     name: "lastName",
@@ -18,7 +18,7 @@ export const PatientFields = [
   },
   {
     name: "fatherName",
-    label: "نام پدر *",
+    label: "نام پدر ",
     type: "text",
 
     maxLength: 100,
@@ -91,20 +91,6 @@ export const PatientFields = [
     maxLength: 100,
     placeholder: "ادرس بیمار",
   },
-   {
-    name: "sponsorBy",
-    label: "کمک مالی",
-    type: "text",
-    required: true,
-    maxLength: 20,
-    placeholder: "کمک مالی",
-  },
-  {
-    name: "staffId",
-    label: "داکتر",
-    type: "select",
-    placeholder: "داکتر",
-  },
-
+  
  ];
 

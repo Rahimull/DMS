@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PatientFields } from "./PatientFields";
+import { PatientFields } from "../fields/PatientFields";
 import FormModal from "@/components/modal/FormModal";
 import { createCrudApi } from "@/api/crudApi";
 

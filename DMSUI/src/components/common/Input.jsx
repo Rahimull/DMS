@@ -1,3 +1,6 @@
+import React from "react";
+import PersianDatePicker from "../datePicker/PersianDatePicker";
+
 const Input = ({
   label,
   type = "text",
@@ -13,93 +16,205 @@ const Input = ({
   error,
   disabled = false,
   rows,
+  required = false,
+  dateValue,
 }) => {
   const baseClass = `
-    h-10 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40
-    ${error ? "border-red-300" : "border-gray-300"}
+    w-full
+    rounded-2xl
+    border
+    px-4
+    py-3
+    text-sm
+    text-slate-800
+    bg-white
+
+    shadow-sm
+
+    transition-all
+    duration-200
+
+    placeholder:text-slate-400
+
+    hover:border-slate-400
+
+    focus:outline-none
+    focus:border-blue-500
+    focus:ring-4
+    focus:ring-blue-100
+
+    disabled:bg-slate-100
+    disabled:cursor-not-allowed
+    disabled:opacity-70
+
+    ${
+      error
+        ? "border-red-400 focus:border-red-500 focus:ring-red-100"
+        : "border-slate-300"
+    }
+
     ${className}
   `;
 
   return (
-    <div className="flex flex-col space-y-1">
+    <div className="flex flex-col gap-2">
       {label && type !== "checkbox" && (
-        <label className="text-sm font-medium text-right">{label}</label>
+        <label
+          className="
+            flex
+            items-center
+            gap-1
+            text-sm
+            font-semibold
+            text-slate-700
+          "
+        >
+          {label}
+
+          {required && <span className="text-red-500">*</span>}
+        </label>
       )}
 
+      {/* Textarea */}
+
       {type === "textarea" && (
-  <textarea
-    className={baseClass}
-    name={name}
-    value={value ?? ""}
-    placeholder={placeholder}
-    onChange={onChange}
-    disabled={disabled}
-    maxLength={maxLength}
-    rows={rows || 6}
-  />
-)}
+        <textarea
+          name={name}
+          value={value ?? ""}
+          placeholder={placeholder}
+          onChange={onChange}
+          disabled={disabled}
+          maxLength={maxLength}
+          rows={rows || 5}
+          className={`
+            ${baseClass}
+            min-h-[140px]
+            resize-none
+          `}
+        />
+      )}
+      {/* Persian Date */}
+
+      {/* Date */}
+
+      {/* Persian Date */}
+
+      {type === "date" && (
+        <PersianDatePicker
+          value={dateValue}
+          onChange={(date) =>
+            onChange({
+              target: {
+                name,
+                value: date?.format("YYYY/MM/DD") || "",
+              },
+            })
+          }
+        />
+      )}
+
+      {/* Select */}
 
       {type === "select" && (
         <select
-          className={baseClass}
           name={name}
           value={value ?? ""}
           onChange={onChange}
           disabled={disabled}
+          className={`${baseClass} h-12`}
         >
-          <option value="" disabled>
-            Select...
-          </option>
-          {options.map((opt, index) => (
-            <option key={index} value={opt.value}>
+          <option value="">انتخاب نمایید</option>
+
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>
           ))}
         </select>
       )}
 
+      {/* Checkbox */}
+
       {type === "checkbox" && (
-        <label className="flex items-center space-x-2">
+        <label
+          className="
+            flex
+            items-center
+            gap-3
+
+            rounded-xl
+            border
+            border-slate-200
+
+            p-3
+
+            transition
+
+            hover:bg-slate-50
+
+            cursor-pointer
+          "
+        >
           <input
             type="checkbox"
             name={name}
             checked={value || false}
             onChange={(e) =>
-              onChange({ target: { name, value: e.target.checked } })
+              onChange({
+                target: {
+                  name,
+                  type: "checkbox",
+                  checked: e.target.checked,
+                },
+              })
             }
+            className="
+              h-4
+              w-4
+              rounded
+              border-slate-300
+              text-blue-600
+            "
           />
-          <span>{label}</span>
+
+          <span className="text-sm text-slate-700">{label}</span>
         </label>
       )}
-      {type === "file" ? (
-        <input
-          className={baseClass}
-          type="file"
-          name={name}
-          onChange={onChange}
-          disabled={disabled}
-          autoFocus={autoFocus}
-        />
-      ) : (
-        !["textarea", "select", "checkbox"].includes(type) && (
+
+      {/* File Upload */}
+
+      {type === "file" && (
+        <div
+          className="relative rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50
+           p-8 text-center transition hover:bg-slate-100"
+        >
           <input
-            className={baseClass}
-            type={type}
+            id={name}
+            type="file"
             name={name}
-            value={value ?? ""}
-            placeholder={placeholder}
             onChange={onChange}
             disabled={disabled}
-            maxLength={maxLength}
-            autoFocus={autoFocus}
-            onKeyDown={onKeyDown}
+            className="hidden"
           />
-        )
+
+          <label
+            htmlFor={name}
+            className="flex cursor-pointer flex-col items-center gap-2"
+          >
+            <span className="text-4xl">📷</span>
+
+            <span className="font-semibold text-slate-700">انتخاب فایل</span>
+
+            <span className="text-xs text-slate-500">JPG, PNG, PDF</span>
+          </label>
+        </div>
       )}
 
-      {/* {!["textarea", "select", "checkbox"].includes(type) && (
+      {/* Normal Input */}
+
+      {!["textarea", "select", "checkbox", "file", "date"].includes(type) && (
         <input
-          className={baseClass}
+          className={`${baseClass} h-12`}
           type={type}
           name={name}
           value={value ?? ""}
@@ -110,10 +225,20 @@ const Input = ({
           autoFocus={autoFocus}
           onKeyDown={onKeyDown}
         />
-      )} */}
+      )}
+
+      {/* Error */}
 
       {error && (
-        <span className="text-red-500 text-xs text-right">{error}</span>
+        <span
+          className="
+            text-xs
+            font-medium
+            text-red-600
+          "
+        >
+          {error}
+        </span>
       )}
     </div>
   );

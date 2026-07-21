@@ -60,28 +60,42 @@ const useTreatmentPlan = (initialData) => {
   // =========================
   useEffect(() => {
     if (!initialData) return;
-    
-    
-      setForm({
-        id: initialData.id,
-        patientId: initialData.patientId,
-        staffId: initialData.staffId,
-        startDate: initialData.startDate,
-        endDate: initialData.endDate,
-        status: initialData.status,
-        round: initialData.round,
-        installments: initialData.installments,
-        notes: initialData.notes,
-        notification: initialData.notification,
 
-    conditions: initialData.conditions ?? [],
-    services: initialData.services ?? [],
-      });
-    
+    setForm({
+      id: initialData.id,
+      patientId: initialData.patientId,
+      staffId: initialData.staffId,
+      startDate: initialData.startDate?.split("T")[0] ?? "",
+      endDate: initialData.endDate?.split("T")[0] ?? "",
+      status: initialData.status,
+      round: initialData.round,
+      installments: initialData.installments,
+      notes: initialData.notes,
+      notification: initialData.notification,
+      discount: initialData.discount ?? 0,
+      totalFee: initialData.totalFee ?? 0,
+
+      conditions:
+        initialData.conditionDetails?.map((x) => ({
+          id: x.id,
+          conditionId: x.conditionId,
+          severity: s.severity,
+          notes: x.notes,
+        })) ?? [],
+      services:
+        initialData.planServices?.map((x) => ({
+          id: x.id,
+          serviceId: x.serviceId,
+          serviceFee: x.serviceFee,
+          totalFee: x.totalFee,
+        })) ?? [],
+    });
   }, [initialData]);
   // =========================
   // Load Lookup Data
   // =========================
+
+  console.log("Edit Data: ", initialData);
 
   useEffect(() => {
     loadData();
@@ -345,7 +359,7 @@ const useTreatmentPlan = (initialData) => {
         toast.success(
           response.data.message || "پلان تداوی با موفقیت ویرایش شد.",
         );
-        resetForm();
+        
         return response.data;
       } else {
         const response = await TreatmentPlanApi.save(payload);

@@ -412,6 +412,7 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
             _context.ConditionDetails.RemoveRange(oldConditions);
 
             // Add New Conditions
+            
             foreach (var item in model.GetProperty("conditions")
                 .EnumerateArray())
             {
