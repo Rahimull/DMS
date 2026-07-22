@@ -93,20 +93,16 @@ const Input = ({
           `}
         />
       )}
-      {/* Persian Date */}
-
-      {/* Date */}
-
-      {/* Persian Date */}
+            {/* Persian Date */}
 
       {type === "date" && (
         <PersianDatePicker
-          value={dateValue}
+          value={dateValue || null}
           onChange={(date) =>
             onChange({
               target: {
                 name,
-                value: date?.format("YYYY/MM/DD") || "",
+                value: date,
               },
             })
           }

@@ -2,7 +2,7 @@
 export const PatientFields = [
   {
     name: "firstName",
-    label: "اسم  *",
+    label: "اسم",
     type: "text",
     required: true,
     maxLength: 100,
@@ -85,7 +85,7 @@ export const PatientFields = [
   },
   {
     name: "address",
-    label: "ادرس بیمار *",
+    label: "ادرس بیمار",
     type: "text",
     required: true,
     maxLength: 100,

@@ -13,18 +13,19 @@ const FormModal = ({
   onCancel,
 }) => {
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title={title}
-    >
+    <Modal open={open} onClose={onClose} title={title}>
       <Form
+        title=""
+        description=""
         fields={fields}
         initialValues={initialValues}
         onSubmit={onSubmit}
         loading={loading}
         submitText={submitText}
         onCancel={onClose}
+        padding="p-3"
+        border={false}
+        columns={1}
       />
     </Modal>
   );

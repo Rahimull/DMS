@@ -1,6 +1,5 @@
 import { notify } from "@/utils/notify";
 import { useState } from "react";
-// import { toast } from "react-toastify";
 
 const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
   /* ---------------- UI STATE ---------------- */
@@ -67,23 +66,7 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     }
   };
 
-  // const updateRecord = async (id, data) => {
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-  //     await ApiService.update(id, data);
-  //     notify.info(msg.update);
-  //     return true;
-  //   } catch (err) {
-  //     const message = err?.response?.data?.message || "Update failed";
-  //     setError(message);
-  //     notify.error(message);
-  //     return false;
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
+ 
   const updateRecord = async (id, data) => {
     try {
       setLoading(true);

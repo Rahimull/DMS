@@ -1,28 +1,28 @@
+import usePatientRegistrationWizard from "@/features/patient/hooks/usePatientRegistrationWizard";
+
 import FeePaymentStep from "@/features/patient/components/FeePaymentStep";
 import MedicalHistoryStep from "@/features/patient/components/MedicalHistoryStep";
 import PatientSummary from "@/features/patient/components/PatientSummary";
 import PersonalInfoStep from "@/features/patient/components/PersonalInfoStep";
 import ServiceSelectionStep from "@/features/patient/components/ServiceSelectionStep";
 import Stepper from "@/features/patient/components/Stepper";
-import { useState } from "react";
-
 
 export default function PatientRegistrationWizard() {
-  const [step, setStep] = useState(1);
 
-  const [data, setData] = useState({
-    patient: {},
-    medicalHistory: {},
-    services: [],
-    payment: {},
-  });
-
-  const nextStep = () => setStep((prev) => prev + 1);
-  const prevStep = () => setStep((prev) => prev - 1);
+  const {
+    step,
+    formData,
+    updateSection,
+    nextStep,
+    prevStep,
+    isFirstStep,
+    isLastStep,
+  } = usePatientRegistrationWizard();
 
   return (
     <div className="min-h-screen bg-slate-100 p-6">
-      <div className="flex justify-between items-center mb-6">
+
+      <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">
           ثبت مریض جدید
         </h1>
@@ -36,53 +36,70 @@ export default function PatientRegistrationWizard() {
 
           {step === 1 && (
             <PersonalInfoStep
-              data={data}
-              setData={setData}
+              formData={formData}
+              updateSection={updateSection}
             />
           )}
 
           {step === 2 && (
             <MedicalHistoryStep
-              data={data}
-              setData={setData}
+              formData={formData}
+              updateSection={updateSection}
             />
           )}
 
           {step === 3 && (
             <ServiceSelectionStep
-              data={data}
-              setData={setData}
+              formData={formData}
+              updateSection={updateSection}
             />
           )}
 
           {step === 4 && (
             <FeePaymentStep
-              data={data}
-              setData={setData}
+              formData={formData}
+              updateSection={updateSection}
             />
           )}
 
           <div className="flex justify-between mt-8">
 
-            {step > 1 && (
+            {!isFirstStep && (
               <button
                 onClick={prevStep}
-                className="px-6 py-2 rounded bg-gray-200"
+                className="
+                  px-6
+                  py-2
+                  rounded-lg
+                  bg-slate-200
+                "
               >
                 قبلی
               </button>
             )}
 
-            {step < 4 ? (
+            {!isLastStep ? (
               <button
                 onClick={nextStep}
-                className="px-6 py-2 rounded bg-blue-600 text-white"
+                className="
+                  px-6
+                  py-2
+                  rounded-lg
+                  bg-blue-600
+                  text-white
+                "
               >
                 مرحله بعد
               </button>
             ) : (
               <button
-                className="px-6 py-2 rounded bg-green-600 text-white"
+                className="
+                  px-6
+                  py-2
+                  rounded-lg
+                  bg-green-600
+                  text-white
+                "
               >
                 ثبت مریض و ایجاد پلان درمان
               </button>
@@ -93,10 +110,11 @@ export default function PatientRegistrationWizard() {
         </div>
 
         <div className="col-span-3">
-          <PatientSummary data={data} />
+          <PatientSummary formData={formData} />
         </div>
 
       </div>
+
     </div>
   );
 }

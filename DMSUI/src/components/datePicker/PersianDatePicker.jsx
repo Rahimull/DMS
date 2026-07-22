@@ -1,11 +1,18 @@
 import DatePickerModule from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
 import { CalendarDays } from "lucide-react";
 
 const DatePicker = DatePickerModule.default;
 
+export default function PersianDatePicker({
+  value,
+  onChange,
+  disabled = false,
+}) {
+
 const dariAfghanistan = {
-  name: "dari_af",
+  ...persian_fa,
 
   months: [
     ["حمل", "حمل"],
@@ -26,20 +33,13 @@ const dariAfghanistan = {
     ["شنبه", "شن"],
     ["یکشنبه", "یک"],
     ["دوشنبه", "دو"],
-    ["سه شنبه", "سه"],
+    ["سه‌شنبه", "سه"],
     ["چهارشنبه", "چهار"],
     ["پنجشنبه", "پنج"],
     ["جمعه", "جمع"],
   ],
-
-  digits: ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"],
 };
 
-export default function PersianDatePicker({
-  value,
-  onChange,
-  disabled = false,
-}) {
   return (
     <div className="relative w-full">
 
@@ -59,15 +59,32 @@ export default function PersianDatePicker({
         />
       </div>
 
+
       <DatePicker
-        value={value}
-        onChange={onChange}
+
+        value={value || ""}
+
+        onChange={(date)=>{
+
+          onChange(
+            date
+              ? date.format("YYYY/MM/DD")
+              : ""
+          );
+
+        }}
+
         calendar={persian}
         locale={dariAfghanistan}
+
         format="YYYY/MM/DD"
+
         calendarPosition="bottom-right"
+
         disabled={disabled}
+
         containerClassName="w-full"
+
         inputClass="
           w-full
           h-12
@@ -77,16 +94,6 @@ export default function PersianDatePicker({
           bg-white
           pr-11
           pl-4
-          text-sm
-          text-slate-700
-          shadow-sm
-          transition-all
-          duration-200
-          hover:border-slate-400
-          focus:border-blue-500
-          focus:ring-4
-          focus:ring-blue-100
-          focus:outline-none
         "
       />
 

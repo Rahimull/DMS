@@ -11,6 +11,9 @@ const Form = ({
   submitText = "ذخیره اطلاعات",
   onCancel,
   showActions = true,
+  padding = "p-8",
+  border= true,
+  columns = 2,
 }) => {
   const initialState = useMemo(() => {
     const state = {};
@@ -60,20 +63,20 @@ const Form = ({
 
     setFormData((prev) => ({
       ...prev,
-      newValue,
+      [name]: newValue,
     }));
 
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
-        "": ""
+        [name]: ""
       }));
     }
 
     if (serverErrors[name]) {
       setServerErrors((prev) => ({
         ...prev,
-        "": ""
+        [name]: ""
       }));
     }
   };
@@ -152,24 +155,12 @@ const Form = ({
     <form
       dir="rtl"
       onSubmit={handleSubmit}
-      className="
-        rounded-3xl
-        border
-        border-slate-200
-        bg-white
-        p-8
-        shadow-sm
-      "
+      className={`rounded-3xl bg-whie ${border ? "boder border-slate-200 shadow-sm" : ""} ${padding}`}
     >
       {/* Header */}
 
       <div
-        className="
-          mb-8
-          border-b
-          border-slate-200
-          pb-5
-        "
+       
       >
         <h2
           className="
@@ -214,12 +205,12 @@ const Form = ({
       {/* Fields */}
 
       <div
-        className="
-          grid
+         className={`
+            grid
           grid-cols-1
-          gap-6
-          md:grid-cols-2
-        "
+          gap-3
+          ${columns === 2 ? "md:grid-cols-2" : ""}
+          `}
       >
         {fields.map((field) => (
           <div

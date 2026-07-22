@@ -2,383 +2,180 @@ import ConditionApi from "@/features/condition/api/ConditionApi";
 import useLoadData from "@/hooks/useLoadData";
 import { Activity, HeartPulse, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
+import ConditionCard from "./medicalHistoryStep/conditionCard";
+import ConditionDetailsDialog from "./medicalHistoryStep/ConditionDetailsDialog";
+import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
+import { Button } from "@/components/ui/button";
+import ConditionForm from "@/features/condition/components/ConditionForm";
 
-export default function MedicalHistoryStep() {
+export default function MedicalHistoryStep({ formData, updateSection }) {
   const filters = useMemo(() => ({}), []);
 
-  const {
-    data: conditions = [],
-    dataLoading,
+  const [selectedId, setSelectedId] = useState(null);
+
+  const openDialog = (id) => {
+    setSelectedId(id);
+  };
+  const closeDialog = () => {
+    setSelectedId(null);
+  };
+
+  // const {
+  //   data: conditions = [],
+  //   dataLoading,
+  //   error,
+  // } = useLoadData(ConditionApi, { filters });
+
+  // Add New Condtions
+
+  const messages = {
+    create: "عارضه با موفقیت ثبت شد.",
+    update: "اطلاعات عارضه با موفقیت ویرایش شد.",
+    delete: "عارضه با موفقیت حذف شد.",
+  };
+
+    const curd = useCreatUpdateForm(ConditionApi, messages, {useFormData:false});
+
+
+   const {
+    data:conditions= [],
+    totalCount,
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    search,
+    setSearch,
+    setRefreshKey,
+    loading: dataLoading,
     error,
-  } = useLoadData(
-    ConditionApi,
-    { filters }
-  );
+  } = useLoadData(ConditionApi, {
+    pageSize: 1000,
+    filters,
+    refreshKey: curd.refreshKey,
+  });
 
-  const [selectedConditions, setSelectedConditions] =
-    useState({});
+  const selectedCondition = conditions.find((x) => x.id === selectedId);
 
-  const handleConditionChange = (
-    conditionId,
-    checked
-  ) => {
+  const selectedConditions = formData.conditions.conditionDetails ?? {};
+
+  const handleConditionChange = (conditionId, checked) => {
+    const updated = { ...selectedConditions };
     if (checked) {
-      setSelectedConditions((prev) => ({
-        // ...prev,
-
-        // {
-        //   conditionId,
-        //   severity: "",
-        //   diagnosisDate: "",
-        //   result: "",
-        //   notes: "",
-        // },
-      }));
+      updated[conditionId] = {
+        conditionId,
+        severity: "",
+        diagnosisDate: "",
+        result: "",
+        notes: "",
+      };
     } else {
-      setSelectedConditions((prev) => {
-        const copy = { ...prev };
-
-        delete copy[conditionId];
-
-        return copy;
-      });
+      delete updated[conditionId];
     }
+    updateSection("conditions", { conditionDetails: updated });
   };
 
-  const handleFieldChange = (
-    conditionId,
-    field,
-    value
-  ) => {
-    setSelectedConditions((prev) => ({
-      ...prev,
-
-      // {
-      //   ...prev[conditionId],
-      //   value,
-      // },
-    }));
+  const handleSaveCondition = (detail) => {
+    updateSection("conditions", {
+      conditionDetails: {
+        ...selectedConditions,
+        [detail.conditionId]: detail,
+      },
+    });
   };
+
+
+  
+
+
 
   return (
     <div className="space-y-6">
-
       {/* Header */}
 
       <div>
-
-        <h2 className="text-2xl font-bold text-slate-800">
-          تاریخچه صحی مریض
-        </h2>
+        <h2 className="text-2xl font-bold text-slate-800">تاریخچه صحی مریض</h2>
 
         <p className="mt-2 text-slate-500">
           بیماری‌های زمینه‌ای و سوابق طبی مریض
         </p>
-
       </div>
 
       {/* Summary */}
 
       <div className="grid md:grid-cols-3 gap-4">
-
         <div className="rounded-xl border bg-white p-4">
-          <p className="text-sm text-slate-500">
-            تعداد بیماری‌ها
-          </p>
+          <p className="text-sm text-slate-500">تعداد بیماری‌ها</p>
 
           <h3 className="text-2xl font-bold text-blue-600">
-            {conditions.length}
+            {totalCount}
           </h3>
         </div>
 
         <div className="rounded-xl border bg-white p-4">
-          <p className="text-sm text-slate-500">
-            انتخاب شده
-          </p>
+          <p className="text-sm text-slate-500">انتخاب شده</p>
 
           <h3 className="text-2xl font-bold text-green-600">
-            {Object.keys(
-              selectedConditions
-            ).length}
+            {Object.keys(selectedConditions).length}
           </h3>
         </div>
 
         <div className="rounded-xl border bg-white p-4">
-          <p className="text-sm text-slate-500">
-            وضعیت
-          </p>
+          <p className="text-sm text-slate-500">وضعیت</p>
 
-          <h3 className="text-2xl font-bold text-orange-600">
-            آماده ثبت
-          </h3>
+          <h3 className="text-2xl font-bold text-orange-600">آماده ثبت</h3>
         </div>
-
       </div>
 
       {/* Conditions */}
 
       <div className="rounded-2xl border bg-white p-6">
+        <div className="mb-5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <HeartPulse className="text-blue-600" size={24} />
 
-        <div className="mb-5 flex items-center gap-2">
+            <h3 className="text-lg font-bold">بیماری‌های زمینه‌ای</h3>
+          </div>
 
-          <HeartPulse
-            className="text-blue-600"
-            size={22}
-          />
-
-          <h3 className="font-bold text-lg">
-            بیماری‌های زمینه‌ای
-          </h3>
-
-        </div>
-
-        {dataLoading && (
-          <p>در حال بارگذاری...</p>
-        )}
-
-        {error && (
-          <p className="text-red-500">
-            {error}
-          </p>
-        )}
-
-        <div className="grid md:grid-cols-3 gap-4">
-
-          {conditions.map((item) => (
-
-            <label
-              key={item.id}
-              className="
-                cursor-pointer
-                rounded-2xl
-                border
-                p-4
-                transition-all
-                hover:border-blue-500
-                hover:bg-blue-50
+          <Button
+            type="button"
+            className="flex h-10 w-20 items-center justify-center rounded-xl
+                border border-blue-200 bg-blue-600 text-white transition hover:bg-blue-400
               "
-            >
+            onClick={()=> {curd.openCreate();}}
+          >
+            <Plus size={30} />
+          </Button>
+        </div>
+        <ConditionForm CURD={curd} />
 
-              <div className="flex items-center justify-between">
+        {dataLoading && <p>در حال بارگذاری...</p>}
 
-                <Activity
-                  size={20}
-                  className="text-blue-600"
-                />
+        {error && <p className="text-red-500">{error}</p>}
 
-                <input
-                  type="checkbox"
-                  checked={
-                    !!selectedConditions[
-                      item.id
-                    ]
-                  }
-                  onChange={(e) =>
-                    handleConditionChange(
-                      item.id,
-                      e.target.checked
-                    )
-                  }
-                />
-
-              </div>
-
-              <h4 className="mt-4 font-semibold">
-                {item.name}
-              </h4>
-
-            </label>
-
+        <div className="grid md:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto pl-2">
+          {conditions.map((item) => (
+            <ConditionCard
+              key={item.id}
+              condition={item}
+              checked={!!selectedConditions[item.id]}
+              onCheck={handleConditionChange}
+              onEdit={() => openDialog(item.id)}
+            />
           ))}
 
+          {/* Selected Condition Details */}
+          <ConditionDetailsDialog
+            open={selectedId !== null}
+            onClose={closeDialog}
+            condition={selectedCondition}
+            detail={selectedConditions[selectedId]}
+            onSave={handleSaveCondition}
+          />
+
           {/* Add New Condition */}
-
-          <div
-            className="
-              rounded-2xl
-              border-2
-              border-dashed
-              border-blue-300
-              p-4
-              bg-blue-50
-            "
-          >
-
-            <div className="flex flex-col items-center justify-center h-full">
-
-              <Plus
-                className="text-blue-600"
-                size={26}
-              />
-
-              <p className="mt-2 font-semibold">
-                بیماری جدید
-              </p>
-
-              <p className="text-xs text-slate-500 text-center">
-                اگر در لیست موجود نیست
-              </p>
-
-            </div>
-
-          </div>
-
         </div>
-
       </div>
-
-      {/* Selected Condition Details */}
-
-      {Object.values(
-        selectedConditions
-      ).map((condition) => {
-
-        const conditionInfo =
-          conditions.find(
-            (x) =>
-              x.id ===
-              condition.conditionId
-          );
-
-        return (
-          <div
-            key={condition.conditionId}
-            className="
-              rounded-2xl
-              border
-              bg-white
-              p-6
-            "
-          >
-
-            <h3 className="mb-4 text-lg font-bold">
-              {conditionInfo?.name}
-            </h3>
-
-            <div className="grid md:grid-cols-2 gap-4">
-
-              <select
-                className="
-                  rounded-xl
-                  border
-                  p-3
-                "
-                value={condition.severity}
-                onChange={(e) =>
-                  handleFieldChange(
-                    condition.conditionId,
-                    "severity",
-                    e.target.value
-                  )
-                }
-              >
-                <option value="">
-                  شدت بیماری
-                </option>
-
-                <option value="mild">
-                  خفیف
-                </option>
-
-                <option value="moderate">
-                  متوسط
-                </option>
-
-                <option value="severe">
-                  شدید
-                </option>
-
-              </select>
-
-              <input
-                type="date"
-                className="
-                  rounded-xl
-                  border
-                  p-3
-                "
-                value={
-                  condition.diagnosisDate
-                }
-                onChange={(e) =>
-                  handleFieldChange(
-                    condition.conditionId,
-                    "diagnosisDate",
-                    e.target.value
-                  )
-                }
-              />
-
-              <input
-                type="text"
-                placeholder="نتیجه"
-                className="
-                  md:col-span-2
-                  rounded-xl
-                  border
-                  p-3
-                "
-                value={condition.result}
-                onChange={(e) =>
-                  handleFieldChange(
-                    condition.conditionId,
-                    "result",
-                    e.target.value
-                  )
-                }
-              />
-
-            </div>
-
-            <textarea
-              rows={4}
-              className="
-                mt-4
-                w-full
-                rounded-xl
-                border
-                p-3
-              "
-              placeholder="یادداشت"
-              value={condition.notes}
-              onChange={(e) =>
-                handleFieldChange(
-                  condition.conditionId,
-                  "notes",
-                  e.target.value
-                )
-              }
-            />
-
-          </div>
-        );
-      })}
-
-      {/* General Notes */}
-
-      <div className="rounded-2xl border bg-white p-6">
-
-        <h3 className="mb-4 text-lg font-bold">
-          یادداشت عمومی داکتر
-        </h3>
-
-        <textarea
-          rows={6}
-          className="
-            w-full
-            rounded-xl
-            border
-            p-3
-          "
-          placeholder="
-تشخیص اولیه
-توضیحات
-نکات مهم
-          "
-        />
-
-      </div>
-
     </div>
   );
 }

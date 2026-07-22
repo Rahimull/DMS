@@ -15,7 +15,7 @@ const steps = [
     title: "فیس و پرداخت",
     icon: "💰",
   },
-];
+  ];
 
 export default function Stepper({ currentStep }) {
   return (

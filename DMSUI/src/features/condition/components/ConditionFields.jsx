@@ -12,7 +12,7 @@ export const ConditionFields = [
     label: "توضیحات",
     type: "textarea",
     required: true,
-    maxLength: 20,
+    maxLength: 200,
     placeholder: "توضیحات",
     rows: 6,
   },
