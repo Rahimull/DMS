@@ -10,6 +10,8 @@ const PatientApi = {
   create: (data) => Api.post(endpoint, data),
   update: (id, data) => Api.put(`${endpoint}/${id}`, data),
   delete: (id) => Api.delete(`${endpoint}/${id}`),
+
+  register: (data) => Api.post("/Patient/PatientRegistration", data)
 };
 
 export default PatientApi;

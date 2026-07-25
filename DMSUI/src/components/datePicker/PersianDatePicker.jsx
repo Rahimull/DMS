@@ -1,15 +1,12 @@
 import DatePickerModule from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
+import gregorian from "react-date-object/calendars/gregorian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import DateObject from "react-date-object";
 import { CalendarDays } from "lucide-react";
 
 const DatePicker = DatePickerModule.default;
 
-export default function PersianDatePicker({
-  value,
-  onChange,
-  disabled = false,
-}) {
 
 const dariAfghanistan = {
   ...persian_fa,
@@ -18,11 +15,11 @@ const dariAfghanistan = {
     ["حمل", "حمل"],
     ["ثور", "ثور"],
     ["جوزا", "جوزا"],
-    ["سرطان", "سر"],
+    ["سرطان", "سرطان"],
     ["اسد", "اسد"],
-    ["سنبله", "سنب"],
-    ["میزان", "میز"],
-    ["عقرب", "عقر"],
+    ["سنبله", "سنبله"],
+    ["میزان", "میزان"],
+    ["عقرب", "عقرب"],
     ["قوس", "قوس"],
     ["جدی", "جدی"],
     ["دلو", "دلو"],
@@ -40,8 +37,60 @@ const dariAfghanistan = {
   ],
 };
 
+
+// تبدیل ارقام فارسی به انگلیسی
+const toEnglishNumber = (str) => {
+  return str.replace(/[۰-۹]/g, (d) =>
+    "۰۱۲۳۴۵۶۷۸۹".indexOf(d)
+  );
+};
+
+
+export default function PersianDatePicker({
+  value,
+  onChange,
+  disabled = false,
+}) {
+
+
+  // مقدار ذخیره شده از Backend
+  // 2026-08-01
+  // تبدیل برای نمایش شمسی
+
+  const pickerValue = value
+    ? new DateObject({
+        date: value,
+        calendar: gregorian,
+        format: "YYYY-MM-DD",
+      }).convert(persian)
+    : "";
+
+
+  const handleChange = (date) => {
+
+    if (!date) {
+      onChange("");
+      return;
+    }
+
+
+    const gregorianDate = date
+      .convert(gregorian)
+      .format("YYYY-MM-DD");
+
+
+    const cleanDate = toEnglishNumber(
+      gregorianDate
+    );
+
+
+    onChange(cleanDate);
+  };
+
+
   return (
     <div className="relative w-full">
+
 
       <div
         className="
@@ -62,19 +111,12 @@ const dariAfghanistan = {
 
       <DatePicker
 
-        value={value || ""}
+        value={pickerValue}
 
-        onChange={(date)=>{
-
-          onChange(
-            date
-              ? date.format("YYYY/MM/DD")
-              : ""
-          );
-
-        }}
+        onChange={handleChange}
 
         calendar={persian}
+
         locale={dariAfghanistan}
 
         format="YYYY/MM/DD"
@@ -83,7 +125,9 @@ const dariAfghanistan = {
 
         disabled={disabled}
 
+
         containerClassName="w-full"
+
 
         inputClass="
           w-full
@@ -94,7 +138,12 @@ const dariAfghanistan = {
           bg-white
           pr-11
           pl-4
+          outline-none
+          focus:border-blue-500
+          focus:ring-2
+          focus:ring-blue-100
         "
+
       />
 
     </div>

@@ -1,219 +1,197 @@
-import {
-  Stethoscope,
-  Smile,
-  Scissors,
-  Activity,
-  Shield,
-  Sparkles,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { CalendarClock, ClipboardList, Plus } from "lucide-react";
 
-const services = [
-  {
-    id: 1,
-    title: "معاینه",
-    icon: Stethoscope,
-    color: "text-blue-600",
-  },
-  {
-    id: 2,
-    title: "پر کردن",
-    icon: Smile,
-    color: "text-green-600",
-  },
-  {
-    id: 3,
-    title: "کشیدن دندان",
-    icon: Scissors,
-    color: "text-red-500",
-  },
-  {
-    id: 4,
-    title: "عصب کشی",
-    icon: Activity,
-    color: "text-purple-600",
-  },
-  {
-    id: 5,
-    title: "کرون",
-    icon: Shield,
-    color: "text-yellow-600",
-  },
-  {
-    id: 6,
-    title: "ایمپلنت",
-    icon: Sparkles,
-    color: "text-cyan-600",
-  },
-];
+import { Button } from "@/components/ui/button";
+import WirzadForm from "@/components/form/WizrdForm";
 
-export default function ServiceSelectionStep() {
+import ServiceApi from "@/features/service/api/ServiceApi";
+import StaffApi from "@/features/staff/api/StaffApi";
+
+import RequirementForm from "./serviceSelectionStep/RequirementForm";
+import SelectedServicesTable from "./serviceSelectionStep/SelectedServicesTable";
+import { AppointmentFields } from "./serviceSelectionStep/AppointmentFields";
+
+export default function ServiceSelectionStep({ formData, updateSection }) {
+  const [services, setServices] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+
+      const serviceList = await ServiceApi.lookup({
+        mapper: (item) => ({
+          value: item.id,
+          label: item.serviceName,
+          fee: item.fee,
+          description: item.description,
+          data: item,
+        }),
+      });
+
+      const doctorList = await StaffApi.lookup({
+        mapper: (item) => ({
+          value: item.id,
+          label: `${item.firstName} ${item.lastName}`,
+          data: item,
+        }),
+      });
+
+      setServices(serviceList);
+      setDoctors(doctorList);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const appointment = formData.services?.appointment ?? {};
+
+  const selectedServices = formData.services?.patientServices ?? [];
+
+  const currentRequirements = formData.services?.currentRequirements ?? [];
+
+  const fields = AppointmentFields(services, doctors);
+
+  const handleAppointmentChange = (e) => {
+    const { name, value } = e.target;
+
+    updateSection("services", {
+      ...formData.services,
+
+      appointment: {
+        ...appointment,
+        [name]: value,
+      },
+    });
+  };
+
+  const activeService = services.find(
+    (x) => x.value === Number(appointment.serviceId),
+  );
+
+
+  // اضافه کردن خدمت انتخاب شده
+
+  const handleAddService = () => {
+    if (!activeService) return;
+
+    const exists = selectedServices.some(
+      (x) => x.serviceId === activeService.value,
+    );
+
+    if (exists) return;
+
+    const newService = {
+      serviceId: activeService.value,
+
+      serviceName: activeService.label,
+
+      description: activeService.description,
+
+      fee: activeService.fee,
+
+      requirements: currentRequirements,
+    };
+
+    updateSection("services", {
+      ...formData.services,
+
+      patientServices: [...selectedServices, newService],
+
+      currentRequirements: [],
+    });
+  };
+
+  const handleRemoveService = (id) => {
+    updateSection("services", {
+      ...formData.services,
+
+      patientServices: selectedServices.filter((x) => x.serviceId !== id),
+    });
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-1">
+      {/* Appointment */}
 
-      <div>
-        <h2 className="text-2xl font-bold text-slate-800">
-          خدمات مورد نیاز
-        </h2>
+      <div
+       
+      >
 
-        <p className="text-slate-500 mt-2">
-          خدمات مورد نیاز بیمار را انتخاب نمایید.
-        </p>
+        {loading ? (
+          <div className="py-10 text-center">در حال بارگذاری...</div>
+        ) : (
+          <WirzadForm
+            title=""
+            description=""
+            border={false}
+            padding="p-0"
+            columns={2}
+            fields={fields}
+            values={appointment}
+            onChange={handleAppointmentChange}
+          />
+        )}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {/* Requirements */}
 
-        {services.map((service) => {
-          const Icon = service.icon;
+      {activeService && (
+        <div
+          className="
+              rounded-3xl
+              border
+              bg-white
+              p-6
+              shadow-sm
+            "
+        >
+          <RequirementForm
+            service={activeService.data}
+            formData={formData}
+            updateSection={updateSection}
+          />
 
-          return (
-            <div
-              key={service.id}
-              className="
-                cursor-pointer
-                rounded-2xl
-                border
-                border-slate-200
-                bg-white
-                p-5
-                shadow-sm
-                transition
-                hover:border-blue-500
-                hover:shadow-md
-              "
-            >
-              <div className="flex items-center gap-3">
-
-                <div className="rounded-xl bg-slate-100 p-3">
-                  <Icon
-                    className={`h-6 w-6 ${service.color}`}
-                  />
-                </div>
-
-                <div>
-
-                  <h3 className="font-semibold">
-                    {service.title}
-                  </h3>
-
-                  <p className="text-sm text-slate-500">
-                    انتخاب خدمت
-                  </p>
-
-                </div>
-
-              </div>
-            </div>
-          );
-        })}
-
-      </div>
-
-      <div className="rounded-2xl border bg-white p-6">
-
-        <h3 className="mb-4 text-lg font-bold">
-          نقشه دندان (Dental Chart)
-        </h3>
-
-        <div className="grid gap-3">
-
-          <div className="flex justify-center gap-2 flex-wrap">
-
-            {[
-              18,17,16,15,14,13,12,11,
-              21,22,23,24,25,26,27,28,
-            ].map((tooth)=>(
-              <button
-                key={tooth}
-                className="
-                  h-12
-                  w-12
-                  rounded-xl
-                  border
-                  bg-white
-                  hover:bg-blue-50
-                  hover:border-blue-500
-                "
-              >
-                {tooth}
-              </button>
-            ))}
-
+          <div className="mt-6 flex justify-end">
+            <Button type="button" onClick={handleAddService}>
+              <Plus size={18} />
+              اضافه کردن خدمت
+            </Button>
           </div>
+        </div>
+      )}
 
-          <div className="flex justify-center gap-2 flex-wrap">
+      {/* Selected Services */}
 
-            {[
-              48,47,46,45,44,43,42,41,
-              31,32,33,34,35,36,37,38,
-            ].map((tooth)=>(
-              <button
-                key={tooth}
-                className="
-                  h-12
-                  w-12
-                  rounded-xl
-                  border
-                  bg-white
-                  hover:bg-blue-50
-                  hover:border-blue-500
-                "
-              >
-                {tooth}
-              </button>
-            ))}
+      <div
+        className="
+          rounded-3xl
+          border
+          bg-white
+          p-6
+          shadow-sm
+        "
+      >
+        <div className="mb-5 flex items-center gap-3">
+          <ClipboardList className="text-indigo-600" />
 
+          <div>
+            <h3 className="font-bold">خدمات ثبت شده</h3>
+
+            <p className="text-sm text-slate-500">خلاصه خدمات بیمار</p>
           </div>
-
         </div>
 
+        <SelectedServicesTable
+          services={selectedServices}
+          onRemove={handleRemoveService}
+        />
       </div>
-
-      <div className="rounded-2xl border bg-white p-6">
-
-        <h3 className="mb-4 text-lg font-bold">
-          خدمات انتخاب شده
-        </h3>
-
-        <table className="w-full">
-
-          <thead>
-            <tr className="border-b">
-              <th className="p-3 text-right">
-                خدمت
-              </th>
-
-              <th className="p-3 text-right">
-                دندان
-              </th>
-
-              <th className="p-3 text-right">
-                قیمت
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-
-            <tr>
-              <td className="p-3">
-                عصب کشی
-              </td>
-
-              <td className="p-3">
-                26
-              </td>
-
-              <td className="p-3">
-                ۳۵۰۰ افغانی
-              </td>
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
     </div>
   );
 }

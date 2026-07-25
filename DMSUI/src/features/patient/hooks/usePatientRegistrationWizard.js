@@ -6,13 +6,32 @@ export default function usePatientRegistrationWizard() {
 
   const [step, setStep] = useState(1);
   const initialFormData = {
-    patient: {},
-    conditions: {
-      conditionDetails: {},
+  patient: {},
+
+  conditions: {
+    conditionDetails: {},
+  },
+
+  services: {
+    appointment: {
+      patientId: null,
+      serviceId: null,      // در صورت نیاز (Service اصلی)
+      installment: 1,
+      round: 1,
+      discount: 0,
+      serviceFee: 0,
+      totalFee: 0,
+      meetDate: "",
+      staffId: null,
+      status: "",
+      details: "",
     },
-    services: [],
-    payment: {},
-  }
+
+    patientServices: [],
+  },
+
+  payment: {},
+};
 
   const [formData, setFormData] = useState(initialFormData);
 

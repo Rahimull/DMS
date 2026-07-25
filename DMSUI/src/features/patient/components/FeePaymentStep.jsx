@@ -1,240 +1,179 @@
 import {
   Wallet,
-  CreditCard,
-  Banknote,
   Receipt,
   Percent,
   Calculator,
+  CreditCard,
+  CircleDollarSign,
+  BadgeCheck,
+  AlertCircle,
 } from "lucide-react";
+import SummaryCard from "./SummaryCard";
+import StatusBox from "./StatusBox";
 
-export default function FeePaymentStep() {
+export default function FeePaymentStep({ formData, updateSection }) {
+  const payment = formData.payment ?? {
+    totalFee: 0,
+    discount: 0,
+    paidAmount: 0,
+    paymentType: "full",
+  };
+
+  const totalFee = Number(payment.totalFee || 0);
+
+  const discount = Number(payment.discount || 0);
+
+  const discountAmount = (totalFee * discount) / 100;
+
+  const payable = totalFee - discountAmount;
+
+  const paid = Number(payment.paidAmount || 0);
+
+  const remaining = payable - paid;
+
+  const handleChange = (name, value) => {
+    updateSection("payment", {
+      ...payment,
+
+      [name]: value,
+    });
+  };
+
   return (
     <div className="space-y-6">
+      {/* Cards */}
 
-      {/* Header */}
+      <div
+        className="
+grid
+grid-cols-1
+md:grid-cols-4
+gap-4
+"
+      >
+        <SummaryCard
+          title="مجموع فیس"
+          value={`${totalFee.toLocaleString()} افغانی`}
+          icon={<Calculator />}
+        />
 
-      <div>
-        <h2 className="text-2xl font-bold text-slate-800">
-          فیس و پرداخت
-        </h2>
+        <SummaryCard title="تخفیف" value={`${discount}%`} icon={<Percent />} />
 
-        <p className="mt-2 text-slate-500">
-          هزینه خدمات و اطلاعات پرداخت مریض را ثبت نمایید.
-        </p>
+        <SummaryCard
+          title="قابل پرداخت"
+          value={`${payable.toLocaleString()} افغانی`}
+          icon={<CircleDollarSign />}
+        />
+
+        <SummaryCard
+          title="باقی مانده"
+          value={`${remaining.toLocaleString()} افغانی`}
+          icon={<AlertCircle />}
+        />
       </div>
 
-      {/* Summary Cards */}
+      {/* Form */}
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-        <div className="rounded-2xl bg-green-50 border border-green-200 p-4">
-          <p className="text-sm text-slate-600">
-            مجموع خدمات
-          </p>
-
-          <h3 className="mt-2 text-xl font-bold text-green-700">
-            ۵٬۵۰۰ افغانی
-          </h3>
-        </div>
-
-        <div className="rounded-2xl bg-yellow-50 border border-yellow-200 p-4">
-          <p className="text-sm text-slate-600">
-            تخفیف
-          </p>
-
-          <h3 className="mt-2 text-xl font-bold text-yellow-700">
-            ۵۰۰ افغانی
-          </h3>
-        </div>
-
-        <div className="rounded-2xl bg-blue-50 border border-blue-200 p-4">
-          <p className="text-sm text-slate-600">
-            پیش پرداخت
-          </p>
-
-          <h3 className="mt-2 text-xl font-bold text-blue-700">
-            ۲٬۰۰۰ افغانی
-          </h3>
-        </div>
-
-        <div className="rounded-2xl bg-red-50 border border-red-200 p-4">
-          <p className="text-sm text-slate-600">
-            باقی مانده
-          </p>
-
-          <h3 className="mt-2 text-xl font-bold text-red-700">
-            ۳٬۰۰۰ افغانی
-          </h3>
-        </div>
-
-      </div>
-
-      {/* Payment Form */}
-
-      <div className="rounded-2xl border bg-white p-6">
-
-        <h3 className="mb-5 text-lg font-bold">
-          اطلاعات پرداخت
-        </h3>
-
-        <div className="grid grid-cols-2 gap-4">
-
-          <div>
-            <label className="mb-2 block font-medium">
-              مجموع فیس
-            </label>
-
-            <div className="relative">
-              <Calculator className="absolute right-3 top-3 h-5 w-5 text-slate-400" />
-
-              <input
-                className="w-full rounded-xl border p-3 pr-12"
-                placeholder="مجموع فیس"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="mb-2 block font-medium">
-              تخفیف
-            </label>
-
-            <div className="relative">
-              <Percent className="absolute right-3 top-3 h-5 w-5 text-slate-400" />
-
-              <input
-                className="w-full rounded-xl border p-3 pr-12"
-                placeholder="تخفیف"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="mb-2 block font-medium">
-              پیش پرداخت
-            </label>
-
-            <div className="relative">
-              <Wallet className="absolute right-3 top-3 h-5 w-5 text-slate-400" />
-
-              <input
-                className="w-full rounded-xl border p-3 pr-12"
-                placeholder="پیش پرداخت"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="mb-2 block font-medium">
-              باقی مانده
-            </label>
-
-            <div className="relative">
-              <Receipt className="absolute right-3 top-3 h-5 w-5 text-slate-400" />
-
-              <input
-                className="w-full rounded-xl border p-3 pr-12 bg-slate-50"
-                placeholder="باقی مانده"
-                readOnly
-              />
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* Payment Method */}
-
-      <div className="rounded-2xl border bg-white p-6">
-
-        <h3 className="mb-5 text-lg font-bold">
-          روش پرداخت
-        </h3>
-
-        <div className="grid grid-cols-3 gap-4">
-
-          <label className="cursor-pointer rounded-xl border p-4 hover:border-blue-500 hover:bg-blue-50">
-            <input
-              type="radio"
-              name="paymentMethod"
-              className="mb-3"
-            />
-
-            <div className="flex items-center gap-2">
-              <Banknote className="h-5 w-5 text-green-600" />
-              <span>نقدی</span>
-            </div>
-          </label>
-
-          <label className="cursor-pointer rounded-xl border p-4 hover:border-blue-500 hover:bg-blue-50">
-            <input
-              type="radio"
-              name="paymentMethod"
-              className="mb-3"
-            />
-
-            <div className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5 text-blue-600" />
-              <span>کارت بانکی</span>
-            </div>
-          </label>
-
-          <label className="cursor-pointer rounded-xl border p-4 hover:border-blue-500 hover:bg-blue-50">
-            <input
-              type="radio"
-              name="paymentMethod"
-              className="mb-3"
-            />
-
-            <div className="flex items-center gap-2">
-              <Wallet className="h-5 w-5 text-purple-600" />
-              <span>انتقال آنلاین</span>
-            </div>
-          </label>
-
-        </div>
-
-      </div>
-
-      {/* Installment */}
-
-      <div className="rounded-2xl border bg-white p-6">
-
-        <h3 className="mb-5 text-lg font-bold">
-          وضعیت پرداخت
-        </h3>
-
-        <div className="grid grid-cols-2 gap-4">
-
-          <label className="flex items-center gap-3 rounded-xl border p-4">
-            <input type="radio" name="paymentStatus" />
-            پرداخت کامل
-          </label>
-
-          <label className="flex items-center gap-3 rounded-xl border p-4">
-            <input type="radio" name="paymentStatus" />
-            پرداخت اقساطی
-          </label>
-
-        </div>
-
-        <div className="mt-5 grid grid-cols-2 gap-4">
-
-          <input
-            className="rounded-xl border p-3"
-            placeholder="تعداد اقساط"
+      <div
+        className="
+rounded-3xl
+border
+bg-white
+p-6
+"
+      >
+        <div
+          className="
+grid
+md:grid-cols-2
+gap-5
+"
+        >
+          <PaymentInput
+            label="مجموع فیس"
+            icon={<Calculator />}
+            value={payment.totalFee}
+            onChange={(v) => handleChange("totalFee", v)}
           />
 
-          <input
-            className="rounded-xl border p-3"
-            placeholder="مبلغ قسط اول"
+          <PaymentInput
+            label="تخفیف فیصدی"
+            icon={<Percent />}
+            value={payment.discount}
+            onChange={(v) => handleChange("discount", v)}
           />
 
+          <PaymentInput
+            label="مبلغ دریافت شده"
+            icon={<Receipt />}
+            value={payment.paidAmount}
+            onChange={(v) => handleChange("paidAmount", v)}
+          />
         </div>
-
       </div>
 
+      {/* Status */}
+
+      <div
+        className="
+grid
+md:grid-cols-3
+gap-4
+"
+      >
+        <StatusBox
+          title="پرداخت شده"
+          value={`${paid.toLocaleString()} افغانی`}
+          icon={<BadgeCheck />}
+        />
+
+        <StatusBox
+          title="باقی مانده"
+          value={`${remaining.toLocaleString()} افغانی`}
+          icon={<AlertCircle />}
+        />
+
+        <StatusBox
+          title="وضعیت"
+          value={remaining <= 0 ? "تکمیل شده" : "باقی دارد"}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PaymentInput({ label, icon, value, onChange }) {
+  return (
+    <div>
+      <label className="block mb-2 font-medium">{label}</label>
+
+      <div className="relative">
+        <div
+          className="
+absolute
+right-3
+top-3
+text-slate-400
+"
+        >
+          {icon}
+        </div>
+
+        <input
+          type="number"
+          value={value ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+          className="
+w-full
+rounded-xl
+border
+p-3
+pr-12
+focus:ring-2
+focus:ring-blue-500
+"
+        />
+      </div>
     </div>
   );
 }

@@ -22,14 +22,7 @@ const WirzadForm = ({
     >
       {/* Header */}
 
-      <div
-        className="
-          mb-8
-          border-b
-          border-slate-200
-          pb-5
-        "
-      >
+      <div>
         <h2
           className="
             text-xl

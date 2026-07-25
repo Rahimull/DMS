@@ -15,82 +15,65 @@ const steps = [
     title: "فیس و پرداخت",
     icon: "💰",
   },
-  ];
+];
 
 export default function Stepper({ currentStep }) {
   return (
-    <div
-      className="
-        rounded-3xl
-        border
-        border-slate-200
-        bg-white
-        p-6
-        shadow-sm
-      "
-    >
-      <div className="flex items-center justify-between">
-
+    <div className="px-2">
+      <div className="flex items-start justify-around">
         {steps.map((step, index) => {
-          const stepNumber = index + 1;
+          const number = index + 1;
 
-          const isActive =
-            currentStep === stepNumber;
-
-          const isCompleted =
-            currentStep > stepNumber;
+          const active = currentStep === number;
+          const completed = currentStep > number;
 
           return (
             <div
-              key={index}
-              className="
-                flex
-                flex-1
-                items-center
-              "
+              key={number}
+              className="flex flex-1 items-center"
             >
-              <div className="flex flex-col items-center">
+              {/* Step */}
 
-                {/* Circle */}
+              <div className="flex flex-col items-center">
 
                 <div
                   className={`
+                    relative
                     flex
-                    h-14
-                    w-14
+                    h-11
+                    w-11
                     items-center
                     justify-center
                     rounded-full
                     border-2
                     text-lg
-                    font-bold
                     transition-all
+                    duration-300
 
                     ${
-                      isCompleted
-                        ? "border-green-500 bg-green-500 text-white"
-                        : isActive
+                      completed
+                        ? "border-emerald-500 bg-emerald-500 text-white shadow-md shadow-emerald-200"
+                        : active
                         ? "border-blue-600 bg-blue-600 text-white shadow-lg shadow-blue-200"
-                        : "border-slate-300 bg-slate-100 text-slate-500"
+                        : "border-slate-300 bg-white"
                     }
                   `}
                 >
-                  {isCompleted ? "✓" : step.icon}
+                  {completed ? "✓" : step.icon}
                 </div>
-
-                {/* Title */}
 
                 <span
                   className={`
-                    mt-3
-                    text-sm
-                    font-medium
+                    mt-2
+                    whitespace-nowrap
+                    text-xs
+                    font-semibold
 
                     ${
-                      isActive
+                      completed
+                        ? "text-emerald-600"
+                        : active
                         ? "text-blue-700"
-                        : isCompleted
-                        ? "text-green-700"
                         : "text-slate-500"
                     }
                   `}
@@ -99,24 +82,24 @@ export default function Stepper({ currentStep }) {
                 </span>
               </div>
 
-              {/* Line */}
+              {/* Connector */}
 
               {index !== steps.length - 1 && (
-                <div
-                  className={`
-                    mx-4
-                    mt-[-35px]
-                    h-1
-                    flex-1
-                    rounded-full
+                <div className="mx-3 mb-6 flex-1">
+                  <div
+                    className={`
+                      h-[4px]
+                      rounded-full
+                      transition-all
 
-                    ${
-                      currentStep > stepNumber
-                        ? "bg-green-500"
-                        : "bg-slate-200"
-                    }
-                  `}
-                />
+                      ${
+                        completed
+                          ? "bg-emerald-500"
+                          : "bg-slate-200"
+                      }
+                    `}
+                  />
+                </div>
               )}
             </div>
           );

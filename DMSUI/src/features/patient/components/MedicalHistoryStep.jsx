@@ -20,12 +20,6 @@ export default function MedicalHistoryStep({ formData, updateSection }) {
     setSelectedId(null);
   };
 
-  // const {
-  //   data: conditions = [],
-  //   dataLoading,
-  //   error,
-  // } = useLoadData(ConditionApi, { filters });
-
   // Add New Condtions
 
   const messages = {
@@ -91,15 +85,6 @@ export default function MedicalHistoryStep({ formData, updateSection }) {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-
-      <div>
-        <h2 className="text-2xl font-bold text-slate-800">تاریخچه صحی مریض</h2>
-
-        <p className="mt-2 text-slate-500">
-          بیماری‌های زمینه‌ای و سوابق طبی مریض
-        </p>
-      </div>
 
       {/* Summary */}
 

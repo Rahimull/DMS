@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DMS.Modules.Appointments.Entities;
 using DMS.Modules.Labs.Entities;
-using DMS.Modules.Patients.Entities;
 using DMS.Shared.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,4 +31,5 @@ public class Service : BaseEntity
 
       public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
       public ICollection<LabCase> LabCases { get; set; } = new List<LabCase>();
+      public ICollection<ServiceRequirementMap> ServiceRequirementMaps { get; set; } = new List<ServiceRequirementMap>();
 }

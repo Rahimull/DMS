@@ -1450,6 +1450,43 @@ namespace DMSAPI.Migrations
                     b.ToTable("service_requirements", (string)null);
                 });
 
+            modelBuilder.Entity("DMS.Modules.Treatments.Entities.ServiceRequirementMap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ServiceRequirmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("ServiceRequirmentId");
+
+                    b.ToTable("ServiceRequirementMaps", (string)null);
+                });
+
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.TreatmentPlan", b =>
                 {
                     b.Property<int>("Id")
@@ -2052,6 +2089,25 @@ namespace DMSAPI.Migrations
                     b.Navigation("TreatmentPlan");
                 });
 
+            modelBuilder.Entity("DMS.Modules.Treatments.Entities.ServiceRequirementMap", b =>
+                {
+                    b.HasOne("DMS.Modules.Treatments.Entities.Service", "Service")
+                        .WithMany("ServiceRequirementMaps")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DMS.Modules.Treatments.Entities.ServiceRequirement", "ServiceRequirement")
+                        .WithMany("ServiceRequirementMaps")
+                        .HasForeignKey("ServiceRequirmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("ServiceRequirement");
+                });
+
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.TreatmentPlan", b =>
                 {
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
@@ -2241,11 +2297,15 @@ namespace DMSAPI.Migrations
                     b.Navigation("PlanServices");
 
                     b.Navigation("Retreatments");
+
+                    b.Navigation("ServiceRequirementMaps");
                 });
 
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.ServiceRequirement", b =>
                 {
                     b.Navigation("PatientServices");
+
+                    b.Navigation("ServiceRequirementMaps");
                 });
 
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.TreatmentPlan", b =>

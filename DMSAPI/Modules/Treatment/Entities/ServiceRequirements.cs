@@ -15,5 +15,6 @@ public class ServiceRequirement : BaseEntity
 
     // Navigaton property
    public ICollection<PatientService> PatientServices { get; set; } = new List<PatientService>();
+   public ICollection<ServiceRequirementMap> ServiceRequirementMaps { get; set; } = new List<ServiceRequirementMap>();
 
 }

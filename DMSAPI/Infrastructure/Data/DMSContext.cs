@@ -40,6 +40,7 @@ public class DMSContext : IdentityDbContext<ApplicationUser>
     #region Service
     public DbSet<Service> Services => Set<Service>();
     public DbSet<ServiceRequirement> ServiceRequirements => Set<ServiceRequirement>();
+    public DbSet<ServiceRequirementMap> ServiceRequirementMaps => Set<ServiceRequirementMap>();
     #endregion
 
     #region Treatment Plan

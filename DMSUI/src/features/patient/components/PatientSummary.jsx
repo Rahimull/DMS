@@ -1,19 +1,44 @@
-export default function PatientSummary({ data }) {
+import {
+  UserRound,
+  Phone,
+  MapPin,
+  CalendarDays,
+  Droplets,
+  Stethoscope,
+  Wallet,
+  Calculator,
+  BadgeCheck,
+  Receipt,
+  Percent,
+} from "lucide-react";
+
+export default function PatientSummary({ data = {} }) {
+  const patient = data.patient ?? {};
+
+  const services = data.services?.patientServices ?? [];
+
+  const appointment = data.services?.appointment ?? {};
+
+  const payment = data.payment ?? {};
+
+  const totalFee = Number(payment.totalFee ?? appointment.totalFee ?? 0);
+
+  const discount = Number(payment.discount ?? 0);
+
+  const paid = Number(payment.paidAmount ?? 0);
+
+  const remaining = totalFee - discount - paid;
+
   return (
     <div
       className="
         sticky
         top-6
-
+        overflow-auto
         rounded-3xl
         border
-        border-slate-200
-
         bg-white
-
-        shadow-sm
-
-        overflow-hidden
+        shadow-lg
       "
     >
       {/* Header */}
@@ -22,225 +47,287 @@ export default function PatientSummary({ data }) {
         className="
           bg-gradient-to-r
           from-blue-600
-          to-blue-500
-
+          to-indigo-600
           p-5
-
           text-white
         "
       >
-        <div className="flex items-center gap-3">
-
+        <div className="flex items-center gap-4">
           <div
             className="
               flex
-              h-14
-              w-14
+              h-16
+              w-16
               items-center
               justify-center
-
               rounded-full
-
               bg-white/20
-
-              text-2xl
             "
           >
-            👤
+            <UserRound size={32} />
           </div>
 
           <div>
-            <h3 className="font-bold text-lg">
-              خلاصه مریض
-            </h3>
+            <h2 className="text-xl font-bold">
+              {patient.firstName || "-"} {patient.lastName || ""}
+            </h2>
 
-            <p className="text-sm text-blue-100">
-              ثبت اولیه معلومات
-            </p>
+            <p className="text-sm text-blue-100">خلاصه دوسیه مریض</p>
           </div>
         </div>
       </div>
 
-      {/* Body */}
+      <div className="space-y-5 p-5">
+        {/* Patient Info */}
 
-      <div className="p-5 space-y-5">
+        <div className="space-y-3">
+          <Info
+            icon={<Phone size={18} />}
+            title="شماره تماس"
+            value={patient.phone}
+          />
 
-        {/* Basic Info */}
+          <Info
+            icon={<MapPin size={18} />}
+            title="آدرس"
+            value={patient.address}
+          />
+
+          <Info
+            icon={<Droplets size={18} />}
+            title="گروه خون"
+            value={patient.bloodGroup}
+          />
+
+          <Info
+            icon={<CalendarDays size={18} />}
+            title="سن"
+            value={`${patient.age || "-"} سال`}
+          />
+        </div>
+
+        {/* Appointment */}
 
         <div
           className="
             rounded-2xl
-            bg-slate-50
+            bg-emerald-50
             p-4
           "
         >
-          <div className="text-xs text-slate-500 mb-1">
-            شماره دوسیه
-          </div>
-
-          <div className="font-semibold text-slate-800">
-            {data?.patient?.fileId || "DMS-0001"}
-          </div>
-        </div>
-
-        <div
-          className="
-            rounded-2xl
-            bg-slate-50
-            p-4
-          "
-        >
-          <div className="text-xs text-slate-500 mb-1">
-            نام مریض
-          </div>
-
-          <div className="font-semibold text-slate-800">
-            {data?.patient?.firstName || "---"}
-          </div>
-        </div>
-
-        <div
-          className="
-            rounded-2xl
-            bg-slate-50
-            p-4
-          "
-        >
-          <div className="text-xs text-slate-500 mb-1">
-            شماره تماس
-          </div>
-
-          <div className="font-semibold text-slate-800">
-            {data?.patient?.phone || "---"}
-          </div>
-        </div>
-
-        {/* Divider */}
-
-        <div className="border-t border-slate-200" />
-
-        {/* Services */}
-
-        <div>
           <div
             className="
               mb-3
               flex
               items-center
               gap-2
-              font-semibold
-              text-slate-700
+              font-bold
+              text-emerald-700
             "
           >
-            🦷 خدمات انتخاب شده
+            <Stethoscope size={20} />
+            جلسه درمان
           </div>
 
-          <div
-            className="
-              rounded-2xl
-              bg-slate-50
-              p-3
-            "
-          >
-            {data?.services?.length > 0 ? (
-              <ul className="space-y-2">
-                {data.services.map((service, index) => (
-                  <li
-                    key={index}
-                    className="
-                      flex
-                      items-center
-                      justify-between
-                      text-sm
-                    "
-                  >
-                    <span>
-                      {service.name}
-                    </span>
+          <div className="space-y-2 text-sm">
+            <p>
+              تاریخ:
+              <b className="mr-2">{appointment.meetDate || "-"}</b>
+            </p>
 
-                    <span className="text-slate-500">
-                      {service.price}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <span className="text-sm text-slate-400">
-                هنوز خدمتی انتخاب نشده
-              </span>
-            )}
+            <p>
+              وضعیت:
+              <b className="mr-2">{appointment.status || "ثبت نشده"}</b>
+            </p>
           </div>
         </div>
 
-        {/* Financial */}
+        {/* Services */}
 
-        <div className="border-t border-slate-200 pt-4">
-
-          <div
+        <div>
+          <h3
             className="
-              flex
-              items-center
-              justify-between
               mb-3
+              font-bold
             "
           >
-            <span className="text-slate-600">
-              مجموع فیس
-            </span>
+            🦷 خدمات انتخاب شده
+          </h3>
 
-            <span
+          {services.length === 0 ? (
+            <div
               className="
-                font-bold
-                text-green-600
+                rounded-xl
+                bg-slate-50
+                p-4
+                text-sm
+                text-slate-400
               "
             >
-              {data?.payment?.totalFee || 0} افغانی
-            </span>
-          </div>
+              هنوز خدمتی انتخاب نشده
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {services.map((service) => (
+                <div
+                  key={service.serviceId}
+                  className="
+                    rounded-2xl
+                    bg-slate-50
+                    p-4
+                  "
+                >
+                  <div
+                    className="
+                      flex
+                      justify-between
+                      font-bold
+                    "
+                  >
+                    <span>{service.serviceName}</span>
 
-          <div
-            className="
-              flex
-              items-center
-              justify-between
-            "
-          >
-            <span className="text-slate-600">
-              باقی مانده
-            </span>
+                    <span
+                      className="
+                        text-blue-600
+                      "
+                    >
+                      {Number(service.fee).toLocaleString()} افغانی
+                    </span>
+                  </div>
 
-            <span
-              className="
-                font-bold
-                text-orange-500
-              "
-            >
-              {data?.payment?.remaining || 0} افغانی
-            </span>
-          </div>
+                  {/* Requirements */}
+
+                  {service.requirements?.length > 0 && (
+                    <div
+                      className="
+                        mt-3
+                        border-t
+                        pt-3
+                      "
+                    >
+                      <p
+                        className="
+                          mb-2
+                          text-sm
+                          text-slate-500
+                        "
+                      >
+                        ضروریات:
+                      </p>
+
+                      {service.requirements.map((req, index) => (
+                        <div
+                          key={index}
+                          className="
+                              rounded-lg
+                              bg-white
+                              p-2
+                              text-sm
+                            "
+                        >
+                          {req.serviceRequirementId === 1 ? (
+                            <>🦷 دندان: {req.value?.join(", ")}</>
+                          ) : (
+                            <>{JSON.stringify(req.value)}</>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Payment */}
+
+        <div
+          className="
+            border-t
+            pt-5
+            space-y-3
+          "
+        >
+          <Money icon={<Calculator />} title="مجموع فیس" value={totalFee} />
+
+          <Money icon={<Percent />} title="تخفیف" value={discount} />
+
+          <Money icon={<Wallet />} title="پرداخت شده" value={paid} />
+
+          <Money icon={<Receipt />} title="باقی مانده" value={remaining} />
         </div>
 
         {/* Status */}
 
         <div
           className="
-            rounded-2xl
-            border
-            border-blue-100
+            flex
+            items-center
+            gap-2
+            rounded-xl
             bg-blue-50
             p-4
+            text-blue-700
           "
         >
-          <div className="text-xs text-blue-600 mb-1">
-            وضعیت ثبت
-          </div>
-
-          <div className="font-medium text-blue-800">
-            مرحله {data?.currentStep || 1} از 4
-          </div>
+          <BadgeCheck size={20} />
+          مرحله ثبت:
+          <b>{data?.currentStep ?? 1}</b>
         </div>
-
       </div>
+    </div>
+  );
+}
+
+function Info({ icon, title, value }) {
+  return (
+    <div
+      className="
+flex
+items-center
+gap-3
+rounded-xl
+bg-slate-50
+p-3
+"
+    >
+      <div className="text-blue-600">{icon}</div>
+
+      <div>
+        <p className="text-xs text-slate-500">{title}</p>
+
+        <p className="font-semibold">{value || "-"}</p>
+      </div>
+    </div>
+  );
+}
+
+function Money({ icon, title, value }) {
+  return (
+    <div
+      className="
+flex
+items-center
+justify-between
+rounded-xl
+bg-slate-50
+p-3
+"
+    >
+      <div
+        className="
+flex
+items-center
+gap-2
+"
+      >
+        <span className="text-blue-600">{icon}</span>
+
+        <span>{title}</span>
+      </div>
+
+      <b>{Number(value).toLocaleString()} افغانی</b>
     </div>
   );
 }

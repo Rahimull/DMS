@@ -48,7 +48,7 @@ export const PatientFields = [
     label: "حالت مدنی",
     type: "select",
     options: [
-      {label : "متحل", value: "متحل"},
+      {label : "متحل", value: "متاهل"},
       {label : "مجرد", value: "مجرد"},
     ],
     placeholder: "حالت مدنی",

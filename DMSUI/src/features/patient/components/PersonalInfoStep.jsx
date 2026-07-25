@@ -18,6 +18,7 @@ export default function PersonalInfoStep({
       values={formData.patient}
       onChange={handleChange}
       showActions={false}
+      border={false}
     />
   );
 }
