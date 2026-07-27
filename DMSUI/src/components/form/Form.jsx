@@ -59,7 +59,7 @@ const Form = ({
         ? checked
         : type === "file"
         ? files?.[0]
-        : value;
+        : type === "number" ? value === "" ? null : Number(value) : value;
 
     setFormData((prev) => ({
       ...prev,

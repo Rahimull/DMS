@@ -8,21 +8,21 @@ namespace DMS.Modules.Treatments.Entities;
 public class ConditionDetail : BaseEntity
 {
     [Column("condition_ID")]
-    public int ConditionId { get; set; }
+    public int? ConditionId { get; set; }
 
     [Column("pat_ID")]
-    public int PatientId { get; set; }
+    public int? PatientId { get; set; }
 
     [Column("severty")]
     public string? Severty { get; set; }
 
     [Column("result")]
-    public int Result { get; set; } = 1;
+    public int Result { get; set; }
 
     [Column("diagnosis_date")]
     public DateOnly? DaignosisDate { get; set; }
 
-    public int TreatmentPlanId { get; set; }
+    public int? TreatmentPlanId { get; set; }
 
     [MaxLength(1000)]
     [Column("notes")]

@@ -11,12 +11,19 @@ import {
 import SummaryCard from "./SummaryCard";
 import StatusBox from "./StatusBox";
 
-export default function FeePaymentStep({ formData, updateSection }) {
+export default function FeePaymentStep({
+  formData,
+  updateSection,
+  updateValue,
+  errors,
+}) {
   const payment = formData.payment ?? {
     totalFee: 0,
     discount: 0,
+    payable: 0,
     paidAmount: 0,
-    paymentType: "full",
+    dueAmount: 0,
+    installment: 1,
   };
 
   const totalFee = Number(payment.totalFee || 0);
@@ -31,12 +38,49 @@ export default function FeePaymentStep({ formData, updateSection }) {
 
   const remaining = payable - paid;
 
-  const handleChange = (name, value) => {
-    updateSection("payment", {
-      ...payment,
+  // برای تغییرات هر بخش
+  // const handleChangePayment = (name, value) =>{
+  //   const newPayment = {...payment,[name]:value,};
 
+  //   updateSection("payment", newPayment);
+
+  //   const totalFee = Number(newPayment.totalFee || 0);
+  //   const discount = Number(newPayment.discount || 0)
+  //   const discountAmount = (totalFee * discount ) / 100;
+  //   const payable = totalFee - discountAmount;
+
+  //   updateValue("services.appointment.totalFee", payable);
+  //   updateValue("services.appointment.discount", discount);
+  //   updateValue("services.appointment.installment", Number(newPayment.installment) || 1);
+  //   updateValue("payment.dueAmount", (payable - newPayment.paidAmount))
+  //   updateValue("payment.payable", payable)
+
+  // }
+  const handleChangePayment = (name, value) => {
+    const newPayment = {
+      ...payment,
       [name]: value,
-    });
+    };
+
+    const totalFee = Number(newPayment.totalFee || 0);
+    const discount = Number(newPayment.discount || 0);
+    const paidAmount = Number(newPayment.paidAmount || 0);
+
+    const discountAmount = (totalFee * discount) / 100;
+    const payable = totalFee - discountAmount;
+    const dueAmount = payable - paidAmount;
+
+    newPayment.payable = payable;
+    newPayment.dueAmount = dueAmount;
+
+    updateSection("payment", newPayment);
+
+    updateValue("services.appointment.totalFee", payable);
+    updateValue("services.appointment.discount", discount);
+    updateValue(
+      "services.appointment.installment",
+      Number(newPayment.installment) || 1,
+    );
   };
 
   return (
@@ -73,41 +117,60 @@ gap-4
       </div>
 
       {/* Form */}
-
-      <div
-        className="
-rounded-3xl
-border
-bg-white
-p-6
-"
-      >
-        <div
-          className="
-grid
-md:grid-cols-2
-gap-5
-"
-        >
+      <div className="rounded-3xl border bg-white p-6">
+        <div className="grid md:grid-cols-2 gap-5">
           <PaymentInput
             label="مجموع فیس"
             icon={<Calculator />}
             value={payment.totalFee}
-            onChange={(v) => handleChange("totalFee", v)}
+            error={errors?.totalFee}
+            required={true}
+            onChange={(v) => {
+              handleChangePayment("totalFee", v);
+            }}
           />
 
           <PaymentInput
-            label="تخفیف فیصدی"
+            label="تخفیف (%)"
             icon={<Percent />}
             value={payment.discount}
-            onChange={(v) => handleChange("discount", v)}
+            error={errors?.discount}
+            onChange={(v) => {
+              handleChangePayment("discount", v);
+            }}
           />
+
+          <div>
+            <label className="block mb-2 font-medium">تعداد اقساط</label>
+
+            <div className="relative">
+              <CreditCard className="absolute right-3 top-3 text-slate-400 h-5 w-5" />
+
+              <select
+                value={payment.installment}
+                onChange={(e) => {
+                  handleChangePayment("installment", Number(e.target.value));
+                }}
+                className="w-full rounded-xl border p-3 pr-12 focus:ring-2 focus:ring-blue-500"
+              >
+                <option value={1}>1 قسط (پرداخت کامل)</option>
+                <option value={2}>2 قسط</option>
+                <option value={3}>3 قسط</option>
+                <option value={4}>4 قسط</option>
+                <option value={5}>5 قسط</option>
+              </select>
+            </div>
+          </div>
 
           <PaymentInput
             label="مبلغ دریافت شده"
             icon={<Receipt />}
             value={payment.paidAmount}
-            onChange={(v) => handleChange("paidAmount", v)}
+            error={errors?.paidAmount}
+            required={true}
+            onChange={(v) => {
+              handleChangePayment("paidAmount", Number(v));
+            }}
           />
         </div>
       </div>
@@ -142,38 +205,48 @@ gap-4
   );
 }
 
-function PaymentInput({ label, icon, value, onChange }) {
+function PaymentInput({ label, icon, value, onChange, error, required }) {
   return (
     <div>
-      <label className="block mb-2 font-medium">{label}</label>
+      <label className="block mb-2 font-medium">
+        {label}
+        {required && <span className="text-red-500 mr-1">*</span>}
+      </label>
 
       <div className="relative">
         <div
           className="
-absolute
-right-3
-top-3
-text-slate-400
-"
+          absolute
+          right-3
+          top-3
+          text-slate-400
+          "
         >
           {icon}
         </div>
 
         <input
           type="number"
+          required={required ?? false}
           value={value ?? ""}
           onChange={(e) => onChange(e.target.value)}
-          className="
-w-full
-rounded-xl
-border
-p-3
-pr-12
-focus:ring-2
-focus:ring-blue-500
-"
+          className={`
+            w-full
+            rounded-xl
+            border
+            p-3
+            pr-12
+            focus:ring-2
+            ${
+              error
+                ? "border-red-500 focus:ring-red-300"
+                : "border-slate-300 focus:ring-blue-500"
+            }
+          `}
         />
+        {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
       </div>
+    
     </div>
   );
 }

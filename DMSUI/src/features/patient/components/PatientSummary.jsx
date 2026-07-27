@@ -22,12 +22,14 @@ export default function PatientSummary({ data = {} }) {
   const payment = data.payment ?? {};
 
   const totalFee = Number(payment.totalFee ?? appointment.totalFee ?? 0);
+  
 
   const discount = Number(payment.discount ?? 0);
+  const payable = Number(payment.payable ?? 0)
 
   const paid = Number(payment.paidAmount ?? 0);
 
-  const remaining = totalFee - discount - paid;
+  const dueAmount = Number(payment.dueAmount ?? 0);
 
   return (
     <div
@@ -250,12 +252,13 @@ export default function PatientSummary({ data = {} }) {
           "
         >
           <Money icon={<Calculator />} title="مجموع فیس" value={totalFee} />
+          <Money icon={<Calculator />} title=" قابل پرداخت" value={payable} />
 
           <Money icon={<Percent />} title="تخفیف" value={discount} />
 
           <Money icon={<Wallet />} title="پرداخت شده" value={paid} />
 
-          <Money icon={<Receipt />} title="باقی مانده" value={remaining} />
+          <Money icon={<Receipt />} title="باقی مانده" value={dueAmount} />
         </div>
 
         {/* Status */}
@@ -284,13 +287,13 @@ function Info({ icon, title, value }) {
   return (
     <div
       className="
-flex
-items-center
-gap-3
-rounded-xl
-bg-slate-50
-p-3
-"
+        flex
+        items-center
+        gap-3
+        rounded-xl
+        bg-slate-50
+        p-3
+        "
     >
       <div className="text-blue-600">{icon}</div>
 
@@ -307,20 +310,20 @@ function Money({ icon, title, value }) {
   return (
     <div
       className="
-flex
-items-center
-justify-between
-rounded-xl
-bg-slate-50
-p-3
-"
+        flex
+        items-center
+        justify-between
+        rounded-xl
+        bg-slate-50
+        p-3
+        "
     >
       <div
         className="
-flex
-items-center
-gap-2
-"
+          flex
+          items-center
+          gap-2
+          "
       >
         <span className="text-blue-600">{icon}</span>
 

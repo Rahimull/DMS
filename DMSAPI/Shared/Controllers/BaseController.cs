@@ -30,10 +30,19 @@ public abstract class BaseController<TEntity> : ControllerBase
         // Search
         if (!string.IsNullOrWhiteSpace(query.Search?.SearchTerm))
         {
-            var search = query.Search.SearchTerm.ToLower();
 
-            data = data.Where(x =>
-                EF.Property<string>(x, "Name").ToLower().Contains(search));
+            data = ApplySearch(data, query.Search.SearchTerm);
+        }
+
+        // Sorting
+        if (!string.IsNullOrWhiteSpace(query.Sorting?.SortBy))
+        {
+            Console.WriteLine($"Sorting: {query.Sorting.SortBy} Desc:{query.Sorting.IsDescending}");
+            data = ApplySorting(
+                data,
+                query.Sorting.SortBy,
+                query.Sorting.IsDescending
+            );
         }
 
         // Total Count
@@ -124,4 +133,41 @@ public abstract class BaseController<TEntity> : ControllerBase
     }
 
     #endregion
+
+
+    #region Search
+    protected virtual IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query, string search)
+    {
+        return query;
+    }
+    #endregion
+
+
+    #region  Sortings
+    protected virtual IQueryable<TEntity> ApplySorting(
+    IQueryable<TEntity> query,
+    string sortBy,
+    bool isDescending)
+    {
+        var property = typeof(TEntity)
+            .GetProperties()
+            .FirstOrDefault(p =>
+                string.Equals(
+                    p.Name,
+                    sortBy,
+                    StringComparison.OrdinalIgnoreCase
+                ));
+
+        if (property == null)
+            return query;
+
+        return isDescending
+            ? query.OrderByDescending(x => EF.Property<object>(x, property.Name))
+            : query.OrderBy(x => EF.Property<object>(x, property.Name));
+    }
+
+
+    #endregion
+
+
 }

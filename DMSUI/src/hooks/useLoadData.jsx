@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import useDebounce from "./useDebounce";
-import { toast } from "sonner";
 import { notify } from "@/utils/notify";
 
 const useLoadData = (
@@ -9,7 +8,7 @@ const useLoadData = (
 ) => {
   const [data, setData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [dataLoading, setDataLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const [pagination, setPagination] = useState({
@@ -20,62 +19,78 @@ const useLoadData = (
   const [sorting, setSorting] = useState([]);
 
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 300);
+  const debouncedSearch = useDebounce(search, 200);
 
-  const payload = {
-    pagination,
-    sorting: {
-      sortBy: sorting[0]?.id ?? "",
-      isDescending: sorting[0]?.desc ?? false,
-    },
-    search: {
-      searchTerm: debouncedSearch,
-    },
-    filters,
-  };
 
-  const fetchData = useCallback(async () => {
-    try {
-      setDataLoading(true);
-      setError(null);
-
-      const res = await apiService.getPaged({
-        pagination,
-        sorting: {
-          sortBy: sorting[0]?.id ?? "",
-          isDescending: sorting[0]?.desc ?? false,
-        },
-
-        search: {
-          searchTerm: debouncedSearch,
-        },
-
-        filters,
-      });
-
-      const result = res.data.data;
-      setData(result.data || []);
-      setTotalCount(result.totalCount || 0);
-
-      console.log("res length:", result.data.length);
-    } catch (err) {
-      console.error(err);
-      const message = err?.response?.data?.message || "Failed to fetch data";
-      setError(message);
-      notify.error(message);
-    } finally {
-      setDataLoading(false);
-    }
-  }, [apiService, pagination, sorting, debouncedSearch, filters, refreshKey]);
-
-  // هر بار pagination / sorting / search عوض شود → fetch
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   // وقتی که سرچ تغییر کرد برگرد صفحه اول
+ 
+ useEffect(() => {
+  const controller = new AbortController();
+
+  async function fetchData() {
+    try {
+      setLoading(true);
+
+      const res = await apiService.getPaged(
+        {
+          pagination,
+          sorting: {
+            sortBy: sorting[0]?.id ?? "",
+            isDescending: sorting[0]?.desc ?? false,
+          },
+          search: {
+            searchTerm: debouncedSearch,
+          },
+          filters,
+        },
+        {
+          signal: controller.signal,
+        }
+      );
+
+      const result = res.data.data;
+
+      setData(result.data ?? []);
+      setTotalCount(result.totalCount ?? 0);
+
+    } catch (err) {
+
+      if (err.name !== "CanceledError") {
+        console.error(err);
+      }
+
+    } finally {
+
+      if (!controller.signal.aborted) {
+        setLoading(false);
+      }
+
+    }
+  }
+
+  fetchData();
+
+  return () => {
+    controller.abort();
+  };
+
+}, [
+  apiService,
+  pagination.pageIndex,
+  pagination.pageSize,
+  sorting,
+  debouncedSearch,
+  filters,
+  refreshKey
+]);
+ 
   useEffect(() => {
-    setPagination((p) => ({ ...p, pageIndex: 0 }));
+    setPagination((p) => ({
+      ...p,
+      pageIndex: 0,
+    }));
+         
   }, [debouncedSearch]);
 
   return {
@@ -87,7 +102,7 @@ const useLoadData = (
     setSorting,
     search,
     setSearch,
-    dataLoading,
+    loading,
     error,
   };
 };

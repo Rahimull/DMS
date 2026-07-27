@@ -28,16 +28,6 @@ export default function DataTableToolbar({
   addButtonText = "ثبت جدید",
   children,
 }) {
-  const [value, setValue] = useState(search);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onSearchChange(value);
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [value, onSearchChange]);
-console.log("Toolbar Table:", table);
 
 if (!table)
   return null;
@@ -56,8 +46,8 @@ if (!table)
           />
 
           <Input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
             placeholder="جستجو..."
             className="pl-10"
           />

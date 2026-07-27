@@ -31,6 +31,7 @@ export default function ConditionDetailsDialog({
   if (!detail) return null;
 
   const handleChange = (e) => {
+    console.log(e.target.name, e.target.value, typeof e.target.value);
     const {name, value} = e.target;
     setLocalData((perv)=> ({
         ...perv,

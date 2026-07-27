@@ -13,6 +13,7 @@ import ServiceSelectionStep from "@/features/patient/components/ServiceSelection
 import FeePaymentStep from "@/features/patient/components/FeePaymentStep";
 import PatientApi from "@/features/patient/api/PatientApi";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const STEP_TITLES = {
   1: {
@@ -40,21 +41,29 @@ export default function PatientRegistrationWizard() {
   const {
     step,
     formData,
+    errors, 
+
     updateSection,
+    updateValue,
     nextStep,
     prevStep,
     isFirstStep,
     isLastStep,
+    validateCurrentStep,
   } = usePatientRegistrationWizard();
+
+  const navigate = useNavigate();
 
   const currentStep = STEP_TITLES[step];
 
 
   const handleSubmit = async () => {
     try{
-      await PatientApi.register(formData);
+      const success = await PatientApi.register(formData);
 
       toast.success("مریض با موفقیت ثتب شد.")
+      console.log(success)
+      navigate("/patients");
     }catch(error){
       toast.error("ثبت مریض انجام نشد.")
       console.log(error);
@@ -179,6 +188,7 @@ export default function PatientRegistrationWizard() {
                 <PersonalInfoStep
                   formData={formData}
                   updateSection={updateSection}
+                  errors={errors}
                 />
               )}
 
@@ -186,6 +196,7 @@ export default function PatientRegistrationWizard() {
                 <MedicalHistoryStep
                   formData={formData}
                   updateSection={updateSection}
+                  errors={errors}
                 />
               )}
 
@@ -193,6 +204,8 @@ export default function PatientRegistrationWizard() {
                 <ServiceSelectionStep
                   formData={formData}
                   updateSection={updateSection}
+                  updateValue={updateValue}
+                  errors={errors}
                 />
               )}
 
@@ -200,6 +213,8 @@ export default function PatientRegistrationWizard() {
                 <FeePaymentStep
                   formData={formData}
                   updateSection={updateSection}
+                  updateValue={updateValue}
+                  errors={errors}
                 />
               )}
             </div>
@@ -241,7 +256,11 @@ export default function PatientRegistrationWizard() {
                       bg-emerald-600
                       hover:bg-emerald-700
                     "
-                    onClick={handleSubmit}
+                    onClick={()=>{
+                      if(validateCurrentStep()){
+                        handleSubmit();
+                      }
+                    }}
                   >
                     <Save size={18} />
                     ثبت مریض و ایجاد پلان درمان

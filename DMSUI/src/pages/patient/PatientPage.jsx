@@ -4,8 +4,8 @@ import PatientRegistrationWizard from "./PatientRegistrationWizard";
 export default function PatientsPage() {
   return (
   
-    //  <ListPatient />
-    <PatientRegistrationWizard />
+     <ListPatient />
+    // <PatientRegistrationWizard />
    
   );
 }

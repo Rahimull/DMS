@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMSAPI.Migrations
 {
     [DbContext(typeof(DMSContext))]
-    [Migration("20260722181305_AddServiceRequirmentMap1")]
-    partial class AddServiceRequirmentMap1
+    [Migration("20260725161546_FixAllPatientResgistrations")]
+    partial class FixAllPatientResgistrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1181,7 +1181,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("condition_detail_ID");
 
-                    b.Property<int>("ConditionId")
+                    b.Property<int?>("ConditionId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("condition_ID");
 
@@ -1200,7 +1200,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("notes");
 
-                    b.Property<int>("PatientId")
+                    b.Property<int?>("PatientId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("pat_ID");
 
@@ -1212,7 +1212,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("severty");
 
-                    b.Property<int>("TreatmentPlanId")
+                    b.Property<int?>("TreatmentPlanId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -1969,20 +1969,17 @@ namespace DMSAPI.Migrations
                     b.HasOne("DMS.Modules.Treatments.Entities.Condition", "Condition")
                         .WithMany("ConditionDetails")
                         .HasForeignKey("ConditionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
                         .WithMany("ConditionDetails")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", "TreatmentPlan")
                         .WithMany("ConditionDetails")
                         .HasForeignKey("TreatmentPlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Condition");
 

@@ -3,6 +3,13 @@ import DataTableColumnHeader from "@/components/dataTable/DataTableColumnHeader"
 
 export const PatientColumns = [
   {
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="شماره " />
+    ),
+    enableSorting: true,
+  },
+  {
     accessorKey: "firstName",
     meta: { sticky: "right" },
 
@@ -62,31 +69,25 @@ export const PatientColumns = [
     accessorKey: "registrationDate",
 
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="شماره تماس اصلی" />
+      <DataTableColumnHeader column={column} title="تاریخ ثبت" />
     ),
+    cell: ({row}) => new Date(row.original.registrationDate).toLocaleDateString("Fa-af"),
   },
   {
     accessorKey: "bloodGroup",
 
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title=" شماره تماس دوهم" />
+      <DataTableColumnHeader column={column} title="گروپ خون" />
     ),
   },
 
-  {
-    accessorKey: "sponsorBy",
-
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ایمیل ادرس" />
-    ),
-  },
-  {
+   {
     accessorKey: "createdAt",
 
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="تاریخ ایجاد" />
     ),
     cell: ({ row }) =>
-      new Date(row.original.createdAt).toLocaleDateString("fa-IR"),
+      new Date(row.original.createdAt).toLocaleDateString("fa-af"),
   },
 ];

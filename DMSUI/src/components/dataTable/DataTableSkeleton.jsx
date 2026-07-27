@@ -1,3 +1,4 @@
+import { Skeleton } from "../ui/skeleton";
 
 
 
@@ -19,6 +20,7 @@ export default function DataTableSkeleton({
               className="px-4 py-4"
             >
               <Skeleton className="h-5 w-full rounded-md" />
+             
             </td>
           ))}
         </tr>

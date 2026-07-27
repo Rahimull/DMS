@@ -10,6 +10,8 @@ import ConditionPage from "@/features/condition/pages/ConditionPage";
 import ServiceRequirmentPage from "@/features/serviceRequirment/pages/ServiceRequirmentPage";
 import TreatmentPlanList from "@/features/treatment/pages/TreatmentPlanList";
 import EditTreatmentPlanPage from "@/features/treatment/pages/EditTreatmentPlan";
+import PatientRegistrationWizard from "@/pages/patient/PatientRegistrationWizard";
+import PatientDetails from "@/pages/patient/PatientDetails";
 
 
 export const router = createBrowserRouter([
@@ -24,6 +26,14 @@ export const router = createBrowserRouter([
       {
         path: "/patients",
         element: <PatientsPage />,
+        },
+      {
+        path: "/Patient/PatientRegistration",
+        element: <PatientRegistrationWizard />,
+        },
+      {
+        path: "/Patient/Details/:id",
+        element: <PatientDetails />,
         },
       {
         path: "/clinic",

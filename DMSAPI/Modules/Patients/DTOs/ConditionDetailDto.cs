@@ -7,7 +7,7 @@ public class ConditionDetailDto
 
     public string? DiagnosisDate { get; set; }
 
-    public string? Result { get; set; }
+    public int? Result { get; set; }
 
     public string? Notes { get; set; }
 }

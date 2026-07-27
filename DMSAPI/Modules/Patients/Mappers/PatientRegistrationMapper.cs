@@ -16,7 +16,7 @@ public static class PatientRegistrationMapper
             Age = dto.Age,
             MaritalStatus = dto.MaritalStatus,
             Phone = dto.Phone,
-            RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
+            RegistrationDate = dto.RegistrationDate ?? DateOnly.FromDateTime(DateTime.Today),
             BloodGroup = dto.BloodGroup,
             Address = dto.Address
         };

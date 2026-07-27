@@ -15,6 +15,10 @@ public class PatientConfiguration : IEntityTypeConfiguration<Patient>
         builder.Property(x => x.Id)
             .HasColumnName("pat_ID");
 
+        builder.HasIndex(x => x.FirstName);
+        builder.HasIndex(x => x.LastName);
+        builder.HasIndex(x => x.Phone);
+
         builder.Property(x => x.FileId)
             .HasColumnName("file_ID")
             .HasMaxLength(50);

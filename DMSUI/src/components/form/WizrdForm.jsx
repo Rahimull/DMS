@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Button } from "../ui/button";
 import Input from "../common/Input";
 
 const WirzadForm = ({
@@ -18,7 +17,7 @@ const WirzadForm = ({
   return (
     <form
       dir="rtl"
-      className={`rounded-3xl bg-whie ${border ? "boder border-slate-200 shadow-sm" : ""} ${padding}`}
+      className={`rounded-3xl bg-whie ${border ? "border border-slate-200 shadow-sm" : ""} ${padding}`}
     >
       {/* Header */}
 
@@ -95,6 +94,7 @@ const WirzadForm = ({
               onChange={onChange}
               error={serverErrors[field.name] || errors[field.name]}
             />
+          
           </div>
         ))}
       </div>

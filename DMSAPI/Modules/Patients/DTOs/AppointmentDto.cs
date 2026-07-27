@@ -15,7 +15,7 @@ public class AppointmentDto
 
     public decimal TotalFee { get; set; }
 
-    public string? MeetDate { get; set; }
+    public DateTime? MeetDate { get; set; }
 
     public int? StaffId { get; set; }
 

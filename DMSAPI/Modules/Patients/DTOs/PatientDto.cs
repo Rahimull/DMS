@@ -1,6 +1,7 @@
 namespace DMS.Modules.Patients.DTOs;
 public class PatientDto
 {
+    public int StaffId { get; set; }
     public string? FirstName { get; set; }
 
     public string? LastName { get; set; }

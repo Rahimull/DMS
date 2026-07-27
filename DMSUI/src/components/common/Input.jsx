@@ -93,7 +93,7 @@ const Input = ({
           `}
         />
       )}
-            {/* Persian Date */}
+      {/* Persian Date */}
 
       {type === "date" && (
         <PersianDatePicker
@@ -115,9 +115,20 @@ const Input = ({
         <select
           name={name}
           value={value ?? ""}
-          onChange={onChange}
+          
           disabled={disabled}
           className={`${baseClass} h-12`}
+          onChange={(e)=> {
+            const selectedValue = e.target.value !== "" && !isNaN(e.target.value) ? Number(e.target.value) : e.target.value;
+
+            onChange({
+              target: {
+                ...e.target,
+                name,
+                value: selectedValue,
+              }
+            })
+          }}
         >
           <option value="">انتخاب نمایید</option>
 
@@ -129,6 +140,7 @@ const Input = ({
         </select>
       )}
 
+    
       {/* Checkbox */}
 
       {type === "checkbox" && (
@@ -207,7 +219,6 @@ const Input = ({
       )}
 
       {/* Normal Input */}
-
       {!["textarea", "select", "checkbox", "file", "date"].includes(type) && (
         <input
           className={`${baseClass} h-12`}
@@ -215,7 +226,23 @@ const Input = ({
           name={name}
           value={value ?? ""}
           placeholder={placeholder}
-          onChange={onChange}
+          // onChange={onChange}
+          onChange={(e) => {
+            const newValue =
+              type === "number"
+                ? e.target.value === ""
+                  ? null
+                  : Number(e.target.value)
+                : e.target.value;
+
+            onChange({
+              target: {
+                ...e.target,
+                name,
+                value: newValue,
+              },
+            });
+          }}
           disabled={disabled}
           maxLength={maxLength}
           autoFocus={autoFocus}

@@ -11,7 +11,7 @@ import RequirementForm from "./serviceSelectionStep/RequirementForm";
 import SelectedServicesTable from "./serviceSelectionStep/SelectedServicesTable";
 import { AppointmentFields } from "./serviceSelectionStep/AppointmentFields";
 
-export default function ServiceSelectionStep({ formData, updateSection }) {
+export default function ServiceSelectionStep({ formData, updateSection,updateValue, errors }) {
   const [services, setServices] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -102,6 +102,10 @@ export default function ServiceSelectionStep({ formData, updateSection }) {
       ...formData.services,
 
       patientServices: [...selectedServices, newService],
+      appointment: {
+        ...appointment,
+        serviceFee: newService.fee,
+      },
 
       currentRequirements: [],
     });
@@ -133,6 +137,7 @@ export default function ServiceSelectionStep({ formData, updateSection }) {
             padding="p-0"
             columns={2}
             fields={fields}
+            errors={errors}
             values={appointment}
             onChange={handleAppointmentChange}
           />

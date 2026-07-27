@@ -60,7 +60,7 @@ export default function MedicalHistoryStep({ formData, updateSection }) {
         conditionId,
         severity: "",
         diagnosisDate: "",
-        result: "",
+        result: null,
         notes: "",
       };
     } else {

@@ -7,16 +7,20 @@ import useLoadData from "@/hooks/useLoadData";
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState} from "react";
 
 import { PatientActionColumn } from "@/features/patient/columns/PatientActionColumn";
 import { PatientColumns } from "@/features/patient/columns/PatientColumns";
 import PatientForm from "@/features/patient/components/PatientForm";
+import { useNavigate } from "react-router-dom";
+import PatientRegistrationWizard from "./PatientRegistrationWizard";
+
 
 export default function ListPatient() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const navigate = useNavigate();
 
   const filters = useMemo(
     () => ({
@@ -35,7 +39,7 @@ export default function ListPatient() {
     delete: "بیمار با موفقیت حذف شد.",
   };
 
-  const curd = useCreatUpdateForm(PatientApi, messages, {useFormData:false});
+  const curd = useCreatUpdateForm(PatientApi, messages, { useFormData: false });
 
   const {
     data,
@@ -53,6 +57,8 @@ export default function ListPatient() {
     refreshKey: curd.refreshKey,
   });
 
+ 
+
   // Columns
   const columns = useMemo(
     () => [
@@ -61,6 +67,7 @@ export default function ListPatient() {
       PatientActionColumn({
         onView: (Patient) => {
           console.log("View:", Patient);
+          navigate(`/Patient/Details/${Patient.id}`)
         },
 
         onEdit: (Patient) => {
@@ -105,6 +112,7 @@ export default function ListPatient() {
     },
   });
 
+
   return (
     <div className="space-y-6">
       <h2 className="text-3xl font-bold text-slate-800">مدیریت بیمار</h2>
@@ -121,10 +129,9 @@ export default function ListPatient() {
       >
         <Button
           size="sm"
-          onClick={() => {
-            setSelectedPatient(null);
-            curd.openCreate();
-          }}
+          onClick={()=> 
+            navigate("/Patient/PatientRegistration")
+          }
         >
           ثبت بیمار
           <Plus size={16} />
@@ -136,8 +143,6 @@ export default function ListPatient() {
         loading={loading}
         pageSize={pagination.pageSize}
       />
-
-      <PatientForm CURD={curd} />
     </div>
   );
 }

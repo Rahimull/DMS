@@ -1,0 +1,40 @@
+export default function SummaryBox({ title, value }) {
+  return (
+    <div
+      className="
+        rounded-3xl
+        border
+        border-white
+        bg-white/70
+        p-5
+        shadow-sm
+        backdrop-blur
+        transition-all
+        duration-300
+        hover:-translate-y-1
+        hover:shadow-lg
+      "
+    >
+      <p
+        className="
+          text-sm
+          font-medium
+          text-slate-500
+        "
+      >
+        {title}
+      </p>
+
+      <h3
+        className="
+          mt-3
+          text-xl
+          font-black
+          text-slate-900
+        "
+      >
+        {value}
+      </h3>
+    </div>
+  );
+}

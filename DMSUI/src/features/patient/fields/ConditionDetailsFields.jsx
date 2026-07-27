@@ -4,7 +4,7 @@ export const ConditionDetailsFields = [
   
     
   {
-    name: "serverity",
+    name: "severity",
     label: " شدت بیماری",
     type: "select",
     options: [
@@ -23,8 +23,8 @@ export const ConditionDetailsFields = [
   {
     name: "result",
     label: "نتیجه",
-    type: "text",
-    maxLength: 100,
+    type: "number",
+    maxLength: 10,
     placeholder: "نتیجه",
   },
   {
