@@ -72,7 +72,7 @@ export default function PatientRegistrationWizard() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-2">
       {/* ================= Header ================= */}
 
       <div
@@ -91,21 +91,17 @@ export default function PatientRegistrationWizard() {
             flex
             items-center
             justify-between
-
             border-b
-
             bg-gradient-to-r
             from-blue-600
             to-indigo-600
-
             px-6
-            py-4
-
+            py-2
             text-white
           "
         >
           <div>
-            <h2 className="text-2xl font-bold">ثبت مریض جدید</h2>
+            <h3 className="text-white text-2xl font-bold">ثبت مریض جدید</h3>
 
             <p className="mt-1 text-sm text-blue-100">
               {currentStep.description}
@@ -116,9 +112,8 @@ export default function PatientRegistrationWizard() {
             className="
               rounded-full
               bg-white/20
-              px-5
+              px-6
               py-2
-
               text-sm
               font-semibold
             "
@@ -155,7 +150,6 @@ export default function PatientRegistrationWizard() {
               className="
                 border-b
                 bg-slate-50
-
                 px-6
                 py-5
               "

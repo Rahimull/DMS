@@ -70,9 +70,9 @@ export default function PatientSummary({ data = {} }) {
           </div>
 
           <div>
-            <h2 className="text-xl font-bold">
+            <h3 className="text-xl text-white font-bold">
               {patient.firstName || "-"} {patient.lastName || ""}
-            </h2>
+            </h3>
 
             <p className="text-sm text-blue-100">خلاصه دوسیه مریض</p>
           </div>

@@ -15,6 +15,8 @@ export default function PersonalInfoStep({
 
   return (
     <WirzadForm
+      title=""
+      description=""
       fields={PatientFields}
       values={formData.patient}
       onChange={handleChange}
