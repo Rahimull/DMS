@@ -84,12 +84,12 @@ export default function MedicalHistoryStep({ formData, updateSection }) {
 
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 py-2">
 
       {/* Summary */}
 
       <div className="grid md:grid-cols-3 gap-4">
-        <div className="rounded-xl border bg-white p-4">
+        <div className="rounded-[10px] border bg-white p-4">
           <p className="text-sm text-slate-500">تعداد بیماری‌ها</p>
 
           <h3 className="text-2xl font-bold text-blue-600">
@@ -114,7 +114,7 @@ export default function MedicalHistoryStep({ formData, updateSection }) {
 
       {/* Conditions */}
 
-      <div className="rounded-2xl border bg-white p-6">
+      <div className="bg-white border-t pt-2">
         <div className="mb-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <HeartPulse className="text-blue-600" size={24} />
@@ -124,12 +124,12 @@ export default function MedicalHistoryStep({ formData, updateSection }) {
 
           <Button
             type="button"
-            className="flex h-10 w-20 items-center justify-center rounded-xl
+            className="flex h-10 w-15 items-center justify-center rounded-xl
                 border border-blue-200 bg-blue-600 text-white transition hover:bg-blue-400
               "
             onClick={()=> {curd.openCreate();}}
           >
-            <Plus size={30} />
+            <Plus size={20} />
           </Button>
         </div>
         <ConditionForm CURD={curd} />
@@ -138,7 +138,7 @@ export default function MedicalHistoryStep({ formData, updateSection }) {
 
         {error && <p className="text-red-500">{error}</p>}
 
-        <div className="grid md:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto pl-2">
+        <div className="grid md:grid-cols-3 gap-4 max-h-[500px] overflow-y-auto pl-3">
           {conditions.map((item) => (
             <ConditionCard
               key={item.id}

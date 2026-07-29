@@ -1,33 +1,55 @@
+
 import WirzadForm from "@/components/form/WizrdForm";
 import { PatientFields } from "../fields/PatientFields";
 
 export default function PersonalInfoStep({
   formData,
   updateSection,
-  errors,
+  errors = {},
 }) {
 
+  const patientData = formData?.patient ?? {};
+
   const handleChange = (e) => {
+
+    const {
+      name,
+      value,
+      type,
+      checked,
+    } = e.target;
     updateSection("patient", {
-      [e.target.name]: e.target.value,
+
+      [name]:
+        type === "checkbox"
+          ? checked
+          : value,
+
     });
+
   };
 
   return (
+
     <WirzadForm
-      title=""
+
+      title=" "
+
       description=""
+
       fields={PatientFields}
-      values={formData.patient}
+
+      values={patientData}
+
       onChange={handleChange}
+
       errors={errors}
+
       showActions={false}
+
       border={false}
+
     />
+
   );
 }
-
-
-
-
-

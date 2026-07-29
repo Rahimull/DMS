@@ -38,24 +38,6 @@ export default function FeePaymentStep({
 
   const remaining = payable - paid;
 
-  // برای تغییرات هر بخش
-  // const handleChangePayment = (name, value) =>{
-  //   const newPayment = {...payment,[name]:value,};
-
-  //   updateSection("payment", newPayment);
-
-  //   const totalFee = Number(newPayment.totalFee || 0);
-  //   const discount = Number(newPayment.discount || 0)
-  //   const discountAmount = (totalFee * discount ) / 100;
-  //   const payable = totalFee - discountAmount;
-
-  //   updateValue("services.appointment.totalFee", payable);
-  //   updateValue("services.appointment.discount", discount);
-  //   updateValue("services.appointment.installment", Number(newPayment.installment) || 1);
-  //   updateValue("payment.dueAmount", (payable - newPayment.paidAmount))
-  //   updateValue("payment.payable", payable)
-
-  // }
   const handleChangePayment = (name, value) => {
     const newPayment = {
       ...payment,
@@ -84,40 +66,40 @@ export default function FeePaymentStep({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-6 py-5">
       {/* Cards */}
 
       <div
         className="
-grid
-grid-cols-1
-md:grid-cols-4
-gap-4
-"
+          grid
+          grid-cols-1
+          md:grid-cols-4
+          gap-4
+          "
       >
         <SummaryCard
           title="مجموع فیس"
           value={`${totalFee.toLocaleString()} افغانی`}
-          icon={<Calculator />}
+          icon={<Calculator size={18} />}
         />
 
-        <SummaryCard title="تخفیف" value={`${discount}%`} icon={<Percent />} />
+        <SummaryCard title="تخفیف" value={`${discount}%`} icon={<Percent size={18} />} />
 
         <SummaryCard
           title="قابل پرداخت"
           value={`${payable.toLocaleString()} افغانی`}
-          icon={<CircleDollarSign />}
+          icon={<CircleDollarSign size={18} />}
         />
 
         <SummaryCard
           title="باقی مانده"
           value={`${remaining.toLocaleString()} افغانی`}
-          icon={<AlertCircle />}
+          icon={<AlertCircle size={18} />}
         />
       </div>
 
       {/* Form */}
-      <div className="rounded-3xl border bg-white p-6">
+      <div className="rounded-[10px] border bg-white p-6">
         <div className="grid md:grid-cols-2 gap-5">
           <PaymentInput
             label="مجموع فیس"
@@ -179,10 +161,10 @@ gap-4
 
       <div
         className="
-grid
-md:grid-cols-3
-gap-4
-"
+          grid
+          md:grid-cols-3
+          gap-4
+          "
       >
         <StatusBox
           title="پرداخت شده"
@@ -208,7 +190,7 @@ gap-4
 function PaymentInput({ label, icon, value, onChange, error, required }) {
   return (
     <div>
-      <label className="block mb-2 font-medium">
+      <label className="block mb-2 font-medium text-right">
         {label}
         {required && <span className="text-red-500 mr-1">*</span>}
       </label>
@@ -232,7 +214,8 @@ function PaymentInput({ label, icon, value, onChange, error, required }) {
           onChange={(e) => onChange(e.target.value)}
           className={`
             w-full
-            rounded-xl
+            h-12
+            rounded-[5px]
             border
             p-3
             pr-12

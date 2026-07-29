@@ -58,14 +58,14 @@ export default function PatientDetails() {
     0,
   );
 
-  const remaining = feePayments.reduce((sum, p)=> sum + (p.dueAmount ?? 0), 0);
+  const remaining = feePayments.reduce((sum, p) => sum + (p.dueAmount ?? 0), 0);
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6">
+    <div className="min-h-screen">
       {/* Header */}
       <Card
         className="
-          relative overflow-hidden rounded-[30px] border-0 bg-gradient-to-br from-white via-sky-50 to-indigo-100 shadow-2xl"
+          relative overflow-hidden rounded-[10px] border-0 bg-gradient-to-br from-white via-sky-50 to-indigo-100 shadow-2xl"
       >
         {/* Decorative background */}
 
@@ -452,7 +452,7 @@ export default function PatientDetails() {
                 <p className="text-sm text-slate-500">تخفیف</p>
 
                 <h2 className="text-2xl font-bold mt-2 text-yellow-700">
-                  %{totalDiscount.toLocaleString()} 
+                  %{totalDiscount.toLocaleString()}
                 </h2>
               </CardContent>
             </Card>

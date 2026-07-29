@@ -1,7 +1,6 @@
-import { FileSearch } from "lucide-react";
+import { FileSearch, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
 
 
 export default function DataTableEmpty({
@@ -11,49 +10,171 @@ export default function DataTableEmpty({
   onButtonClick,
   colSpan,
 }) {
+
   return (
+
     <tr>
 
       <td
         colSpan={colSpan}
-        className="py-16"
+        className="
+        h-[380px]
+        "
       >
 
-        <div className="flex flex-col items-center justify-center">
+        <div
+          className="
+          flex
+          flex-col
+          items-center
+          justify-center
+          px-6
+          text-center
+          "
+        >
 
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100">
 
-            <FileSearch className="h-10 w-10 text-slate-400" />
+          {/* Icon */}
+
+          <div
+            className="
+            relative
+            mb-6
+            "
+          >
+
+            <div
+              className="
+              absolute
+              inset-0
+              rounded-full
+              bg-blue-200
+              blur-xl
+              opacity-40
+              "
+            />
+
+
+            <div
+              className="
+              relative
+              flex
+              h-24
+              w-24
+              items-center
+              justify-center
+              rounded-3xl
+              bg-gradient-to-br
+              from-blue-50
+              to-cyan-50
+              ring-1
+              ring-blue-100
+              shadow-lg
+              "
+            >
+
+              <FileSearch
+                className="
+                h-11
+                w-11
+                text-blue-500
+                "
+                strokeWidth={1.8}
+              />
+
+            </div>
 
           </div>
 
-          <h3 className="mt-6 text-xl font-semibold text-slate-700">
+
+
+
+          {/* Title */}
+
+          <h3
+            className="
+            text-xl
+            font-black
+            text-slate-800
+            "
+          >
 
             {title}
 
           </h3>
 
-          <p className="mt-2 max-w-sm text-center text-slate-500">
+
+
+
+          {/* Description */}
+
+          <p
+            className="
+            mt-3
+            max-w-md
+            text-sm
+            leading-6
+            text-slate-500
+            "
+          >
 
             {description}
 
           </p>
 
-          {buttonText && (
 
-            <Button
-              className="mt-6"
-              onClick={onButtonClick}
-            >
-              {buttonText}
-            </Button>
 
-          )}
+
+          {/* Action */}
+
+          {
+            buttonText && (
+
+              <Button
+
+                onClick={onButtonClick}
+
+                className="
+                mt-7
+                rounded-xl
+                bg-gradient-to-r
+                from-blue-600
+                to-cyan-500
+                px-6
+                shadow-md
+                transition-all
+                hover:-translate-y-0.5
+                hover:shadow-lg
+                "
+
+              >
+
+                <Plus
+                  className="
+                  me-2
+                  h-4
+                  w-4
+                  "
+                />
+
+
+                {buttonText}
+
+
+              </Button>
+
+            )
+          }
+
+
 
         </div>
 
+
       </td>
 
+
     </tr>
+
   );
 }

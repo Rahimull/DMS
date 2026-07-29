@@ -30,11 +30,11 @@ function StatusBox({ title, value, icon, color = "green" }) {
   return (
     <div
       className="
-        rounded-3xl
+        rounded-[10px]
         border
         bg-white
         p-5
-        shadow-sm
+        shadow-xl
         transition-all
         hover:-translate-y-1
         hover:shadow-md
@@ -50,11 +50,11 @@ function StatusBox({ title, value, icon, color = "green" }) {
         <div
           className={`
             flex
-            h-12
-            w-12
+            h-10
+            w-10
             items-center
             justify-center
-            rounded-2xl
+            rounded-full
             ${theme.icon}
           `}
         >

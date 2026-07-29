@@ -1,48 +1,182 @@
-import { useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import {
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuBadge,
 } from "@/components/ui/sidebar";
 
 
-
-
 export default function SidebarItems({ item }) {
-  const location = useLocation();
 
   const Icon = item.icon;
 
-  const isActive = item.path
-    ? location.pathname === item.path
-    : false;
 
   return (
+
     <SidebarMenuItem>
+
 
       <SidebarMenuButton
         asChild
-        isActive={isActive}
-        className="gap-3"
+        className="
+          h-auto
+          p-0
+          hover:bg-transparent
+        "
       >
 
-        <a href={item.path || "#"} className="flex items-center gap-3">
+        <NavLink
 
-          <Icon className="h-5 w-5 shrink-0" />
+          to={item.path}
 
-          <span className="flex-1">{item.title}</span>
+          className={({isActive}) =>
+            `
+            group
+            relative
+            flex
+            h-11
+            items-center
+            gap-3
+            rounded-xl
+            px-3
+            transition-all
+            duration-200
 
-          {item.badge && (
-            <SidebarMenuBadge>
-              {item.badge}
-            </SidebarMenuBadge>
+
+            ${
+              isActive
+              ?
+             
+              "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg"
+              :
+              "text-slate-600 hover:bg-blue-50 hover:text-blue-700"
+            }
+
+            `
+          }
+
+        >
+
+
+          {({isActive})=>(
+
+            <>
+
+
+              {/* Active Line */}
+
+              {
+                isActive &&
+                <span
+                  className="
+                  absolute
+                  right-0
+                  top-2
+                  bottom-2
+                  w-1
+                  rounded-l-full
+                  bg-white
+                  "
+                />
+              }
+
+
+
+              {/* Icon */}
+
+              <span
+                className={`
+                flex
+                h-8
+                w-8
+                shrink-0
+                items-center
+                justify-center
+                rounded-lg
+                transition
+
+
+                ${
+                  isActive
+                  ?
+                  "bg-white/20"
+                  :
+                  "bg-slate-100 text-blue-600 group-hover:bg-blue-100"
+                }
+
+                `}
+              >
+
+                <Icon
+                  size={18}
+                  strokeWidth={2}
+                />
+
+              </span>
+
+
+
+
+              {/* Text */}
+
+              <span
+                className="
+                flex-1
+                truncate
+                text-sm
+                font-medium
+                "
+              >
+
+                {item.title}
+
+              </span>
+
+
+
+
+              {/* Badge */}
+
+              {
+                item.badge &&
+                <span
+                  className={`
+                    rounded-full
+                    px-2
+                    py-0.5
+                    text-[11px]
+                    font-bold
+
+
+                    ${
+                      isActive
+                      ?
+                      "bg-white text-blue-600"
+                      :
+                      "bg-red-500 text-white"
+                    }
+
+                  `}
+                >
+
+                  {item.badge}
+
+                </span>
+              }
+
+
+            </>
+
           )}
 
-        </a>
+
+        </NavLink>
+
 
       </SidebarMenuButton>
 
+
     </SidebarMenuItem>
+
   );
 }

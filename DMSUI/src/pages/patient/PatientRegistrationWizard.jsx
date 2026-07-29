@@ -1,4 +1,4 @@
-import { Save, ChevronLeft, ChevronRight } from "lucide-react";
+import { Save, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -11,9 +11,12 @@ import PersonalInfoStep from "@/features/patient/components/PersonalInfoStep";
 import MedicalHistoryStep from "@/features/patient/components/MedicalHistoryStep";
 import ServiceSelectionStep from "@/features/patient/components/ServiceSelectionStep";
 import FeePaymentStep from "@/features/patient/components/FeePaymentStep";
+
 import PatientApi from "@/features/patient/api/PatientApi";
+
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const STEP_TITLES = {
   1: {
@@ -27,8 +30,8 @@ const STEP_TITLES = {
   },
 
   3: {
-    title: "تنظیم جلسه درمان",
-    description: "انتخاب خدمات، داکتر و ضروریات درمان",
+    title: "خدمات درمانی",
+    description: "انتخاب خدمات، داکتر و پلان درمان",
   },
 
   4: {
@@ -41,69 +44,93 @@ export default function PatientRegistrationWizard() {
   const {
     step,
     formData,
-    errors, 
+    errors,
 
     updateSection,
     updateValue,
+
     nextStep,
     prevStep,
+
     isFirstStep,
     isLastStep,
+
     validateCurrentStep,
   } = usePatientRegistrationWizard();
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const currentStep = STEP_TITLES[step];
 
+  const handleNext = () => {
+    if (validateCurrentStep()) {
+      nextStep();
+    }
+  };
 
   const handleSubmit = async () => {
-    try{
-      const success = await PatientApi.register(formData);
+    try {
+      setLoading(true);
 
-      toast.success("مریض با موفقیت ثتب شد.")
-      console.log(success)
+      await PatientApi.register(formData);
+
+      toast.success("مریض با موفقیت ثبت شد.");
+
       navigate("/patients");
-    }catch(error){
-      toast.error("ثبت مریض انجام نشد.")
-      console.log(error);
-       console.log(error.response?.data);
+    } catch (error) {
+      console.error(error);
+      console.log("Back-end Response: ", error?.response);
+
+      toast.error("ثبت مریض انجام نشد.");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-2">
-      {/* ================= Header ================= */}
+      {/* Header */}
 
       <div
         className="
           overflow-hidden
-          rounded-3xl
+          rounded-[10px]
           border
           bg-white
           shadow-sm
-        "
+          "
       >
-        {/* Top */}
-
         <div
           className="
             flex
             items-center
             justify-between
-            border-b
             bg-gradient-to-r
-            from-blue-600
+            from-blue-400
             to-indigo-600
             px-6
-            py-2
+            py-1
             text-white
-          "
+"
         >
           <div>
-            <h3 className="text-white text-2xl font-bold">ثبت مریض جدید</h3>
+            <h4
+              className="
+                text-xl
+                "
+            >
+              ثبت مریض جدید
+            </h4>
 
-            <p className="mt-1 text-sm text-blue-100">
+            <p
+              className="
+                mt-1
+                text-sm
+                text-blue-100
+                "
+            >
               {currentStep.description}
             </p>
           </div>
@@ -112,72 +139,77 @@ export default function PatientRegistrationWizard() {
             className="
               rounded-full
               bg-white/20
-              px-6
+              px-5
               py-2
               text-sm
-              font-semibold
-            "
+              font-bold
+              "
           >
             مرحله {step} از 4
           </div>
         </div>
 
-        {/* Stepper */}
-
-        <div className="px-6 py-4">
+        <div className="px-6 py-1">
           <Stepper currentStep={step} />
         </div>
       </div>
 
-      {/* ================= Body ================= */}
+      {/* Content */}
 
-      <div className="grid grid-cols-12 gap-5">
-        {/* Left */}
+      <div
+        className="
+        grid
+        grid-cols-1
+        gap-2
+        xl:grid-cols-12
+        "
+      >
+        {/* Form */}
 
-        <div className="col-span-8">
+        <div
+          className="
+            xl:col-span-8
+            "
+        >
           <div
             className="
               overflow-hidden
-              rounded-3xl
+              rounded-[10px]
               border
               bg-white
-              shadow-sm
-            "
+              shadow-lg
+              "
           >
-            {/* Step Header */}
-
             <div
               className="
-                border-b
-                bg-slate-50
-                px-6
-                py-5
+              border-b
+              bg-slate-50
+              px-3
+              py-3
               "
             >
-              <h3
+              <h4
                 className="
-                  text-xl
+                  text
                   font-bold
                   text-slate-800
-                "
+                  "
               >
                 {currentStep.title}
-              </h3>
+              </h4>
 
               <p
                 className="
                   mt-1
                   text-sm
                   text-slate-500
-                "
+                  "
               >
                 {currentStep.description}
               </p>
             </div>
 
-            {/* Step Content */}
-
-            <div className="p-6">
+            <div className="">
               {step === 1 && (
                 <PersonalInfoStep
                   formData={formData}
@@ -213,61 +245,64 @@ export default function PatientRegistrationWizard() {
               )}
             </div>
 
-            {/* Footer */}
-
             <div
               className="
                 flex
                 items-center
                 justify-between
-
                 border-t
-
                 bg-slate-50
-
                 px-6
                 py-4
-              "
+                "
             >
-              <div>
-                {!isFirstStep && (
-                  <Button variant="outline" onClick={prevStep}>
-                    <ChevronRight size={18} />
-                    قبلی
-                  </Button>
-                )}
-              </div>
+              <Button
+                variant="outline"
+                disabled={isFirstStep}
+                onClick={prevStep}
+              >
+                <ChevronRight />
+                قبلی
+              </Button>
 
-              <div>
-                {!isLastStep ? (
-                  <Button onClick={nextStep}>
-                    مرحله بعد
-                    <ChevronLeft size={18} />
-                  </Button>
-                ) : (
-                  <Button
-                    className="
-                      bg-emerald-600
-                      hover:bg-emerald-700
-                    "
-                    onClick={()=>{
-                      if(validateCurrentStep()){
-                        handleSubmit();
-                      }
-                    }}
-                  >
-                    <Save size={18} />
-                    ثبت مریض و ایجاد پلان درمان
-                  </Button>
-                )}
-              </div>
+              {!isLastStep ? (
+                <Button onClick={handleNext}>
+                  مرحله بعد
+                  <ChevronLeft />
+                </Button>
+              ) : (
+                <Button
+                  disabled={loading}
+                  onClick={handleSubmit}
+                  className="
+bg-emerald-600
+hover:bg-emerald-700
+"
+                >
+                  {loading ? (
+                    <Loader2
+                      className="
+mr-2
+animate-spin
+"
+                    />
+                  ) : (
+                    <Save />
+                  )}
+                  ثبت مریض
+                </Button>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Right */}
+        {/* Summary */}
 
-        <div className="col-span-4">
+        <div
+          className="
+xl:col-span-4
+"
+        >
           <PatientSummary data={formData} />
         </div>
       </div>

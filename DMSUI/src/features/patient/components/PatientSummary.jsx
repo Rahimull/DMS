@@ -37,7 +37,7 @@ export default function PatientSummary({ data = {} }) {
         sticky
         top-6
         overflow-auto
-        rounded-3xl
+        rounded-[10px]
         border
         bg-white
         shadow-lg
@@ -49,60 +49,61 @@ export default function PatientSummary({ data = {} }) {
         className="
           bg-gradient-to-r
           from-blue-600
-          to-indigo-600
-          p-5
+          to-indigo-400
+          p-3
+          px-6
           text-white
         "
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <div
             className="
               flex
-              h-16
-              w-16
+              h-10
+              w-10
               items-center
               justify-center
               rounded-full
               bg-white/20
             "
           >
-            <UserRound size={32} />
+            <UserRound size={30} />
           </div>
 
           <div>
-            <h3 className="text-xl text-white font-bold">
+            <h4 className="text-xl text-white font-bold">
               {patient.firstName || "-"} {patient.lastName || ""}
-            </h3>
+            </h4>
 
             <p className="text-sm text-blue-100">خلاصه دوسیه مریض</p>
           </div>
         </div>
       </div>
 
-      <div className="space-y-5 p-5">
+      <div className="space-y-3 px-6 py-2">
         {/* Patient Info */}
 
         <div className="space-y-3">
           <Info
-            icon={<Phone size={18} />}
+            icon={<Phone size={14} />}
             title="شماره تماس"
             value={patient.phone}
           />
 
           <Info
-            icon={<MapPin size={18} />}
+            icon={<MapPin size={14} />}
             title="آدرس"
             value={patient.address}
           />
 
           <Info
-            icon={<Droplets size={18} />}
+            icon={<Droplets size={14} />}
             title="گروه خون"
             value={patient.bloodGroup}
           />
 
           <Info
-            icon={<CalendarDays size={18} />}
+            icon={<CalendarDays size={14} />}
             title="سن"
             value={`${patient.age || "-"} سال`}
           />
@@ -251,14 +252,14 @@ export default function PatientSummary({ data = {} }) {
             space-y-3
           "
         >
-          <Money icon={<Calculator />} title="مجموع فیس" value={totalFee} />
-          <Money icon={<Calculator />} title=" قابل پرداخت" value={payable} />
+          <Money icon={<Calculator size={18} />} title="مجموع فیس" value={totalFee} />
+          <Money icon={<Calculator size={18} />} title=" قابل پرداخت" value={payable} />
 
-          <Money icon={<Percent />} title="تخفیف" value={discount} />
+          <Money icon={<Percent size={18} />} title="تخفیف" value={discount} />
 
-          <Money icon={<Wallet />} title="پرداخت شده" value={paid} />
+          <Money icon={<Wallet size={18} />} title="پرداخت شده" value={paid} />
 
-          <Money icon={<Receipt />} title="باقی مانده" value={dueAmount} />
+          <Money icon={<Receipt size={18} />} title="باقی مانده" value={dueAmount} />
         </div>
 
         {/* Status */}
@@ -290,9 +291,9 @@ function Info({ icon, title, value }) {
         flex
         items-center
         gap-3
-        rounded-xl
-        bg-slate-50
-        p-3
+        rounded-[10px]
+        bg-slate-100
+        px-4 py-1
         "
     >
       <div className="text-blue-600">{icon}</div>
@@ -311,11 +312,12 @@ function Money({ icon, title, value }) {
     <div
       className="
         flex
+        gap-3
         items-center
         justify-between
-        rounded-xl
-        bg-slate-50
-        p-3
+        rounded-[10px]
+        bg-slate-100
+        py-3 px-3
         "
     >
       <div

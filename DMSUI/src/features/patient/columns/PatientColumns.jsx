@@ -1,93 +1,204 @@
-import { Badge, Eye, Pencil, Trash2 } from "lucide-react";
 import DataTableColumnHeader from "@/components/dataTable/DataTableColumnHeader";
+import { PatientActionColumn } from "./PatientActionColumn";
 
-export const PatientColumns = [
+const dateFormat = (value) => {
+  if (!value) return "-";
+
+  return new Date(value).toLocaleDateString("fa-AF");
+};
+
+export const PatientColumns = ({ onView, onEdit, onDelete }) => [
   {
     accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="شماره " />
-    ),
-    enableSorting: true,
-  },
-  {
-    accessorKey: "firstName",
-    meta: { sticky: "right" },
+
+    meta: {
+      label: "شماره",
+    },
 
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="نام " />
+      <DataTableColumnHeader column={column} title="شماره" />
     ),
+
+    size: 80,
+
+    enableSorting: true,
+    enableHiding: false,
+  },
+
+  {
+    accessorKey: "firstName",
+
+    meta: {
+      label: "نام",
+      sticky: "right",
+    },
+
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="نام" />
+    ),
+
     enableSorting: true,
   },
+
   {
     accessorKey: "lastName",
+
+    meta: {
+      label: "تخلص",
+    },
+
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="تخلص " />
+      <DataTableColumnHeader column={column} title="تخلص" />
     ),
-    enableSorting: true,
   },
+
   {
     accessorKey: "fatherName",
+
+    meta: {
+      label: "اسم پدر",
+    },
+
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="اسم پدر " />
+      <DataTableColumnHeader column={column} title="اسم پدر" />
     ),
-    enableSorting: true,
   },
+
   {
     accessorKey: "gender",
+
+    meta: {
+      label: "جنسیت",
+    },
+
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="جنسیت" />
     ),
+
+    cell: ({ row }) => (
+      <span
+        className="
+        rounded-full
+        bg-blue-50
+        px-3
+        py-1
+        text-xs
+        font-semibold
+        text-blue-600
+        "
+      >
+        {row.original.gender}
+      </span>
+    ),
   },
+
   {
     accessorKey: "age",
+
+    meta: {
+      label: "عمر",
+    },
+
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="عمر" />
     ),
   },
+
   {
     accessorKey: "maritalStatus",
+
+    meta: {
+      label: "حالت مدنی",
+    },
+
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="حالت مدنی" />
     ),
   },
 
   {
-    accessorKey: "address",
-
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ادرس بیمار" />
-    ),
-  },
-  {
     accessorKey: "phone",
 
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="شماره تماس اصلی" />
-    ),
-  },
-  {
-    accessorKey: "registrationDate",
+    meta: {
+      label: "شماره تماس",
+    },
 
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="تاریخ ثبت" />
+      <DataTableColumnHeader column={column} title="شماره تماس" />
     ),
-    cell: ({row}) => new Date(row.original.registrationDate).toLocaleDateString("Fa-af"),
   },
+
+  {
+    accessorKey: "address",
+
+    meta: {
+      label: "آدرس",
+    },
+
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="آدرس" />
+    ),
+  },
+
   {
     accessorKey: "bloodGroup",
+
+    meta: {
+      label: "گروپ خون",
+    },
 
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="گروپ خون" />
     ),
+
+    cell: ({ row }) => (
+      <span
+        className="
+        rounded-full
+        bg-red-50
+        px-3
+        py-1
+        text-xs
+        font-bold
+        text-red-600
+        "
+      >
+        {row.original.bloodGroup || "-"}
+      </span>
+    ),
   },
 
-   {
+  {
+    accessorKey: "registrationDate",
+
+    meta: {
+      label: "تاریخ ثبت",
+    },
+
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="تاریخ ثبت" />
+    ),
+
+    cell: ({ row }) => dateFormat(row.original.registrationDate),
+  },
+
+  {
     accessorKey: "createdAt",
+
+    meta: {
+      label: "تاریخ ایجاد",
+    },
 
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="تاریخ ایجاد" />
     ),
-    cell: ({ row }) =>
-      new Date(row.original.createdAt).toLocaleDateString("fa-af"),
+
+    cell: ({ row }) => dateFormat(row.original.createdAt),
   },
+
+  PatientActionColumn({
+    onView,
+    onEdit,
+    onDelete,
+  }),
 ];

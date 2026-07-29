@@ -12,9 +12,9 @@ export default function ConditionCard({
       className={`
         group
         cursor-pointer
-        rounded-2xl
+        rounded-[10px]
         border
-        p-5
+        p-4
         transition-all
         duration-200
 
@@ -29,7 +29,7 @@ export default function ConditionCard({
 
       <div className="flex items-start justify-between">
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1">
 
           <div
             className={`
@@ -38,7 +38,7 @@ export default function ConditionCard({
               w-12
               items-center
               justify-center
-              rounded-xl
+              rounded-full
 
               ${
                 checked
@@ -47,7 +47,7 @@ export default function ConditionCard({
               }
             `}
           >
-            <Activity className="text-blue-600" size={22} />
+            <Activity className="text-blue-600" size={16} />
           </div>
 
           <div>
@@ -62,7 +62,7 @@ export default function ConditionCard({
                 inline-flex
                 items-center
                 rounded-full
-                px-2
+                px-
                 py-0.5
                 text-xs
 

@@ -60,28 +60,94 @@ export default function ListPatient() {
  
 
   // Columns
-  const columns = useMemo(
-    () => [
-      ...PatientColumns,
+  // const columns = useMemo(
+  //   () => [
+  //     ...PatientColumns,
 
-      PatientActionColumn({
-        onView: (Patient) => {
-          console.log("View:", Patient);
-          navigate(`/Patient/Details/${Patient.id}`)
-        },
+  //     PatientActionColumn({
+  //       onView: (Patient) => {
+  //         console.log("View:", Patient);
+  //         navigate(`/Patient/Details/${Patient.id}`)
+  //       },
 
-        onEdit: (Patient) => {
-          setSelectedPatient(Patient);
-          curd.openEdit(Patient);
-        },
+  //       onEdit: (Patient) => {
+  //         setSelectedPatient(Patient);
+  //         curd.openEdit(Patient);
+  //       },
 
-        onDelete: (id) => {
-          curd.handleDelete(id);
-        },
-      }),
-    ],
-    [curd],
-  );
+  //       onDelete: (id) => {
+  //         curd.handleDelete(id);
+  //       },
+  //     }),
+  //   ],
+  //   [curd],
+  // );
+//   const columns = useMemo(
+// ()=>[
+
+//  ...PatientColumns,
+
+
+//  PatientActionColumn({
+
+//  onView:(patient)=>{
+
+//  navigate(
+//  `/Patient/Details/${patient.id}`
+//  );
+
+//  },
+
+
+//  onEdit:(patient)=>{
+
+//  setSelectedPatient(patient);
+
+//  curd.openEdit(patient);
+
+//  },
+
+
+//  onDelete:(id)=>{
+
+//  curd.handleDelete(id);
+
+//  }
+
+//  })
+
+// ],
+// [navigate,curd]
+// );
+
+const columns = useMemo(
+  () =>
+    PatientColumns({
+
+      onView: (patient) => {
+        console.log("View:", patient);
+
+        navigate(
+          `/Patient/Details/${patient.id}`
+        );
+      },
+
+
+      onEdit: (patient) => {
+        setSelectedPatient(patient);
+
+        curd.openEdit(patient);
+      },
+
+
+      onDelete: (id) => {
+        curd.handleDelete(id);
+      },
+
+    }),
+
+  [navigate, curd]
+);
 
   // Table
   const table = useReactTable({
@@ -114,10 +180,8 @@ export default function ListPatient() {
 
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت بیمار</h2>
-
-      <DataTableToolbar
+    <div>
+          <DataTableToolbar
         table={table}
         search={search}
         onSearchChange={setSearch}
@@ -129,12 +193,14 @@ export default function ListPatient() {
       >
         <Button
           size="sm"
+        variant="add"
           onClick={()=> 
             navigate("/Patient/PatientRegistration")
           }
         >
-          ثبت بیمار
-          <Plus size={16} />
+         
+          <Plus className="size-6" data-icon="inline-end" />
+          <span> ثبت بیمار</span>
         </Button>
       </DataTableToolbar>
 
@@ -142,6 +208,7 @@ export default function ListPatient() {
         table={table}
         loading={loading}
         pageSize={pagination.pageSize}
+       
       />
     </div>
   );

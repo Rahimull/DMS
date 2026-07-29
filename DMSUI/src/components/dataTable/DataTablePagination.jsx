@@ -16,125 +16,327 @@ import {
 import { Button } from "@/components/ui/button";
 
 
-
 export default function DataTablePagination({
   table,
 }) {
+
+  const pageIndex =
+    table.getState().pagination.pageIndex;
+
+  const pageCount =
+    table.getPageCount();
+
+
   return (
-    <div className="flex flex-col gap-4 border-t bg-slate-50 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
 
-      {/* Left */}
+    <div
+      className="
+      flex
+      flex-col
+      gap-4
+      border-t
+      bg-white
+      px-5
+      py-4
+      md:flex-row
+      md:items-center
+      md:justify-between
+      "
+    >
 
-      <div className="flex items-center gap-3 text-sm text-slate-600">
 
-        <span>تعداد در صفحه</span>
+
+      {/* Page Size */}
+
+      <div
+        className="
+        flex
+        items-center
+        gap-3
+        text-sm
+        text-slate-600
+        "
+      >
+
+        <span className="font-medium">
+          نمایش
+        </span>
+
 
         <Select
-          value={table.getState().pagination.pageSize.toString()}
-          onValueChange={(value) =>
+
+          value={
+            table
+              .getState()
+              .pagination
+              .pageSize
+              .toString()
+          }
+
+          onValueChange={(value)=>
             table.setPageSize(Number(value))
           }
+
         >
-          <SelectTrigger className="w-24">
+
+          <SelectTrigger
+            className="
+            h-9
+            w-24
+            rounded-xl
+            border-slate-200
+            bg-slate-50
+            font-semibold
+            "
+          >
+
             <SelectValue />
+
           </SelectTrigger>
 
-          <SelectContent>
 
-            <SelectItem value="1">
-              1
-            </SelectItem>
-            <SelectItem value="5">
-              5
-            </SelectItem>
-            <SelectItem value="10">
-              10
-            </SelectItem>
+          <SelectContent
+            className="
+            rounded-xl
+            "
+          >
 
-            <SelectItem value="20">
-              20
-            </SelectItem>
+            {[5,10,20,50,100].map(size => (
 
-            <SelectItem value="50">
-              50
-            </SelectItem>
+              <SelectItem
 
-            <SelectItem value="100">
-              100
-            </SelectItem>
+                key={size}
+
+                value={size.toString()}
+
+                className="
+                rounded-lg
+                "
+
+              >
+
+                {size} مورد
+
+              </SelectItem>
+
+            ))}
+
 
           </SelectContent>
 
+
         </Select>
 
-      </div>
 
-      {/* Center */}
-
-      <div className="text-sm text-slate-600">
-
-        صفحه
-
-        <span className="mx-2 font-bold">
-
-          {table.getState().pagination.pageIndex + 1}
-
+        <span className="text-slate-400">
+          در هر صفحه
         </span>
 
-        از
-
-        <span className="mx-2 font-bold">
-
-          {table.getPageCount()}
-
-        </span>
 
       </div>
 
-      {/* Right */}
 
-      <div className="flex items-center gap-2">
 
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
+
+
+      {/* Current Page */}
+
+      <div
+        className="
+        flex
+        items-center
+        gap-2
+        text-sm
+        text-slate-600
+        "
+      >
+
+        <span>
+          صفحه
+        </span>
+
+
+        <span
+          className="
+          flex
+          h-8
+          min-w-8
+          items-center
+          justify-center
+          rounded-lg
+          bg-gradient-to-r
+          from-blue-600
+          to-cyan-500
+          px-2
+          font-bold
+          text-white
+          shadow-sm
+          "
         >
-          <ChevronsRight className="h-4 w-4" />
-        </Button>
 
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
+          {pageIndex + 1}
+
+        </span>
+
+
+        <span>
+          از
+        </span>
+
+
+        <span
+          className="
+          font-bold
+          text-slate-700
+          "
         >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
 
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
+          {pageCount}
 
-        <Button
-          variant="outline"
-          size="icon"
+        </span>
+
+
+      </div>
+
+
+
+
+
+      {/* Navigation */}
+
+      <div
+        className="
+        flex
+        items-center
+        gap-2
+        "
+      >
+
+
+        <PaginationButton
+
+          icon={<ChevronsRight />}
+
           onClick={() =>
-            table.setPageIndex(table.getPageCount() - 1)
+            table.setPageIndex(0)
           }
-          disabled={!table.getCanNextPage()}
-        >
-          <ChevronsLeft className="h-4 w-4" />
-        </Button>
+
+          disabled={
+            !table.getCanPreviousPage()
+          }
+
+          title="صفحه اول"
+
+        />
+
+
+        <PaginationButton
+
+          icon={<ChevronRight />}
+
+          onClick={() =>
+            table.previousPage()
+          }
+
+          disabled={
+            !table.getCanPreviousPage()
+          }
+
+          title="قبلی"
+
+        />
+
+
+        <PaginationButton
+
+          icon={<ChevronLeft />}
+
+          onClick={() =>
+            table.nextPage()
+          }
+
+          disabled={
+            !table.getCanNextPage()
+          }
+
+          title="بعدی"
+
+        />
+
+
+
+        <PaginationButton
+
+          icon={<ChevronsLeft />}
+
+          onClick={() =>
+            table.setPageIndex(pageCount - 1)
+          }
+
+          disabled={
+            !table.getCanNextPage()
+          }
+
+          title="آخرین صفحه"
+
+        />
+
 
       </div>
+
 
     </div>
+
   );
+}
+
+
+
+
+
+function PaginationButton({
+  icon,
+  onClick,
+  disabled,
+  title,
+}) {
+
+  return (
+
+    <Button
+
+      variant="outline"
+
+      size="icon"
+
+      title={title}
+
+      onClick={onClick}
+
+      disabled={disabled}
+
+      className="
+      h-9
+      w-9
+      rounded-xl
+      border-slate-200
+      bg-white
+      transition-all
+
+      hover:-translate-y-0.5
+      hover:border-blue-300
+      hover:bg-blue-50
+      hover:text-blue-600
+
+      disabled:opacity-40
+      "
+
+    >
+
+      {icon}
+
+    </Button>
+
+  );
+
 }

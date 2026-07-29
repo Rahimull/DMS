@@ -1,104 +1,185 @@
+import {
+  UserRound,
+  Stethoscope,
+
+  WalletCards,
+  Check,
+  BadgePlus,
+} from "lucide-react";
+
 const steps = [
   {
     title: "معلومات شخصی",
-    icon: "👤",
+    icon: UserRound,
   },
   {
     title: "تاریخچه صحی",
-    icon: "🩺",
+    icon: Stethoscope,
   },
   {
     title: "خدمات",
-    icon: "🦷",
+    icon: BadgePlus,
   },
   {
     title: "فیس و پرداخت",
-    icon: "💰",
+    icon: WalletCards,
   },
 ];
 
-export default function Stepper({ currentStep }) {
+export default function Stepper({ currentStep = 1 }) {
   return (
-    <div className="px-2">
-      <div className="flex items-start justify-around">
+    <div className="w-full px-3 py-2">
+      <div
+        className="
+        flex
+        items-start
+        justify-between
+        "
+      >
         {steps.map((step, index) => {
           const number = index + 1;
 
           const active = currentStep === number;
+
           const completed = currentStep > number;
+
+          const Icon = step.icon;
 
           return (
             <div
               key={number}
-              className="flex flex-1 items-center"
+              className="
+              flex
+              flex-1
+              items-center
+              "
             >
-              {/* Step */}
+              {/* Step Item */}
 
-              <div className="flex flex-col items-center">
-
+              <div
+                className="
+                flex
+                flex-col
+                items-center
+                "
+              >
                 <div
                   className={`
                     relative
                     flex
-                    h-11
-                    w-11
+                    h-5
+                    w-5
                     items-center
                     justify-center
                     rounded-full
                     border-2
-                    text-lg
                     transition-all
                     duration-300
 
+
                     ${
                       completed
-                        ? "border-emerald-500 bg-emerald-500 text-white shadow-md shadow-emerald-200"
+                        ? " border-emerald-500 bg-emerald-500 text-white shadow-lg shadow-emerald-200 "
                         : active
-                        ? "border-blue-600 bg-blue-600 text-white shadow-lg shadow-blue-200"
-                        : "border-slate-300 bg-white"
+                          ? " border-blue-600 bg-blue-600 text-white shadow-xl shadow-blue-200 scale-110 "
+                          : " border-slate-300 bg-white text-slate-400 "
                     }
+
                   `}
                 >
-                  {completed ? "✓" : step.icon}
+                  {completed ? (
+                    <Check
+                      className="
+                      h-4
+                      w-4
+                      "
+                    />
+                  ) : (
+                    <Icon
+                      className="
+                      h-2
+                      w-2
+                      "
+                    />
+                  )}
+
+                  {active && (
+                    <span
+                      className="
+                        absolute
+                        -inset-2
+                        rounded-full
+                        border
+                        border-blue-300
+                        animate-ping
+                        opacity-30
+                        "
+                    />
+                  )}
                 </div>
 
                 <span
                   className={`
-                    mt-2
-                    whitespace-nowrap
+                    mt-1
                     text-xs
-                    font-semibold
+                    font-bold
+                    whitespace-nowrap
+
 
                     ${
                       completed
                         ? "text-emerald-600"
                         : active
-                        ? "text-blue-700"
-                        : "text-slate-500"
+                          ? "text-blue-700"
+                          : "text-slate-500"
                     }
+
                   `}
                 >
                   {step.title}
+                </span>
+
+                <span
+                  className="
+                  mt-1
+                  text-[11px]
+                  text-slate-400
+                  "
+                >
+                  مرحله {number}
                 </span>
               </div>
 
               {/* Connector */}
 
               {index !== steps.length - 1 && (
-                <div className="mx-3 mb-6 flex-1">
+                <div
+                  className="
+                    mx-4
+                    mb-9
+                    flex-1
+                    "
+                >
                   <div
-                    className={`
-                      h-[4px]
+                    className="
+                      h-1
                       rounded-full
-                      transition-all
+                      bg-slate-200
+                      overflow-hidden
+                      "
+                  >
+                    <div
+                      className={`
+                        h-full
+                        transition-all
+                        duration-500
 
-                      ${
-                        completed
-                          ? "bg-emerald-500"
-                          : "bg-slate-200"
-                      }
-                    `}
-                  />
+
+                        ${completed ? "w-full bg-emerald-500" : "w-0"}
+
+                        `}
+                    />
+                  </div>
                 </div>
               )}
             </div>

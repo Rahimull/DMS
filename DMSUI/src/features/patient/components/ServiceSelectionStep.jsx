@@ -120,7 +120,10 @@ export default function ServiceSelectionStep({ formData, updateSection,updateVal
   };
 
   return (
+
+    
     <div className="space-y-1">
+
       {/* Appointment */}
 
       <div
@@ -134,7 +137,6 @@ export default function ServiceSelectionStep({ formData, updateSection,updateVal
             title=""
             description=""
             border={false}
-            padding="p-0"
             columns={2}
             fields={fields}
             errors={errors}
@@ -149,10 +151,9 @@ export default function ServiceSelectionStep({ formData, updateSection,updateVal
       {activeService && (
         <div
           className="
-              rounded-3xl
-              border
               bg-white
-              p-6
+              border-t
+              p-4
               shadow-sm
             "
         >
@@ -175,8 +176,6 @@ export default function ServiceSelectionStep({ formData, updateSection,updateVal
 
       <div
         className="
-          rounded-3xl
-          border
           bg-white
           p-6
           shadow-sm

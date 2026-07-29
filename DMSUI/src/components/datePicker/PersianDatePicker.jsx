@@ -1,12 +1,16 @@
 import DatePickerModule from "react-multi-date-picker";
+
 import persian from "react-date-object/calendars/persian";
 import gregorian from "react-date-object/calendars/gregorian";
-import persian_fa from "react-date-object/locales/persian_fa";
 import DateObject from "react-date-object";
+
+import persian_fa from "react-date-object/locales/persian_fa";
+import TimePickerModule from "react-multi-date-picker/plugins/time_picker";
+
 import { CalendarDays } from "lucide-react";
 
-const DatePicker = DatePickerModule.default;
-
+const DatePicker = DatePickerModule.default || DatePickerModule;
+const TimePicker = TimePickerModule.default || TimePickerModule;
 
 const dariAfghanistan = {
   ...persian_fa,
@@ -37,115 +41,80 @@ const dariAfghanistan = {
   ],
 };
 
-
-// تبدیل ارقام فارسی به انگلیسی
-const toEnglishNumber = (str) => {
-  return str.replace(/[۰-۹]/g, (d) =>
-    "۰۱۲۳۴۵۶۷۸۹".indexOf(d)
-  );
+const toEnglishNumber = (value = "") => {
+  return String(value).replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
 };
 
-
 export default function PersianDatePicker({
-  value,
+  value = "",
   onChange,
   disabled = false,
+  placeholder = "انتخاب تاریخ",
+  showTime = false,
 }) {
+  const inputFormat = showTime ? "YYYY-MM-DD HH:mm" : "YYYY-MM-DD";
 
-
-  // مقدار ذخیره شده از Backend
-  // 2026-08-01
-  // تبدیل برای نمایش شمسی
+  const displayFormat = showTime ? "YYYY/MM/DD HH:mm" : "YYYY/MM/DD";
 
   const pickerValue = value
     ? new DateObject({
         date: value,
         calendar: gregorian,
-        format: "YYYY-MM-DD",
+        format: inputFormat,
       }).convert(persian)
     : "";
 
-
   const handleChange = (date) => {
-
     if (!date) {
       onChange("");
       return;
     }
 
+    const result = date.convert(gregorian).format(inputFormat);
 
-    const gregorianDate = date
-      .convert(gregorian)
-      .format("YYYY-MM-DD");
-
-
-    const cleanDate = toEnglishNumber(
-      gregorianDate
-    );
-
-
-    onChange(cleanDate);
+    onChange(toEnglishNumber(result));
   };
 
-
   return (
-    <div className="relative w-full">
-
-
-      <div
+    <div className="relative w-full" dir="rtl">
+      <CalendarDays
         className="
-          pointer-events-none
           absolute
           right-4
           top-1/2
           z-10
           -translate-y-1/2
+          text-slate-400
         "
-      >
-        <CalendarDays
-          size={18}
-          className="text-slate-400"
-        />
-      </div>
-
+        size={18}
+      />
 
       <DatePicker
-
         value={pickerValue}
-
         onChange={handleChange}
-
         calendar={persian}
-
         locale={dariAfghanistan}
-
-        format="YYYY/MM/DD"
-
+        format={displayFormat}
+        plugins={showTime ? [<TimePicker position="bottom" />] : []}
         calendarPosition="bottom-right"
-
         disabled={disabled}
-
-
-        containerClassName="w-full"
-
-
+        editable={false}
+        placeholder={placeholder}
         inputClass="
+          h-10
           w-full
-          h-12
-          rounded-2xl
+          rounded-[5px]
           border
           border-slate-300
           bg-white
-          pr-11
-          pl-4
-          outline-none
+          px-4
+          text-right
+          text-sm
           focus:border-blue-500
-          focus:ring-2
+          focus:ring-4
           focus:ring-blue-100
         "
-
       />
-
     </div>
   );
 }

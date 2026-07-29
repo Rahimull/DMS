@@ -6,26 +6,32 @@ export const PatientActionColumn = ({
   onEdit,
   onDelete,
 }) => ({
-
   id: "actions",
 
-  header: "عملیات",
-  meta: {sticky: "left"},
-
-  cell: ({ row }) => (
-
-    <DataTableAction
-
-      row={row}
-
-      onView={onView}
-
-      onEdit={onEdit}
-
-      onDelete={onDelete}
-
-    />
-
+  header: () => (
+    <div className="text-center">
+      عملیات
+    </div>
   ),
 
+  enableSorting: false,
+  enableHiding: false,
+
+  meta: {
+    sticky: "left",
+    label: "عملیات",
+  },
+
+  size: 120,
+
+  cell: ({ row }) => (
+    <div className="flex justify-center">
+      <DataTableAction
+        row={row}
+        onView={onView}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
+    </div>
+  ),
 });

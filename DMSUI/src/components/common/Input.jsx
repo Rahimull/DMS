@@ -21,28 +21,21 @@ const Input = ({
 }) => {
   const baseClass = `
     w-full
-    rounded-2xl
+    rounded-[5px]
     border
-    px-4
-    py-3
+    px-3
     text-sm
     text-slate-800
     bg-white
-
     shadow-sm
-
     transition-all
     duration-200
-
     placeholder:text-slate-400
-
     hover:border-slate-400
-
     focus:outline-none
     focus:border-blue-500
     focus:ring-4
     focus:ring-blue-100
-
     disabled:bg-slate-100
     disabled:cursor-not-allowed
     disabled:opacity-70
@@ -57,7 +50,7 @@ const Input = ({
   `;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       {label && type !== "checkbox" && (
         <label
           className="
@@ -117,7 +110,7 @@ const Input = ({
           value={value ?? ""}
           
           disabled={disabled}
-          className={`${baseClass} h-12`}
+          className={`${baseClass} h-10`}
           onChange={(e)=> {
             const selectedValue = e.target.value !== "" && !isNaN(e.target.value) ? Number(e.target.value) : e.target.value;
 
@@ -150,7 +143,7 @@ const Input = ({
             items-center
             gap-3
 
-            rounded-xl
+            rounded-[5px]
             border
             border-slate-200
 
@@ -193,7 +186,7 @@ const Input = ({
 
       {type === "file" && (
         <div
-          className="relative rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50
+          className="relative rounded-[5px] border-2 border-dashed border-slate-300 bg-slate-50
            p-8 text-center transition hover:bg-slate-100"
         >
           <input
@@ -221,7 +214,7 @@ const Input = ({
       {/* Normal Input */}
       {!["textarea", "select", "checkbox", "file", "date"].includes(type) && (
         <input
-          className={`${baseClass} h-12`}
+          className={`${baseClass} h-10`}
           type={type}
           name={name}
           value={value ?? ""}

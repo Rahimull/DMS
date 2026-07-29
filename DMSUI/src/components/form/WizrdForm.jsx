@@ -17,7 +17,7 @@ const WirzadForm = ({
   return (
     <form
       dir="rtl"
-      className={`rounded-3xl bg-whie ${border ? "border border-slate-200 shadow-sm" : ""} ${padding}`}
+      className={`rounded-[10px] bg-whie ${border ? "border border-slate-200 shadow-sm" : ""} ${padding}`}
     >
       {/* Header */}
 
@@ -48,12 +48,12 @@ const WirzadForm = ({
       {serverErrors.general && (
         <div
           className="
-            mb-6
-            rounded-2xl
+            mb-3
+            rounded-[10px]
             border
             border-red-200
             bg-red-50
-            p-4
+            p-2
             text-sm
             text-red-600
           "
@@ -67,10 +67,10 @@ const WirzadForm = ({
       <div
         className={`
             grid
-          grid-cols-1
-          gap-3
-          ${columns === 2 ? "md:grid-cols-2" : ""}
-          `}
+            grid-cols-1
+            gap-3
+            ${columns === 2 ? "md:grid-cols-2" : ""}
+            `}
       >
         {fields.map((field) => (
           <div
@@ -98,7 +98,7 @@ const WirzadForm = ({
           </div>
         ))}
       </div>
-      <div className="mt-6">{children}</div>
+      <div className="mt-3">{children}</div>
 
       {/* Actions */}
     </form>

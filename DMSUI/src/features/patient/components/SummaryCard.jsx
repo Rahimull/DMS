@@ -30,11 +30,11 @@ function SummaryCard({ title, value, icon, color = "blue" }) {
   return (
     <div
       className={`
-        rounded-3xl
+        rounded-[10px]
         border
         bg-white
-        p-5
-        shadow-sm
+        p-2
+        shadow-xl
         transition-all
         hover:-translate-y-1
         hover:shadow-md
@@ -50,11 +50,11 @@ function SummaryCard({ title, value, icon, color = "blue" }) {
         <div
           className={`
             flex
-            h-12
-            w-12
+            h-10
+            w-10
             items-center
             justify-center
-            rounded-2xl
+            rounded-full
             ${theme.icon}
           `}
         >
@@ -62,7 +62,7 @@ function SummaryCard({ title, value, icon, color = "blue" }) {
         </div>
       </div>
 
-      <div className="mt-5">
+      <div className="m-5">
         <p
           className="
             text-sm
@@ -74,8 +74,8 @@ function SummaryCard({ title, value, icon, color = "blue" }) {
 
         <h3
           className={`
-            mt-2
-            text-2xl
+            
+            text-xl
             font-bold
             ${theme.text}
           `}
