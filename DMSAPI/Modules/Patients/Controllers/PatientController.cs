@@ -10,6 +10,7 @@ using DMS.Persistence;
 using DMS.Shared.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace DMS.Modules.Patients.Controllers;
 
@@ -203,30 +204,40 @@ public class PatientController : BaseController<Patient>
     }
     #endregion
 
+    #region Include Relations
+    protected override IQueryable<Patient> IncludeRelations(IQueryable<Patient> query)
+    {
+        return query
+            .Include(x => x.Appointments).ThenInclude(a => a.FeePayments)
+            .Include(x => x.Staff);
+    }
+
+
+    #endregion
 
     #region  Search
-   protected override IQueryable<Patient> ApplySearch(
-    IQueryable<Patient> query,
-    string search)
-{
-    search = search.Trim().ToLower();
-
-    if (int.TryParse(search, out var id))
+    protected override IQueryable<Patient> ApplySearch(
+     IQueryable<Patient> query,
+     string search)
     {
+        search = search.Trim().ToLower();
+
+        if (int.TryParse(search, out var id))
+        {
+            return query.Where(x =>
+                x.Id == id ||
+                (x.FirstName ?? "").Contains(search) ||
+                (x.LastName ?? "").Contains(search) ||
+                (x.Phone ?? "").Contains(search)
+            );
+        }
+
         return query.Where(x =>
-            x.Id == id ||
             (x.FirstName ?? "").Contains(search) ||
             (x.LastName ?? "").Contains(search) ||
             (x.Phone ?? "").Contains(search)
         );
     }
-
-    return query.Where(x =>
-        (x.FirstName ?? "").Contains(search) ||
-        (x.LastName ?? "").Contains(search) ||
-        (x.Phone ?? "").Contains(search)
-    );
-}
 
 
     #endregion

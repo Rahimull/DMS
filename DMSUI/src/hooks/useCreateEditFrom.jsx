@@ -8,6 +8,7 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
 
   const [openModal, setOpenModal] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [initialvalues, setInitialvalues] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const defaultMessages = {
@@ -125,18 +126,21 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     }
   };
 
-  const openCreate = () => {
+  const openCreate = (values={}) => {
     setEditing(null);
+    setInitialvalues(values)
     setOpenModal(true);
   };
 
   const openEdit = (row) => {
     setEditing(row);
+    setInitialvalues(row);
     setOpenModal(true);
   };
 
   const closeModal = () => {
     setOpenModal(false);
+    setInitialvalues(null);
     setEditing(null);
   };
 
@@ -148,7 +152,7 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     console.log("HOOK DATA: ", data);
     let success = false;
 
-    if (editing) {
+    if (editing?.id) {
       console.log("UPDATE MODE");
       success = await updateRecord(editing.id, data);
     } else {
@@ -193,10 +197,12 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     openModal,
     editing,
     refreshKey,
+    setRefreshKey,
 
     // ACTION
     openCreate,
     openEdit,
+    initialvalues,
     closeModal,
     handleSubmit,
     handleDelete,

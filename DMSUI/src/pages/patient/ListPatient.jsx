@@ -7,14 +7,15 @@ import useLoadData from "@/hooks/useLoadData";
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
-import { useMemo, useState} from "react";
+import { useMemo, useState } from "react";
 
 import { PatientActionColumn } from "@/features/patient/columns/PatientActionColumn";
 import { PatientColumns } from "@/features/patient/columns/PatientColumns";
 import PatientForm from "@/features/patient/components/PatientForm";
 import { useNavigate } from "react-router-dom";
 import PatientRegistrationWizard from "./PatientRegistrationWizard";
-
+import FeePaymentApi from "@/features/feePayment/api/FeePaymentApi";
+import FeePaymentForm from "@/features/feePayment/components/FeePaymentForm";
 
 export default function ListPatient() {
   const [filterStatus, setFilterStatus] = useState("all");
@@ -41,6 +42,17 @@ export default function ListPatient() {
 
   const curd = useCreatUpdateForm(PatientApi, messages, { useFormData: false });
 
+  // بخش اپدیت کردن صورت حساب
+  const PaymentMessages = {
+    create: "پرداخت با موفقیت ثبت شد.",
+    update: "اطلاعات پرداخت با موفقیت ویرایش شد.",
+    delete: "پرداخت با موفقیت حذف شد.",
+  };
+
+  const curdPayment = useCreatUpdateForm(FeePaymentApi, PaymentMessages, {
+    useFormData: false,
+  });
+
   const {
     data,
     totalCount,
@@ -57,97 +69,40 @@ export default function ListPatient() {
     refreshKey: curd.refreshKey,
   });
 
- 
+  console.log("Patient Data : ", data);
+  const columns = useMemo(
+    () =>
+      PatientColumns({
+        onView: (patient) => {
+          console.log("View:", patient);
 
-  // Columns
-  // const columns = useMemo(
-  //   () => [
-  //     ...PatientColumns,
+          navigate(`/Patient/Details/${patient.id}`);
+        },
 
-  //     PatientActionColumn({
-  //       onView: (Patient) => {
-  //         console.log("View:", Patient);
-  //         navigate(`/Patient/Details/${Patient.id}`)
-  //       },
+        onEdit: (patient) => {
+          setSelectedPatient(patient);
 
-  //       onEdit: (Patient) => {
-  //         setSelectedPatient(Patient);
-  //         curd.openEdit(Patient);
-  //       },
+          curd.openEdit(patient);
+        },
 
-  //       onDelete: (id) => {
-  //         curd.handleDelete(id);
-  //       },
-  //     }),
-  //   ],
-  //   [curd],
-  // );
-//   const columns = useMemo(
-// ()=>[
+        onDelete: (id) => {
+          curd.handleDelete(id);
+        },
+        onOpenPyament: (patient) => {
+          const appointment = patient.appointments?.at(-1);
+          const payment = appointment?.feePayments?.at(-1);
 
-//  ...PatientColumns,
+          curdPayment.openEdit({
+            patientId: patient.id,
+            appointmentId: appointment?.id,
+            totalFee: appointment?.totalFee ?? 0,
+            dueAmount: payment?.dueAmount ?? 0,
+          });
+        },
+      }),
 
-
-//  PatientActionColumn({
-
-//  onView:(patient)=>{
-
-//  navigate(
-//  `/Patient/Details/${patient.id}`
-//  );
-
-//  },
-
-
-//  onEdit:(patient)=>{
-
-//  setSelectedPatient(patient);
-
-//  curd.openEdit(patient);
-
-//  },
-
-
-//  onDelete:(id)=>{
-
-//  curd.handleDelete(id);
-
-//  }
-
-//  })
-
-// ],
-// [navigate,curd]
-// );
-
-const columns = useMemo(
-  () =>
-    PatientColumns({
-
-      onView: (patient) => {
-        console.log("View:", patient);
-
-        navigate(
-          `/Patient/Details/${patient.id}`
-        );
-      },
-
-
-      onEdit: (patient) => {
-        setSelectedPatient(patient);
-
-        curd.openEdit(patient);
-      },
-
-
-      onDelete: (id) => {
-        curd.handleDelete(id);
-      },
-
-    }),
-
-  [navigate, curd]
-);
+    [navigate, curd],
+  );
 
   // Table
   const table = useReactTable({
@@ -178,10 +133,9 @@ const columns = useMemo(
     },
   });
 
-
   return (
     <div>
-          <DataTableToolbar
+      <DataTableToolbar
         table={table}
         search={search}
         onSearchChange={setSearch}
@@ -193,12 +147,9 @@ const columns = useMemo(
       >
         <Button
           size="sm"
-        variant="add"
-          onClick={()=> 
-            navigate("/Patient/PatientRegistration")
-          }
+          variant="add"
+          onClick={() => navigate("/Patient/PatientRegistration")}
         >
-         
           <Plus className="size-6" data-icon="inline-end" />
           <span> ثبت بیمار</span>
         </Button>
@@ -208,8 +159,9 @@ const columns = useMemo(
         table={table}
         loading={loading}
         pageSize={pagination.pageSize}
-       
       />
+
+      <FeePaymentForm CURD={curdPayment} />
     </div>
   );
 }

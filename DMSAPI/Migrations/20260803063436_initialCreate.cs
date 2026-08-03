@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DMSAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -260,6 +260,37 @@ namespace DMSAPI.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServiceRequirementMaps",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ServiceId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ServiceRequirmentId = table.Column<int>(type: "INTEGER", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsRequired = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceRequirementMaps", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServiceRequirementMaps_service_requirements_ServiceRequirmentId",
+                        column: x => x.ServiceRequirmentId,
+                        principalTable: "service_requirements",
+                        principalColumn: "requirement_ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ServiceRequirementMaps_services_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "services",
+                        principalColumn: "service_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -714,8 +745,8 @@ namespace DMSAPI.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     patient_ID = table.Column<int>(type: "INTEGER", nullable: true),
                     staff_ID = table.Column<int>(type: "INTEGER", nullable: true),
-                    start_date = table.Column<DateOnly>(type: "TEXT", nullable: true),
-                    end_date = table.Column<DateOnly>(type: "TEXT", nullable: true),
+                    start_date = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    end_date = table.Column<DateTime>(type: "TEXT", nullable: true),
                     total_fee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     installments = table.Column<int>(type: "INTEGER", nullable: false),
                     round = table.Column<int>(type: "INTEGER", nullable: false),
@@ -788,12 +819,12 @@ namespace DMSAPI.Migrations
                 {
                     condition_detail_ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    condition_ID = table.Column<int>(type: "INTEGER", nullable: false),
-                    pat_ID = table.Column<int>(type: "INTEGER", nullable: false),
+                    condition_ID = table.Column<int>(type: "INTEGER", nullable: true),
+                    pat_ID = table.Column<int>(type: "INTEGER", nullable: true),
                     severty = table.Column<string>(type: "TEXT", nullable: true),
                     result = table.Column<int>(type: "INTEGER", nullable: false),
                     diagnosis_date = table.Column<DateOnly>(type: "TEXT", nullable: true),
-                    TreatmentPlanId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TreatmentPlanId = table.Column<int>(type: "INTEGER", nullable: true),
                     notes = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
@@ -827,14 +858,14 @@ namespace DMSAPI.Migrations
                 {
                     payment_ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    installment_counter = table.Column<int>(type: "INTEGER", nullable: false),
-                    payment_date = table.Column<DateOnly>(type: "TEXT", nullable: false),
-                    paid_amount = table.Column<decimal>(type: "TEXT", nullable: false),
-                    due_amount = table.Column<decimal>(type: "TEXT", nullable: false),
-                    whole_fee_paid = table.Column<decimal>(type: "TEXT", nullable: false),
+                    installment_counter = table.Column<int>(type: "INTEGER", nullable: true),
+                    payment_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    paid_amount = table.Column<decimal>(type: "TEXT", nullable: true),
+                    due_amount = table.Column<decimal>(type: "TEXT", nullable: true),
+                    whole_fee_paid = table.Column<int>(type: "INTEGER", nullable: true),
                     apt_ID = table.Column<int>(type: "INTEGER", nullable: true),
                     tp_ID = table.Column<int>(type: "INTEGER", nullable: true),
-                    staff_ID = table.Column<int>(type: "INTEGER", nullable: false),
+                    staff_ID = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
@@ -1212,6 +1243,16 @@ namespace DMSAPI.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_patients_firstname",
+                table: "patients",
+                column: "firstname");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_patients_lastname",
+                table: "patients",
+                column: "lastname");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_patients_phone",
                 table: "patients",
                 column: "phone");
@@ -1255,6 +1296,16 @@ namespace DMSAPI.Migrations
                 name: "IX_retreatments_tp_ID",
                 table: "retreatments",
                 column: "tp_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceRequirementMaps_ServiceId",
+                table: "ServiceRequirementMaps",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceRequirementMaps_ServiceRequirmentId",
+                table: "ServiceRequirementMaps",
+                column: "ServiceRequirmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_services_service_name",
@@ -1368,6 +1419,9 @@ namespace DMSAPI.Migrations
                 name: "retreatments");
 
             migrationBuilder.DropTable(
+                name: "ServiceRequirementMaps");
+
+            migrationBuilder.DropTable(
                 name: "supplies_sales");
 
             migrationBuilder.DropTable(
@@ -1395,13 +1449,13 @@ namespace DMSAPI.Migrations
                 name: "medicine_inventory");
 
             migrationBuilder.DropTable(
-                name: "service_requirements");
-
-            migrationBuilder.DropTable(
                 name: "appointments");
 
             migrationBuilder.DropTable(
                 name: "treatment_plans");
+
+            migrationBuilder.DropTable(
+                name: "service_requirements");
 
             migrationBuilder.DropTable(
                 name: "supplies_inventory");

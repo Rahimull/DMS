@@ -3,6 +3,7 @@ using DMS.Shared.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DMS.Models;
+using System.Net.Quic;
 
 namespace DMS.Shared.Controllers;
 
@@ -24,8 +25,10 @@ public abstract class BaseController<TEntity> : ControllerBase
     [HttpPost("paged")]
     public virtual async Task<IActionResult> GetPaged([FromBody] QueryParams query)
     {
-        IQueryable<TEntity> data = _db.AsNoTracking()
-                                      .Where(x => !x.IsDeleted);
+        // IQueryable<TEntity> data = _db.AsNoTracking()
+        //                               .Where(x => !x.IsDeleted);
+
+        IQueryable<TEntity> data = IncludeRelations(_db.AsNoTracking().Where(x => !x.IsDeleted));
 
         // Search
         if (!string.IsNullOrWhiteSpace(query.Search?.SearchTerm))
@@ -169,5 +172,12 @@ public abstract class BaseController<TEntity> : ControllerBase
 
     #endregion
 
+
+    #region Include Relations
+    protected virtual IQueryable<TEntity> IncludeRelations(IQueryable<TEntity> query)
+    {
+        return query;
+    }
+    #endregion
 
 }

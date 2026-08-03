@@ -1,6 +1,8 @@
 namespace DMS.Modules.Patients.DTOs;
 public class PatientDto
 {
+    public int Id { get; set; } // bew
+
     public int StaffId { get; set; }
     public string? FirstName { get; set; }
 
@@ -21,4 +23,7 @@ public class PatientDto
     public string? BloodGroup { get; set; }
 
     public string? Address { get; set; }
+
+    public decimal DueAmount { get; set; }
+    public decimal PaidAmount { get; set; }
 }

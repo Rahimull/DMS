@@ -1,5 +1,7 @@
 import DataTableColumnHeader from "@/components/dataTable/DataTableColumnHeader";
 import { PatientActionColumn } from "./PatientActionColumn";
+import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
+import FeePaymentApi from "@/features/feePayment/api/FeePaymentApi";
 
 const dateFormat = (value) => {
   if (!value) return "-";
@@ -7,7 +9,8 @@ const dateFormat = (value) => {
   return new Date(value).toLocaleDateString("fa-AF");
 };
 
-export const PatientColumns = ({ onView, onEdit, onDelete }) => [
+
+export const PatientColumns = ({ onView, onEdit, onDelete, onOpenPyament }) => [
   {
     accessorKey: "id",
 
@@ -138,6 +141,132 @@ export const PatientColumns = ({ onView, onEdit, onDelete }) => [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="آدرس" />
     ),
+  },
+  {
+    accessorKey: "totalFee",
+    id: "totalFee",
+
+    accessorFn: (row) => {
+      return row.appointments?.flatMap((a) => a.totalFee ?? 0)?.at(-1) ?? 0;
+    },
+
+    meta: {
+      label: "مجموعه فیس ",
+    },
+    enableSorting: true,
+
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title=" مجموعه فیس" />
+    ),
+    cell: ({ row }) => {
+      const amount = row.getValue("totalFee") ?? 0;
+      return (
+        <div className="text-center">
+          <span
+            className={`
+          inline-flex
+          items-center
+          rounded-full
+          px-3
+          py-1
+          text-xs
+          font-bold bg-blue-100 text-blue-700
+          
+        `}
+          >
+            {Number(amount).toLocaleString("fa-AF")} افغانی
+          </span>
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: "paidAmount",
+
+    meta: {
+      label: "پرداخت",
+    },
+
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="پرداخت" />
+    ),
+    cell: ({ row }) => {
+      const payment = row.original.appointments
+        ?.flatMap((a) => a.feePayments ?? [])
+        ?.at(-1);
+
+      const amount = payment?.paidAmount ?? 0;
+
+      return (
+        <div className="text-center">
+          <span
+            className={`
+          inline-flex
+          items-center
+          rounded-full
+          px-3
+          py-1
+          text-xs
+          font-bold
+          ${
+            amount > 0
+              ? "bg-emerald-100 text-emerald-700"
+              : "bg-slate-100 text-slate-500"
+          }
+        `}
+          >
+            {amount.toLocaleString("fa-AF")} افغانی
+          </span>
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: "dueAmount",
+
+    meta: {
+      label: "باقی مانده",
+    },
+    enableSorting: true,
+
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="باقی مانده" />
+    ),
+    cell: ({ row }) => {
+      const payment = row.original.appointments
+        ?.flatMap((a) => a.feePayments ?? [])
+        ?.at(-1);
+
+      const amount = payment?.dueAmount ?? 0;
+
+      return (
+        <div className="text-center">
+          <button
+            onClick={()=> onOpenPyament(row.original)}
+            disabled={amount <= 0}
+            className={`
+              inline-flex
+              items-center
+              rounded-full
+              px-3
+              py-1
+              text-xs
+              font-bold
+              transition
+              ${
+                amount > 0
+                  ? "bg-red-600 text-red-100 cursor-pointer hover:bg-red-400"
+                  : "bg-emerald-100 text-emerald-700"
+              }
+            `}
+          >
+            {amount.toLocaleString("fa-AF")} افغانی
+          </button>
+        </div>
+      );
+    },
   },
 
   {

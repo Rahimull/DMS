@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMSAPI.Migrations
 {
     [DbContext(typeof(DMSContext))]
-    [Migration("20260727111400_FixPatientIndex")]
-    partial class FixPatientIndex
+    [Migration("20260803063436_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

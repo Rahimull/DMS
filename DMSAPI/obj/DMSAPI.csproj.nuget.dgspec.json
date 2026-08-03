@@ -10,11 +10,11 @@
         "projectUniqueName": "D:\\Dr. Norstani\\DMSAPI\\DMSAPI.csproj",
         "projectName": "DMSAPI",
         "projectPath": "D:\\Dr. Norstani\\DMSAPI\\DMSAPI.csproj",
-        "packagesPath": "C:\\Users\\rahim\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
         "outputPath": "D:\\Dr. Norstani\\DMSAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\rahim\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\hp\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -114,7 +114,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

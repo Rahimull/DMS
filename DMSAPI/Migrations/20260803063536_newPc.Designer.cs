@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMSAPI.Migrations
 {
     [DbContext(typeof(DMSContext))]
-    [Migration("20260725161546_FixAllPatientResgistrations")]
-    partial class FixAllPatientResgistrations
+    [Migration("20260803063536_newPc")]
+    partial class newPc
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -431,26 +431,26 @@ namespace DMSAPI.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("DueAmount")
+                    b.Property<decimal?>("DueAmount")
                         .HasColumnType("TEXT")
                         .HasColumnName("due_amount");
 
-                    b.Property<int>("InstallmentCounter")
+                    b.Property<int?>("InstallmentCounter")
                         .HasColumnType("INTEGER")
                         .HasColumnName("installment_counter");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("PaidAmount")
+                    b.Property<decimal?>("PaidAmount")
                         .HasColumnType("TEXT")
                         .HasColumnName("paid_amount");
 
-                    b.Property<DateOnly>("PaymentDate")
+                    b.Property<DateTime>("PaymentDate")
                         .HasColumnType("TEXT")
                         .HasColumnName("payment_date");
 
-                    b.Property<int>("StaffId")
+                    b.Property<int?>("StaffId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("staff_ID");
 
@@ -458,8 +458,8 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("tp_ID");
 
-                    b.Property<decimal>("WholeFeePaid")
-                        .HasColumnType("TEXT")
+                    b.Property<int?>("WholeFeePaid")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("whole_fee_paid");
 
                     b.HasKey("Id");
@@ -928,6 +928,10 @@ namespace DMSAPI.Migrations
 
                     b.HasIndex("FileId")
                         .IsUnique();
+
+                    b.HasIndex("FirstName");
+
+                    b.HasIndex("LastName");
 
                     b.HasIndex("Phone");
 
@@ -1811,8 +1815,7 @@ namespace DMSAPI.Migrations
                     b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
                         .WithMany("FeePayments")
                         .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DMS.Modules.Treatments.Entities.TreatmentPlan", "TreatmentPlan")
                         .WithMany("FeePayments")

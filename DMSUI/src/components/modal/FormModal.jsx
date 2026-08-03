@@ -11,12 +11,13 @@ const FormModal = ({
   loading,
   submitText = "ذخیره",
   onCancel,
+  discription,
 }) => {
   return (
     <Modal open={open} onClose={onClose} title={title}>
       <Form
         title=""
-        description=""
+        description={discription}
         fields={fields}
         initialValues={initialValues}
         onSubmit={onSubmit}

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMSAPI.Migrations
 {
     [DbContext(typeof(DMSContext))]
-    [Migration("20260726095012_FixMeetDate1")]
-    partial class FixMeetDate1
+    [Migration("20260803063730_newPc2")]
+    partial class newPc2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -928,6 +928,10 @@ namespace DMSAPI.Migrations
 
                     b.HasIndex("FileId")
                         .IsUnique();
+
+                    b.HasIndex("FirstName");
+
+                    b.HasIndex("LastName");
 
                     b.HasIndex("Phone");
 
