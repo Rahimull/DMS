@@ -172,7 +172,7 @@ const Form = ({
           {title}
         </h2>
 
-        <p
+        <div
           className="
             mt-1
             text-sm
@@ -180,7 +180,7 @@ const Form = ({
           "
         >
           {description}
-        </p>
+        </div>
       </div>
 
       {/* General Error */}

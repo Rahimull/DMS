@@ -8,6 +8,8 @@ const base = createCrudApi(endpoint);
 const FeePaymentApi = {
   ...base,
 
+  createPayment : (data) => Api.post(`${endpoint}/createPayment`, data),
+
   lookup: async (
     query = {
       pageNumber: 1,

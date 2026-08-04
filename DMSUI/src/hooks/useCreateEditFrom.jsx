@@ -22,7 +22,7 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     ...messages,
   };
 
-  const { useFormData = false } = option;
+  const { useFormData = false, createMethod= "create", onSuccess } = option;
 
   /* ---------------- CREATE ---------------- */
 
@@ -49,7 +49,7 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
         }
       }
 
-      await ApiService.create(payload);
+      await ApiService[createMethod](payload);
 
       notify.success(msg.create);
 
@@ -144,7 +144,7 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     setEditing(null);
   };
 
-  const refersh = () => {
+  const refresh = () => {
     setRefreshKey((p) => p + 1);
   };
 
@@ -161,7 +161,10 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     }
     if (success) {
       closeModal();
-      refersh();
+      refresh();
+    }
+    if(onSuccess){
+      onSuccess();
     }
   };
 
@@ -170,7 +173,7 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     if (!ok) return;
 
     const success = await deleteRecord(id);
-    if (success) refersh();
+    if (success) refresh();
   };
 
   const defaultAction = [
@@ -207,7 +210,7 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     handleSubmit,
     handleDelete,
     defaultAction,
-    refersh,
+    refresh,
   };
 };
 

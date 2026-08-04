@@ -36,5 +36,5 @@ public class FeePayment : BaseEntity
 
     public TreatmentPlan? TreatmentPlan { get; set; }
 
-    public Staff? Staff { get; set; } = null!;
+    public Staff? Staff { get; set; }
 }

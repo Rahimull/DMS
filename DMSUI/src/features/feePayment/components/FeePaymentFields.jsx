@@ -1,10 +1,21 @@
 export const FeePaymentFields = [
   {
-    name: "dueAmount",
-    label: "باقی ماند",
+    name: "paidAmount",
+    label: "مبلغ پرداخت",
     type: "number",
     required: true,
-    maxLength: 100,
-    placeholder: "اضافه کردن باقی مانده",
+    placeholder: "مبلغ پرداخت شده",
+  },
+  {
+    name: "appointmentId",
+    type: "hidden",
+  },
+  {
+    name: "staffId",
+    type: "hidden",
+  },
+  {
+    name: "installmentCounter",
+    type: "hidden",
   }
-  ];
+];
