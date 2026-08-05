@@ -184,6 +184,160 @@ public class PatientController : BaseController<Patient>
     }
     #endregion
 
+    #region  Add New Appointment
+    [HttpPost("appointment")]
+    public async Task<IActionResult> Appointment([FromBody] AppointmentRegistrationsDto dto)
+    {
+        System.Console.WriteLine("data from frant end: ", dto);
+        if (dto?.Appointment == null)
+        {
+            return BadRequest("جلسه ضروری است");
+        }
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // ======================
+            // 1- Get Patient By Id  
+            // ======================
+            
+            var patientObj = await _context.Patients.FirstOrDefaultAsync(x => x.Id == dto.Appointment.PatientId);
+            if (patientObj == null) return NotFound("مریض موجود نیست");
+            Patient patient = patientObj;
+
+
+            // ======================
+            // 2- Conditions
+            // ======================
+            if (dto.Conditions?.ConditionDetails != null)
+            {
+                foreach (var item in dto.Conditions.ConditionDetails)
+                {
+                    var detail = item.Value;
+
+                    var conditionDetail = new ConditionDetail
+                    {
+                        PatientId = patient?.Id,
+                        ConditionId = detail.ConditionId,
+                        Severty = detail.Severity,
+                        DaignosisDate = string.IsNullOrEmpty(detail.DiagnosisDate) ? null : DateOnly.Parse(detail.DiagnosisDate),
+                        Result = detail.Result ?? 0,
+                        Notes = detail.Notes
+
+                    };
+                    _context.ConditionDetails.Add(conditionDetail);
+                }
+                // await _context.SaveChangesAsync();
+            }
+
+            // ======================
+            // 3- Appointment
+            // ======================
+
+           Appointment? appointment = null;
+            if (dto.Appointment != null)
+            {
+                
+                appointment = new Appointment
+                {
+                    PatientId = patient!.Id,
+                    ServiceId = dto.Appointment.ServiceId,
+                    StaffId = dto.Appointment.StaffId,
+                    Installment = dto.Appointment.Installment,
+                    Round = dto.Appointment.Round,
+                    Discount = dto.Appointment.Discount,
+                    ServiceFee = dto.Appointment.ServiceFee,
+                    TotalFee = dto.Appointment.TotalFee,
+                    MeetDate = dto.Appointment.MeetDate,
+                    Status = dto.Appointment.Status,
+                    Details = dto.Appointment.Details,
+                };
+                _context.Appointments.Add(appointment);
+                await _context.SaveChangesAsync();
+            }
+
+            // ======================
+            // 4- Patient Services
+            // ======================
+
+            if (dto.Services?.PatientServices != null)
+            {
+                foreach (var serviceDto in dto.Services.PatientServices)
+                {
+                    foreach (var requirement in serviceDto.Requirements)
+                    {
+                        var patientService = new PatientService
+                        {
+                            PatientId = patient!.Id,
+                            ServiceId = serviceDto.ServiceId,
+                            AppointmentId = appointment?.Id,
+
+                            ServiceRequirementId =
+                                requirement.ServiceRequirementId,
+
+                            Value =
+                                serviceDto.Description +
+                                " " +
+                                JsonSerializer.Serialize(
+                                    requirement.Value
+                                )
+                        };
+
+                        _context.PatientServices.Add(patientService);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+
+
+            // ======================
+            // 5- Payment
+            // ======================
+
+            if (dto.Payment != null)
+            {
+                var payment = new FeePayment
+                {
+                    InstallmentCounter = appointment?.Installment ?? 1,
+                    PaymentDate = DateTime.UtcNow,
+                    PaidAmount = dto.Payment.PaidAmount,
+                    DueAmount = dto.Payment.DueAmount,
+                    WholeFeePaid = 0,
+                    AppointmentId = appointment?.Id,
+                    StaffId = appointment?.StaffId ?? 0
+                };
+
+                _context.FeePayments.Add(payment);
+                await _context.SaveChangesAsync();
+            }
+
+            await transaction.CommitAsync();
+
+            return Ok(new
+            {
+                message = "جلسه به درستی ثبت شد.",
+                patientId = patient!.Id
+            });
+
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            return BadRequest(new
+            {
+                message = ex.Message,
+                innerException = ex.InnerException?.Message,
+                stackTrace = ex.StackTrace
+
+            });
+        }
+    }
+
+    #endregion
+
 
     #region Patient Get By Id
     public override async Task<IActionResult> GetById(int id)

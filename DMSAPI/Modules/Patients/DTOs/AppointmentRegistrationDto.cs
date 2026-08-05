@@ -1,11 +1,9 @@
-
-
 namespace DMS.Modules.Patients.DTOs;
 
-public class PatientRegistrationDto
+
+public class AppointmentRegistrationsDto
 {
-    public PatientDto Patient { get; set; } = new();
-    public AppointmentDto Appointment {get; set;} = new();
+    public AppointmentDto Appointment { get; set; } = new();
 
     public ConditionSectionDto Conditions { get; set; } = new();
 

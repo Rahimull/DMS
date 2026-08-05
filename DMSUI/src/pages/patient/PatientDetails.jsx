@@ -23,8 +23,8 @@ import usePatientDetails from "@/features/patient/hooks/usePatientDetails";
 
 export default function PatientDetails() {
   const {finance: {totalPaid},patient} = usePatientDetails();
- 
 
+ 
 
   return (
     <div className="min-h-screen">

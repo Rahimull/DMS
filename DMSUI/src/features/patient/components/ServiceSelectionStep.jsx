@@ -49,7 +49,7 @@ export default function ServiceSelectionStep({ formData, updateSection,updateVal
     }
   };
 
-  const appointment = formData.services?.appointment ?? {};
+  const appointment = formData.appointment ?? {};
 
   const selectedServices = formData.services?.patientServices ?? [];
 
@@ -60,15 +60,14 @@ export default function ServiceSelectionStep({ formData, updateSection,updateVal
   const handleAppointmentChange = (e) => {
     const { name, value } = e.target;
 
-    updateSection("services", {
-      ...formData.services,
-
-      appointment: {
-        ...appointment,
+    updateSection("appointment", {
+              ...appointment,
         [name]: value,
       },
-    });
+    );
   };
+
+  
 
   const activeService = services.find(
     (x) => x.value === Number(appointment.serviceId),
@@ -102,14 +101,13 @@ export default function ServiceSelectionStep({ formData, updateSection,updateVal
       ...formData.services,
 
       patientServices: [...selectedServices, newService],
-      appointment: {
-        ...appointment,
-        serviceFee: newService.fee,
-      },
 
       currentRequirements: [],
     });
+   
   };
+
+  
 
   const handleRemoveService = (id) => {
     updateSection("services", {

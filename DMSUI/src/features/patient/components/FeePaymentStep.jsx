@@ -57,10 +57,10 @@ export default function FeePaymentStep({
 
     updateSection("payment", newPayment);
 
-    updateValue("services.appointment.totalFee", payable);
-    updateValue("services.appointment.discount", discount);
+    updateValue("appointment.totalFee", payable);
+    updateValue("appointment.discount", discount);
     updateValue(
-      "services.appointment.installment",
+      "appointment.installment",
       Number(newPayment.installment) || 1,
     );
   };

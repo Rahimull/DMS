@@ -12,6 +12,7 @@ import TreatmentPlanList from "@/features/treatment/pages/TreatmentPlanList";
 import EditTreatmentPlanPage from "@/features/treatment/pages/EditTreatmentPlan";
 import PatientRegistrationWizard from "@/pages/patient/PatientRegistrationWizard";
 import PatientDetails from "@/pages/patient/PatientDetails";
+import AppointmentWizard from "@/pages/patient/AppointmentWizard";
 
 
 export const router = createBrowserRouter([
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: "/Patient/PatientRegistration",
         element: <PatientRegistrationWizard />,
+        },
+      {
+        path: "/Patient/AppointmentWizard",
+        element: <AppointmentWizard />,
         },
       {
         path: "/Patient/Details/:id",
