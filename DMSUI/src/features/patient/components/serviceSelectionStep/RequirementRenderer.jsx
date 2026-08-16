@@ -1,109 +1,260 @@
 import DentalChart from "./DentalChart";
 
-export default function RequirementRenderer({ requirement, value, onChange }) {
-  const handleChange = (val) => {
-    onChange(requirement.serviceRequirementId, val);
+export default function RequirementRenderer({
+  requirement,
+  value,
+  onChange,
+}) {
+
+  // -----------------------------------------
+  // Requirement ID
+  // -----------------------------------------
+
+  const requirementId = Number(
+    requirement?.requirement?.id ??
+    requirement?.requirementId ??
+    requirement?.id
+  );
+
+
+  // -----------------------------------------
+  // Change
+  // -----------------------------------------
+
+  const handleChange = (newValue) => {
+    onChange(
+      requirement.serviceRequirementId,
+      newValue
+    );
   };
 
-  switch (requirement.serviceRequirementId) {
-    // Teeth Selection
-    case 1:
-      return <DentalChart 
-        value={value} 
-        onChange={(teeth)=> 
-            onChange(requirement.serviceRequirementId, teeth)
-        } 
+  // -----------------------------------------
+  // Dental Chart
+  // -----------------------------------------
 
-    />;
-
-    // Description
-    case 2:
-      
-      return (
-        <textarea
-          label="توضیحات"
-          name={`req_${requirement.id}`}
-          value={value}
-          onChange={(e) => handleChange(e.target.value)}
-        />
-      );
-
-    // Procedure Type
-    case 3:
-      return (
-        <select
-          label="نوع عملیات"
-          name={`req_${requirement.id}`}
-          value={value}
-          onChange={(e) => handleChange(e.target.value)}
-          options={[
-            {
-              value: "Single",
-              label: "Single",
-            },
-            {
-              value: "Multiple",
-              label: "Multiple",
-            },
-          ]}
-        />
-      );
-
-    // Materials
-    case 4:
-      return (
-        <input
-          label="مواد استفاده شده"
-          name={`req_${requirement.id}`}
-          value={value}
-          onChange={(e) => handleChange(e.target.value)}
-        />
-      );
-
-    // Bleaching Steps
-    case 5:
-      return (
-        <input
-          label="Bleaching Steps"
-          name={`req_${requirement.id}`}
-          value={value}
-          onChange={(e) => handleChange(e.target.value)}
-        />
-      );
-
-    // Gum Selection
-    case 7:
-      return (
-        <select
-          label="انتخاب لثه"
-          name={`req_${requirement.id}`}
-          value={value}
-          onChange={(e) => handleChange(e.target.value)}
-          options={[
-            {
-              value: "Upper",
-              label: "فک بالا",
-            },
-            {
-              value: "Lower",
-              label: "فک پایین",
-            },
-          ]}
-        />
-      );
-
-    // Affected Area
-    case 9:
-      return (
-        <input
-          label="محل آسیب"
-          name={`req_${requirement.id}`}
-          value={value}
-          onChange={(e) => handleChange(e.target.value)}
-        />
-      );
-
-    default:
-      return null;
+  if (requirementId === 1) {
+    return (
+      <DentalChart
+        value={Array.isArray(value) ? value : []}
+        onChange={handleChange}
+      />
+    );
   }
+
+  // -----------------------------------------
+  // Description
+  // -----------------------------------------
+
+  if (requirementId === 2) {
+    return (
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          توضیحات
+        </label>
+
+        <textarea
+          value={value ?? ""}
+          onChange={(e) =>
+            handleChange(e.target.value)
+          }
+          rows={3}
+          className="
+            w-full
+            rounded-lg
+            border
+            border-slate-300
+            p-3
+            outline-none
+            focus:border-blue-500
+            focus:ring-2
+            focus:ring-blue-100
+          "
+        />
+      </div>
+    );
+  }
+
+  // -----------------------------------------
+  // Procedure Type
+  // -----------------------------------------
+
+  if (requirementId === 3) {
+    return (
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          نوع عملیات
+        </label>
+
+        <select
+          value={value ?? ""}
+          onChange={(e) =>
+            handleChange(e.target.value)
+          }
+          className="
+            h-11
+            w-full
+            rounded-lg
+            border
+            border-slate-300
+            px-3
+            outline-none
+            focus:border-blue-500
+          "
+        >
+          <option value="">
+            انتخاب کنید
+          </option>
+
+          <option value="Single">
+            Single
+          </option>
+
+          <option value="Multiple">
+            Multiple
+          </option>
+        </select>
+      </div>
+    );
+  }
+
+  // -----------------------------------------
+  // Materials
+  // -----------------------------------------
+
+  if (requirementId === 4) {
+    return (
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          مواد استفاده شده
+        </label>
+
+        <input
+          type="text"
+          value={value ?? ""}
+          onChange={(e) =>
+            handleChange(e.target.value)
+          }
+          className="
+            h-11
+            w-full
+            rounded-lg
+            border
+            border-slate-300
+            px-3
+            outline-none
+            focus:border-blue-500
+          "
+        />
+      </div>
+    );
+  }
+
+  // -----------------------------------------
+  // Bleaching Steps
+  // -----------------------------------------
+
+  if (requirementId === 5) {
+    return (
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          Bleaching Steps
+        </label>
+
+        <input
+          type="text"
+          value={value ?? ""}
+          onChange={(e) =>
+            handleChange(e.target.value)
+          }
+          className="
+            h-11
+            w-full
+            rounded-lg
+            border
+            border-slate-300
+            px-3
+            outline-none
+            focus:border-blue-500
+          "
+        />
+      </div>
+    );
+  }
+
+  // -----------------------------------------
+  // Gum
+  // -----------------------------------------
+
+  if (requirementId === 7) {
+    return (
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          انتخاب لثه
+        </label>
+
+        <select
+          value={value ?? ""}
+          onChange={(e) =>
+            handleChange(e.target.value)
+          }
+          className="
+            h-11
+            w-full
+            rounded-lg
+            border
+            border-slate-300
+            px-3
+            outline-none
+            focus:border-blue-500
+          "
+        >
+          <option value="">
+            انتخاب کنید
+          </option>
+
+          <option value="Upper">
+            فک بالا
+          </option>
+
+          <option value="Lower">
+            فک پایین
+          </option>
+        </select>
+      </div>
+    );
+  }
+
+  // -----------------------------------------
+  // Affected Area
+  // -----------------------------------------
+
+  if (requirementId === 9) {
+    return (
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          محل آسیب
+        </label>
+
+        <input
+          type="text"
+          value={value ?? ""}
+          onChange={(e) =>
+            handleChange(e.target.value)
+          }
+          className="
+            h-11
+            w-full
+            rounded-lg
+            border
+            border-slate-300
+            px-3
+            outline-none
+            focus:border-blue-500
+          "
+        />
+      </div>
+    );
+  }
+
+  return null;
 }

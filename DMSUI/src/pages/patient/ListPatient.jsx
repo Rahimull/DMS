@@ -153,6 +153,19 @@ export default function ListPatient() {
           <Plus className="size-6" data-icon="inline-end" />
           <span> ثبت بیمار</span>
         </Button>
+        <Button
+          size="sm"
+          variant="add"
+          className="
+            bg-gradient-to-br from-indigo-100 to-green-600
+            hover:from-green-50 hover:to-green-900
+            transition-all duration-300
+"
+          onClick={() => navigate("/Patient/TreatmentPlanWizard")}
+        >
+          <Plus className="size-6" data-icon="inline-end" />
+          <span> ایجاد پلان تداوی </span>
+        </Button>
       </DataTableToolbar>
 
       <DataTable

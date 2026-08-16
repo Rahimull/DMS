@@ -51,19 +51,7 @@ export default function PatientDetails() {
                   </div>
 
                   <span
-                    className="
-                absolute
-                bottom-0
-                right-5
-                rounded-full
-                border-4
-                border-white
-                bg-emerald-500
-                px-4
-                py-1
-                text-xs
-                font-bold
-                text-white
+                    className="absolute bottom-0 right-5 rounded-full border-4 border-white bg-emerald-500 px-4 py-1 text-xs font-bold text-white
               "
                   >
                     فعال

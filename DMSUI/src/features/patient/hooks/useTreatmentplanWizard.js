@@ -1,0 +1,196 @@
+import { useState } from "react";
+import PatientApi from "@/features/patient/api/PatientApi";
+import { validateFields } from "@/utils/wizardValidation";
+
+
+export default function useTreatmentplanWizard() {
+  const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState({});
+
+  const initialFormData = {
+    patient: {},
+
+    conditions: {
+      conditionDetails: {},
+    },
+    treatmentPlan: {
+      staffId: null,
+      startDate: "",
+      endDate: "",
+      totalFee: 0,
+      installment: 1,
+      round: 1,
+      status: "",
+      discount: 0,
+      notes: "",
+      notifications: "",
+    },
+    patientServices: [
+      // {
+      //   serviceId,
+      //   serviceName,
+      //   fee,
+      //   requirements: [
+      //     {
+      //       serviceRequirementId: 1, 
+      //       value: []
+      //     }
+      //   ]
+      // }
+    ],
+    currentRequirements: [],
+    payment: {
+      discount:0,
+      dueAmount:0,
+      installment:0,
+      paidAmount: 0,
+      payable: 0,
+      totalFee:0
+
+    },
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const nextStep = () => {
+    if (!validateCurrentStep()) return;
+
+    setStep((prev) => Math.min(prev + 1, 4));
+  };
+
+  const prevStep = () => {
+    setStep((prev) => Math.max(prev - 1, 1));
+  };
+
+  const goToStep = (stepNumber) => {
+    setStep(stepNumber);
+  };
+
+  const updateSection = (section, value) => {
+    setFormData((prev) => {
+      if (Array.isArray(value)) {
+        return { ...prev, [section]: value };
+      }
+
+      if (value !== null && typeof value === "object") {
+        return {
+          ...prev,
+          [section]: {
+            ...(prev[section] || {}),
+            ...value,
+          },
+        };
+      }
+      return {
+        ...prev,
+        [section]: value,
+      };
+    });
+  };
+
+  const resetWizard = () => {
+    setStep(1);
+    setFormData(initialFormData);
+  };
+
+  console.log("Form Data", formData);
+
+  const handleSubmit = async () => {
+    await PatientApi.create(formData);
+  };
+
+  const updateValue = (path, value) => {
+    setFormData((prev) => {
+      const updated = { ...prev };
+
+      const key = path.split(".");
+
+      let current = updated;
+
+      for (let i = 0; i < key.length - 1; i++) {
+        current[key[i]] = {
+          ...(current[key[i]] || {}),
+        };
+        current = current[key[i]];
+      }
+      current[key[key.length - 1]] = value;
+      return updated;
+    });
+  };
+
+  // ولیدیشن برای فیلد های ضروری برای هر مرحله
+  const validateCurrentStep = () => {
+    let validationError = {};
+
+    switch (step) {
+      case 1:
+        // validationError = validateFields(PatientFields, formData.patient);
+        break;
+      case 2:
+        // validationError = validateFields(
+        //   ConditionDetailsFields,
+        //   formData.conditions,
+        // );
+        break;
+
+      case 3:
+        // validationError = validateFields(
+        //   AppointmentFields([], []), // یا fields فعلی
+        //   formData.services.appointment,
+        // );
+        break;
+
+      case 4:
+        validationError = validateFields(
+          [
+            {
+              name: "totalFee",
+              label: "مجموع فیس",
+              required: true,
+            },
+            {
+              name: "paidAmount",
+              label: "مبلغ دریافت شده",
+              required: true,
+            },
+            {
+              name: "installment",
+              label: "تعداد اقساط",
+              required: true,
+            },
+          ],
+          formData.payment,
+        );
+        break;
+      default:
+        validationError = {};
+    }
+      console.log("Validation Error:", validationError);
+    setErrors(validationError);
+    return Object.keys(validationError).length === 0;
+  };
+
+  return {
+    step,
+
+    formData,
+    setFormData,
+
+    nextStep,
+    prevStep,
+    goToStep,
+
+    updateSection,
+    updateValue,
+    resetWizard,
+    errors,
+    setErrors,
+
+    handleSubmit,
+
+    isFirstStep: step === 1,
+    isLastStep: step === 4,
+
+    validateCurrentStep,
+  };
+}

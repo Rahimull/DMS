@@ -31,11 +31,10 @@ export default function PaymentCard(){
     onSuccess: refreshPatient,
   });
   const handlePayment = ()=>{
-             curdPayment.openCreate({
+        curdPayment.openCreate({
         appointmentId: appointments?.at(-1).id,
         installmentCounter: installmentCounter,
         staffId: appointments?.at(-1).staffId,
-
        });
        
   }

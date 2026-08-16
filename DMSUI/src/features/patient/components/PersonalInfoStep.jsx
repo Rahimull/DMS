@@ -24,8 +24,8 @@ export default function PersonalInfoStep({
         type === "checkbox"
           ? checked
           : value,
-
     });
+   
 
   };
 

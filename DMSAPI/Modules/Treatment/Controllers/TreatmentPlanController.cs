@@ -1,5 +1,8 @@
 using System.Text.Json;
 using DMS.Models;
+using DMS.Modules.Finances.Entities;
+using DMS.Modules.Patients.Entities;
+using DMS.Modules.Treatments.DTOs;
 using DMS.Modules.Treatments.Entities;
 using DMS.Persistence;
 using DMS.Shared.Controllers;
@@ -16,8 +19,9 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
     {
     }
 
-  
-     public override async Task<IActionResult> GetPaged([FromBody] QueryParams query)
+
+    #region  GetPaged
+    public override async Task<IActionResult> GetPaged([FromBody] QueryParams query)
     {
         IQueryable<TreatmentPlan> data = _context.TreatmentPlans.AsNoTracking()
                 .Include(x => x.Patient)
@@ -53,7 +57,10 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
         });
     }
 
+    #endregion
 
+
+#region SAVE TREATEMENT PLAN 
     [HttpPost("save")]
     public async Task<IActionResult> SaveTreatment([FromBody] JsonElement model)
     {
@@ -128,7 +135,7 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
             }
 
             // Calculate Total Fee
-            plan.TotalFee = Math.Max(0,totalFee - plan.Discount);
+            plan.TotalFee = Math.Max(0, totalFee - plan.Discount);
 
             // --------------------------
             // Save Conditions
@@ -183,6 +190,162 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
         }
     }
 
+
+#endregion 
+
+#region ADD NEW TREATMENT PLAN
+[HttpPost("treatmentplan")]
+public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrationsDto dto)
+    {
+        System.Console.WriteLine("data from frant end: ", dto);
+        if (dto?.Treatmentplan == null)
+        {
+            return BadRequest("پلان ضروری است");
+        }
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // ======================
+            // 1- Get Patient By Id  
+            // ======================
+            
+            var patientObj = await _context.Patients.FirstOrDefaultAsync(x => x.Id == dto.Treatmentplan.PatientId);
+            if (patientObj == null) return NotFound("مریض موجود نیست");
+            Patient patient = patientObj;
+
+
+            // ======================
+            // 2- Conditions
+            // ======================
+            if (dto.Conditions?.ConditionDetails != null)
+            {
+                foreach (var item in dto.Conditions.ConditionDetails)
+                {
+                    var detail = item.Value;
+
+                    var conditionDetail = new ConditionDetail
+                    {
+                        PatientId = patient?.Id,
+                        ConditionId = detail.ConditionId,
+                        Severty = detail.Severity,
+                        DaignosisDate = string.IsNullOrEmpty(detail.DiagnosisDate) ? null : DateOnly.Parse(detail.DiagnosisDate),
+                        Result = detail.Result ?? 0,
+                        Notes = detail.Notes
+
+                    };
+                    _context.ConditionDetails.Add(conditionDetail);
+                }
+                // await _context.SaveChangesAsync();
+            }
+
+            // ======================
+            // 3- Treatmentplan
+            // ======================
+
+           TreatmentPlan? treatmentplan = null;
+            if (dto.Treatmentplan != null)
+            {
+                
+                treatmentplan = new TreatmentPlan
+                {
+                    PatientId = patient!.Id,
+                    StaffId = dto.Treatmentplan.StaffId,
+                    Installments = dto.Treatmentplan.Installment,
+                    Round = dto.Treatmentplan.Round,
+                    Discount = dto.Treatmentplan.Discount,
+                    TotalFee = dto.Treatmentplan.TotalFee,
+                    StartDate = dto.Treatmentplan.StartDate,
+                    EndDate = dto.Treatmentplan.EndDate,
+                    Status = dto.Treatmentplan.Status,
+                    Notes = dto.Treatmentplan.Details,
+                };
+                _context.TreatmentPlans.Add(treatmentplan);
+                await _context.SaveChangesAsync();
+            }
+
+            // ======================
+            // 4- Patient Services
+            // ======================
+
+            if (dto.Services?.PatientServices != null)
+            {
+                foreach (var serviceDto in dto.Services.PatientServices)
+                {
+                    foreach (var requirement in serviceDto.Requirements)
+                    {
+                        var patientService = new PatientService
+                        {
+                            PatientId = patient!.Id,
+                            ServiceId = serviceDto.ServiceId,
+                            TreatmentPlanId = treatmentplan?.Id,
+
+                            ServiceRequirementId =
+                                requirement.ServiceRequirementId,
+
+                            Value =
+                                serviceDto.Description +
+                                " " +
+                                JsonSerializer.Serialize(
+                                    requirement.Value
+                                )
+                        };
+
+                        _context.PatientServices.Add(patientService);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+
+
+            // ======================
+            // 5- Payment
+            // ======================
+
+            if (dto.Payment != null)
+            {
+                var payment = new FeePayment
+                {
+                    InstallmentCounter = treatmentplan?.Installments ?? 1,
+                    PaymentDate = DateTime.UtcNow,
+                    PaidAmount = dto.Payment.PaidAmount,
+                    DueAmount = dto.Payment.DueAmount,
+                    WholeFeePaid = 0,
+                    TreatmentPlanId = treatmentplan?.Id,
+                    StaffId = treatmentplan?.StaffId ?? 0
+                };
+
+                _context.FeePayments.Add(payment);
+                await _context.SaveChangesAsync();
+            }
+
+            await transaction.CommitAsync();
+
+            return Ok(new
+            {
+                message = "جلسه به درستی ثبت شد.",
+                patientId = patient!.Id
+            });
+
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            return BadRequest(new
+            {
+                message = ex.Message,
+                innerException = ex.InnerException?.Message,
+                stackTrace = ex.StackTrace
+
+            });
+        }
+    }
+
+#endregion
+#region GET TREATMENT DETAILS
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTreatmentDetails(int id)
     {
@@ -285,6 +448,10 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
         });
     }
 
+#endregion
+
+
+#region UPDATE TREATMENT PLAN
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateTreatment(
         int id,
@@ -412,7 +579,7 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
             _context.ConditionDetails.RemoveRange(oldConditions);
 
             // Add New Conditions
-            
+
             foreach (var item in model.GetProperty("conditions")
                 .EnumerateArray())
             {
@@ -461,6 +628,9 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
         }
     }
 
+#endregion
+
+#region DELETE TREAMENT PLAN
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTreatment(int id)
     {
@@ -513,4 +683,6 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
             });
         }
     }
+
+    #endregion
 }

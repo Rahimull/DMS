@@ -182,6 +182,63 @@ const Input = ({
         </label>
       )}
 
+      {/* Checkbox Group */}
+
+{type === "checkbox-group" && (
+  <div className="space-y-3">
+    {label && (
+      <label className="text-sm font-semibold text-slate-700">
+        {label}
+        {required && <span className="text-red-500">*</span>}
+      </label>
+    )}
+
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      {options.map((opt) => {
+        const checked = Array.isArray(value)
+          ? value.includes(opt.value)
+          : false;
+
+        return (
+          <label
+            key={opt.value}
+            className="
+              flex items-center gap-2
+              rounded-lg border border-slate-200
+              p-3 cursor-pointer
+              hover:bg-slate-50
+            "
+          >
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={(e) => {
+                let newValue = Array.isArray(value) ? [...value] : [];
+
+                if (e.target.checked) {
+                  newValue.push(opt.value);
+                } else {
+                  newValue = newValue.filter((x) => x !== opt.value);
+                }
+
+                onChange({
+                  target: {
+                    name,
+                    value: newValue,
+                  },
+                });
+              }}
+            />
+
+            <span>{opt.label}</span>
+          </label>
+        );
+      })}
+    </div>
+  </div>
+)}
+
+
       {/* File Upload */}
 
       {type === "file" && (

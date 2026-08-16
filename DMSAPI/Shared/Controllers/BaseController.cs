@@ -37,7 +37,21 @@ public abstract class BaseController<TEntity> : ControllerBase
             data = ApplySearch(data, query.Search.SearchTerm);
         }
 
-        // Sorting
+        // Default Sorting (lastest first)
+        if (string.IsNullOrWhiteSpace(query.Sorting?.SortBy))
+        {
+            var createdAtProperty = typeof(TEntity).GetProperty("CreatedAt");
+            if(createdAtProperty != null)
+            {
+                data = data.OrderByDescending(x => EF.Property<int>(x, "Id"));
+            }
+            else
+            {
+                data = data.OrderByDescending(x => EF.Property<int>(x, "Id"));
+            }
+        }
+
+        // Custom Sorting
         if (!string.IsNullOrWhiteSpace(query.Sorting?.SortBy))
         {
             Console.WriteLine($"Sorting: {query.Sorting.SortBy} Desc:{query.Sorting.IsDescending}");
