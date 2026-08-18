@@ -38,9 +38,8 @@ public class MedicineInventory : BaseEntity
 
     [MaxLength(200)]
     [Column("notes")]
-    public string? notes { get; set; }
-
-    
+    public string? Notes { get; set; }
 
     public ICollection<MedicineSale> Sales { get; set; } = new List<MedicineSale>();
+    public ICollection<PrescriptionItem> PrescriptionItem { get; set; } = new List<PrescriptionItem>();
 }

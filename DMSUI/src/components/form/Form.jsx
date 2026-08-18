@@ -12,8 +12,11 @@ const Form = ({
   onCancel,
   showActions = true,
   padding = "p-8",
-  border= true,
+  border = true,
   columns = 2,
+
+  // اضافه شد
+  children,
 }) => {
   const initialState = useMemo(() => {
     const state = {};
@@ -59,7 +62,11 @@ const Form = ({
         ? checked
         : type === "file"
         ? files?.[0]
-        : type === "number" ? value === "" ? null : Number(value) : value;
+        : type === "number"
+        ? value === ""
+          ? null
+          : Number(value)
+        : value;
 
     setFormData((prev) => ({
       ...prev,
@@ -69,14 +76,14 @@ const Form = ({
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
 
     if (serverErrors[name]) {
       setServerErrors((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
   };
@@ -155,30 +162,20 @@ const Form = ({
     <form
       dir="rtl"
       onSubmit={handleSubmit}
-      className={`rounded-3xl bg-whie ${border ? "boder border-slate-200 shadow-sm" : ""} ${padding}`}
+      className={`rounded-3xl bg-white ${
+        border
+          ? "border border-slate-200 shadow-sm"
+          : ""
+      } ${padding}`}
     >
       {/* Header */}
 
-      <div
-       
-      >
-        <h2
-          className="
-            text-xl
-            font-bold
-            text-slate-800
-          "
-        >
+      <div>
+        <h2 className="text-xl font-bold text-slate-800">
           {title}
         </h2>
 
-        <div
-          className="
-            mt-1
-            text-sm
-            text-slate-500
-          "
-        >
+        <div className="mt-1 text-sm text-slate-500">
           {description}
         </div>
       </div>
@@ -186,18 +183,7 @@ const Form = ({
       {/* General Error */}
 
       {serverErrors.general && (
-        <div
-          className="
-            mb-6
-            rounded-2xl
-            border
-            border-red-200
-            bg-red-50
-            p-4
-            text-sm
-            text-red-600
-          "
-        >
+        <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
           {serverErrors.general}
         </div>
       )}
@@ -205,12 +191,12 @@ const Form = ({
       {/* Fields */}
 
       <div
-         className={`
-            grid
+        className={`
+          grid
           grid-cols-1
           gap-3
           ${columns === 2 ? "md:grid-cols-2" : ""}
-          `}
+        `}
       >
         {fields.map((field) => (
           <div
@@ -243,6 +229,13 @@ const Form = ({
           </div>
         ))}
       </div>
+
+      {/* =====================================
+          Extra Content
+          فقط برای فرم‌هایی مثل Prescription
+      ====================================== */}
+
+      {children}
 
       {/* Actions */}
 

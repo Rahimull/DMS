@@ -100,6 +100,19 @@ public abstract class BaseController<TEntity> : ControllerBase
     }
 
     #endregion
+    #region Get All
+
+    [HttpGet("getAll")]
+    public virtual async Task<IActionResult> GetAll(int id)
+    {
+        var entity = await _db
+            .AsNoTracking()
+            .ToListAsync();
+
+        return Ok(entity);
+    }
+
+    #endregion
 
     #region Create
 

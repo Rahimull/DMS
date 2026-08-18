@@ -60,7 +60,7 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
     #endregion
 
 
-#region SAVE TREATEMENT PLAN 
+    #region SAVE TREATEMENT PLAN 
     [HttpPost("save")]
     public async Task<IActionResult> SaveTreatment([FromBody] JsonElement model)
     {
@@ -191,16 +191,20 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
     }
 
 
-#endregion 
+    #endregion
 
-#region ADD NEW TREATMENT PLAN
-[HttpPost("treatmentplan")]
-public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrationsDto dto)
+    #region ADD NEW TREATMENT PLAN
+    [HttpPost("treatmentplan")]
+    public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrationsDto dto)
     {
         System.Console.WriteLine("data from frant end: ", dto);
         if (dto?.Treatmentplan == null)
         {
             return BadRequest("پلان ضروری است");
+        }
+        if (dto?.Patient == null)
+        {
+            return BadRequest("اطلاعات مریض ارسال نشده.");
         }
 
         using var transaction = await _context.Database.BeginTransactionAsync();
@@ -210,10 +214,24 @@ public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrat
             // ======================
             // 1- Get Patient By Id  
             // ======================
+
+           var patient = new Patient
+           {
+               FirstName = dto.Patient.FirstName,
+               LastName = dto.Patient.LastName,
+               FatherName = dto.Patient.FatherName,
+               StaffId = dto.Treatmentplan.StaffId ?? 1,
+               Phone = dto.Patient.Phone,
+               Age = dto.Patient.Age,
+               Gender = dto.Patient.Gender,
+               MaritalStatus = dto.Patient.MaritalStatus,
+               BloodGroup = dto.Patient.BloodGroup,
+               RegistrationDate = dto.Patient.RegistrationDate ?? DateOnly.FromDateTime(DateTime.Now),
+               Address = dto.Patient.Address,
+           };
             
-            var patientObj = await _context.Patients.FirstOrDefaultAsync(x => x.Id == dto.Treatmentplan.PatientId);
-            if (patientObj == null) return NotFound("مریض موجود نیست");
-            Patient patient = patientObj;
+            _context.Patients.Add(patient);
+            await _context.SaveChangesAsync();
 
 
             // ======================
@@ -227,7 +245,7 @@ public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrat
 
                     var conditionDetail = new ConditionDetail
                     {
-                        PatientId = patient?.Id,
+                        PatientId = patient.Id,
                         ConditionId = detail.ConditionId,
                         Severty = detail.Severity,
                         DaignosisDate = string.IsNullOrEmpty(detail.DiagnosisDate) ? null : DateOnly.Parse(detail.DiagnosisDate),
@@ -244,13 +262,13 @@ public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrat
             // 3- Treatmentplan
             // ======================
 
-           TreatmentPlan? treatmentplan = null;
+            TreatmentPlan? treatmentplan = null;
             if (dto.Treatmentplan != null)
             {
-                
+
                 treatmentplan = new TreatmentPlan
                 {
-                    PatientId = patient!.Id,
+                    PatientId = patient.Id,
                     StaffId = dto.Treatmentplan.StaffId,
                     Installments = dto.Treatmentplan.Installment,
                     Round = dto.Treatmentplan.Round,
@@ -269,32 +287,26 @@ public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrat
             // 4- Patient Services
             // ======================
 
-            if (dto.Services?.PatientServices != null)
+            if (dto.PatientServices != null && dto.PatientServices.Any())
             {
-                foreach (var serviceDto in dto.Services.PatientServices)
+                foreach (var ps in dto.PatientServices)
                 {
-                    foreach (var requirement in serviceDto.Requirements)
+                    foreach (var re in ps.Requirements)
                     {
                         var patientService = new PatientService
                         {
-                            PatientId = patient!.Id,
-                            ServiceId = serviceDto.ServiceId,
+                            PatientId = patient.Id,
+                            ServiceId = ps.ServiceId,
                             TreatmentPlanId = treatmentplan?.Id,
-
-                            ServiceRequirementId =
-                                requirement.ServiceRequirementId,
-
-                            Value =
-                                serviceDto.Description +
-                                " " +
-                                JsonSerializer.Serialize(
-                                    requirement.Value
-                                )
+                            ServiceRequirementId = re.ServiceRequirementId,
+                            Value = JsonSerializer.Serialize(re.Value)
                         };
 
                         _context.PatientServices.Add(patientService);
+
                     }
                 }
+
 
                 await _context.SaveChangesAsync();
             }
@@ -327,7 +339,7 @@ public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrat
             return Ok(new
             {
                 message = "جلسه به درستی ثبت شد.",
-                patientId = patient!.Id
+                patientId = patient.Id
             });
 
         }
@@ -344,8 +356,8 @@ public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrat
         }
     }
 
-#endregion
-#region GET TREATMENT DETAILS
+    #endregion
+    #region GET TREATMENT DETAILS
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTreatmentDetails(int id)
     {
@@ -448,10 +460,10 @@ public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrat
         });
     }
 
-#endregion
+    #endregion
 
 
-#region UPDATE TREATMENT PLAN
+    #region UPDATE TREATMENT PLAN
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateTreatment(
         int id,
@@ -628,9 +640,9 @@ public async Task<IActionResult> Treatmentplan([FromBody] TreatmentplanRegistrat
         }
     }
 
-#endregion
+    #endregion
 
-#region DELETE TREAMENT PLAN
+    #region DELETE TREAMENT PLAN
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTreatment(int id)
     {

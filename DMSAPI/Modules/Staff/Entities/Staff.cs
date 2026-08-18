@@ -94,5 +94,6 @@ public class Staff : BaseEntity
         public ICollection<ExpenseDetail> ExpenseDetails { get; set; } = new List<ExpenseDetail>();
         public ICollection<ExpenseInvoice> ExpenseInvoices { get; set; } = new List<ExpenseInvoice>();
         public ICollection<SupplySale> SupplySales { get; set; } = new List<SupplySale>();
+        public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
        
 }

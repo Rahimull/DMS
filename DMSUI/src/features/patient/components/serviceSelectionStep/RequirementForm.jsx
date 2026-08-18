@@ -12,16 +12,7 @@ export default function RequirementForm({
   const [loading, setLoading] = useState(false);
 
   // =====================================================
-  // این همان state قبلی است
-  // =====================================================
-
-  const currentRequirements =
-    Array.isArray(formData?.currentRequirements)
-      ? formData.currentRequirements
-      : [];
-
-  // =====================================================
-  // Load requirements
+  // Load requirements of selected service
   // =====================================================
 
   useEffect(() => {
@@ -40,13 +31,11 @@ export default function RequirementForm({
           );
 
         setRequirements(
-          Array.isArray(data)
-            ? data
-            : []
+          Array.isArray(data) ? data : []
         );
       } catch (error) {
         console.error(
-          "LOAD REQUIREMENTS ERROR:",
+          "Load requirements error:",
           error
         );
 
@@ -60,17 +49,57 @@ export default function RequirementForm({
   }, [service?.id]);
 
   // =====================================================
-  // Change
+  // Patient Services
+  // =====================================================
+
+  const patientServices = Array.isArray(
+    formData?.patientServices
+  )
+    ? formData.patientServices
+    : [];
+
+  // =====================================================
+  // Current Service
+  // =====================================================
+
+  const currentService = patientServices.find(
+    (item) =>
+      Number(item.serviceId) ===
+      Number(service?.id)
+  );
+
+  // =====================================================
+  // Requirements of Current Service
+  // =====================================================
+
+  const currentRequirements =
+    Array.isArray(currentService?.requirements)
+      ? currentService.requirements
+      : [];
+
+  // =====================================================
+  // HANDLE CHANGE
   // =====================================================
 
   const handleChange = (
     serviceRequirementId,
     value
   ) => {
-    console.log("CHANGE:", {
-      serviceRequirementId,
-      value,
-    });
+    console.log("================================");
+    console.log("REQUIREMENT CHANGE");
+
+    console.log("SERVICE ID:", service?.id);
+
+    console.log(
+      "REQUIREMENT ID:",
+      serviceRequirementId
+    );
+
+    console.log("VALUE:", value);
+
+    // ===================================================
+    // Update current service requirements
+    // ===================================================
 
     const updatedRequirements = [
       ...currentRequirements,
@@ -79,9 +108,7 @@ export default function RequirementForm({
     const index =
       updatedRequirements.findIndex(
         (item) =>
-          Number(
-            item.serviceRequirementId
-          ) ===
+          Number(item.serviceRequirementId) ===
           Number(serviceRequirementId)
       );
 
@@ -98,48 +125,58 @@ export default function RequirementForm({
       };
     }
 
-    // -----------------------------------------
-    // مهم: currentRequirements را update کن
-    // -----------------------------------------
-
-    updateSection(
-      "currentRequirements",
+    console.log(
+      "UPDATED REQUIREMENTS:",
       updatedRequirements
     );
 
-    // -----------------------------------------
-    // patientServices را هم update کن
-    // -----------------------------------------
+    // ===================================================
+    // Update patientServices
+    // ===================================================
 
-    const patientServices =
-      Array.isArray(formData?.patientServices)
-        ? formData.patientServices
-        : [];
-
-    const updatedServices =
+    const updatedPatientServices =
       patientServices.map(
         (patientService) => {
+
+          // ---------------------------------------------
+          // اگر سرویس فعلی نیست
+          // ---------------------------------------------
+
           if (
-            Number(
-              patientService.serviceId
-            ) !==
+            Number(patientService.serviceId) !==
             Number(service?.id)
           ) {
             return patientService;
           }
 
+          // ---------------------------------------------
+          // سرویس فعلی
+          // ---------------------------------------------
+
           return {
             ...patientService,
+
             requirements:
               updatedRequirements,
           };
         }
       );
 
+    console.log(
+      "UPDATED PATIENT SERVICES:",
+      updatedPatientServices
+    );
+
+    // ===================================================
+    // Update parent state
+    // ===================================================
+
     updateSection(
       "patientServices",
-      updatedServices
+      updatedPatientServices
     );
+
+    console.log("================================");
   };
 
   // =====================================================
@@ -155,15 +192,25 @@ export default function RequirementForm({
   }
 
   // =====================================================
+  // No service
+  // =====================================================
+
+  if (!service?.id) {
+    return null;
+  }
+
+  // =====================================================
   // Render
   // =====================================================
 
   return (
     <div className="space-y-6 p-1">
 
+      {/* Service */}
+
       <div>
         <h3 className="text-lg font-bold">
-          {service?.name}
+          {service.name}
         </h3>
 
         <p className="text-sm text-slate-500">
@@ -171,31 +218,39 @@ export default function RequirementForm({
         </p>
       </div>
 
-      {requirements.map((item) => {
+      {/* Requirements */}
 
-        const selectedRequirement =
-          currentRequirements.find(
-            (req) =>
-              Number(
-                req.serviceRequirementId
-              ) ===
-              Number(
-                item.serviceRequirementId
-              )
+      {requirements.length === 0 ? (
+        <div className="rounded-lg border bg-slate-50 p-4 text-center text-sm text-slate-500">
+          برای این خدمت ضرورتی ثبت نشده است.
+        </div>
+      ) : (
+        requirements.map((item) => {
+
+          const selectedRequirement =
+            currentRequirements.find(
+              (req) =>
+                Number(
+                  req.serviceRequirementId
+                ) ===
+                Number(
+                  item.serviceRequirementId
+                )
+            );
+
+          const value =
+            selectedRequirement?.value ?? "";
+
+          return (
+            <RequirementRenderer
+              key={item.id}
+              requirement={item}
+              value={value}
+              onChange={handleChange}
+            />
           );
-
-        const value =
-          selectedRequirement?.value ?? "";
-
-        return (
-          <RequirementRenderer
-            key={item.id}
-            requirement={item}
-            value={value}
-            onChange={handleChange}
-          />
-        );
-      })}
+        })
+      )}
     </div>
   );
 }

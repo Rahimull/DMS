@@ -12,6 +12,7 @@ import TreatmentPlanStepper from "@/features/patient/components/treatmentPlan/Tr
 import useTreatmentplanWizard from "@/features/patient/hooks/useTreatmentplanWizard";
 import TreatmentplanServiceSelectionStep from "@/features/patient/components/treatmentPlan/TreatmentplanServiceSelectionStep";
 import TrFeePaymentStep from "@/features/patient/components/treatmentPlan/TrFeePaymentStep";
+import TreatmentPlanApi from "@/features/treatment/api/TreatmentPlanApi";
 
 const STEP_TITLES = {
   1: {
@@ -69,7 +70,7 @@ export default function TreatmentPlanWizard() {
     try {
       setLoading(true);
 
-      await PatientApi.register(formData);
+      await TreatmentPlanApi.treatmentPlan(formData);
 
       toast.success("مریض با موفقیت ثبت شد.");
 

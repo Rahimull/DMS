@@ -119,8 +119,6 @@ public class PatientController : BaseController<Patient>
                                 requirement.ServiceRequirementId,
 
                             Value =
-                                serviceDto.Description +
-                                " " +
                                 JsonSerializer.Serialize(
                                     requirement.Value
                                 )
@@ -276,12 +274,7 @@ public class PatientController : BaseController<Patient>
                             ServiceRequirementId =
                                 requirement.ServiceRequirementId,
 
-                            Value =
-                                serviceDto.Description +
-                                " " +
-                                JsonSerializer.Serialize(
-                                    requirement.Value
-                                )
+                            Value = JsonSerializer.Serialize(requirement.Value)
                         };
 
                         _context.PatientServices.Add(patientService);

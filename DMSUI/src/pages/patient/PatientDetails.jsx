@@ -20,6 +20,7 @@ import ServicesCard from "@/features/patient/components/Details/ServicesCard";
 import AppointmentCard from "@/features/patient/components/Details/AppointmentCard";
 import XrayCard from "../../features/patient/components/Details/XrayCard";
 import usePatientDetails from "@/features/patient/hooks/usePatientDetails";
+import PrescriptionCard from "@/features/patient/components/PrescriptionCard";
 
 export default function PatientDetails() {
   const {finance: {totalPaid},patient} = usePatientDetails();
@@ -140,6 +141,10 @@ export default function PatientDetails() {
                   <Plus className="me-2 h-4 w-4" />
                   ملاقات
                 </Button>
+                <Button variant="add" className="rounded-[5px]">
+                  <Plus className="me-2 h-4 w-4" />
+                  تجویز نسخه
+                </Button>
               </div>
             </div>
 
@@ -171,13 +176,13 @@ export default function PatientDetails() {
       {/* Patient Summary */}
       <div
         className="
-    mt-8
-    grid
-    grid-cols-1
-    gap-5
-    sm:grid-cols-2
-    xl:grid-cols-4
-  "
+          mt-8
+          grid
+          grid-cols-1
+          gap-5
+          sm:grid-cols-2
+          xl:grid-cols-4
+        "
       >
         <SummaryCard
           title="خدمات"
@@ -231,6 +236,8 @@ export default function PatientDetails() {
       {/* فایل ها و تصاویر */}
 
       <XrayCard />
+       {/*نسخه ها */}
+      <PrescriptionCard />
     </div>
   );
 }

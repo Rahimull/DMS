@@ -11,10 +11,16 @@ const FormModal = ({
   loading,
   submitText = "ذخیره",
   onCancel,
-  discription,
+  discription = "",
+  columns,
+  children,
 }) => {
   return (
-    <Modal open={open} onClose={onClose} title={title}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={title}
+    >
       <Form
         title=""
         description={discription}
@@ -23,11 +29,13 @@ const FormModal = ({
         onSubmit={onSubmit}
         loading={loading}
         submitText={submitText}
-        onCancel={onClose}
+        onCancel={onCancel ?? onClose}
         padding="p-3"
         border={false}
-        columns={1}
-      />
+        columns={columns}
+      >
+        {children}
+      </Form>
     </Modal>
   );
 };

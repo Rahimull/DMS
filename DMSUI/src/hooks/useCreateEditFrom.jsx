@@ -191,6 +191,13 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     },
   ];
 
+  const updateSection = (section, data) => {
+  setFormData((prev) => ({
+    ...prev,
+    [section]: data,
+  }));
+};
+
   return {
     // API State
     loading,

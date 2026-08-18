@@ -14,6 +14,9 @@ import PatientRegistrationWizard from "@/pages/patient/PatientRegistrationWizard
 import PatientDetails from "@/pages/patient/PatientDetails";
 import AppointmentWizard from "@/pages/patient/AppointmentWizard";
 import TreatmentPlanWizard from "@/pages/patient/TreatmentPlanWizard";
+import PrescriptionPage from "@/features/Pharmacy/pages/PrescriptionPage";
+import PrescriptionItemPage from "@/features/Pharmacy/pages/PrescriptionItemPage";
+import InventoryPage from "@/features/Pharmacy/pages/InventoryPage";
 
 
 export const router = createBrowserRouter([
@@ -77,7 +80,21 @@ export const router = createBrowserRouter([
         path: "/condition",
         element: <ConditionPage />
         },
-      
+
+        // بخش فارمسی
+      {
+        path: "/Prescription",
+        element: <PrescriptionPage />
+        },
+      {
+        path: "/PrescriptionItem",
+        element: <PrescriptionItemPage />
+        },
+      {
+        path: "/MedicineInventory",
+        element: <InventoryPage />
+        },
+
     ],
   },
 ]);

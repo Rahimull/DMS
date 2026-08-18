@@ -10,14 +10,9 @@ import usePatientDetails from "../../hooks/usePatientDetails";
 export default function PaymentCard(){
      // باز بسته شدن تصاویر اکسری یا لابراتوار   
       const [openPayment, setOpenPayment] = useState(false);
-      const {finance:{
-       feePayments, totalFee, totalDiscount, totalPaid, remaining, installment, installmentCounter, appointments
-      },patient, refreshPatient} = usePatientDetails();
+      const {finance:{feePayments, totalFee, totalDiscount, totalPaid, remaining, installment, installmentCounter, appointments},patient, refreshPatient} = usePatientDetails();
       
-
-     
-
-
+  
   // پرداخت قسط دوم و سودم ...
    const PaymentMessages = {
     create: "پرداخت با موفقیت ثبت شد.",

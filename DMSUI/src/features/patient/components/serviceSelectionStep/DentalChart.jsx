@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { RotateCcw, SmilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -5,9 +6,9 @@ export default function DentalChart({
   value = [],
   onChange,
 }) {
-  // =========================================
-  // FDI Tooth Numbers
-  // =========================================
+  // =====================================================
+  // Teeth
+  // =====================================================
 
   const upperRight = [18, 17, 16, 15, 14, 13, 12, 11];
   const upperLeft = [21, 22, 23, 24, 25, 26, 27, 28];
@@ -15,64 +16,84 @@ export default function DentalChart({
   const lowerRight = [48, 47, 46, 45, 44, 43, 42, 41];
   const lowerLeft = [31, 32, 33, 34, 35, 36, 37, 38];
 
-  // =========================================
-  // Normalize value
-  // =========================================
+  // =====================================================
+  // Local selected teeth
+  // =====================================================
 
-  const selected = Array.isArray(value)
-    ? value.map(Number)
-    : [];
+  const [selected, setSelected] = useState(
+    Array.isArray(value)
+      ? value.map(Number)
+      : []
+  );
 
-  // =========================================
-  // Toggle Tooth
-  // =========================================
+  // =====================================================
+  // Sync when service/value changes
+  // =====================================================
+
+  useEffect(() => {
+    setSelected(
+      Array.isArray(value)
+        ? value.map(Number)
+        : []
+    );
+  }, [JSON.stringify(value)]);
+
+  // =====================================================
+  // Select / Unselect tooth
+  // =====================================================
 
   const toggleTooth = (tooth) => {
-    let updated;
+    setSelected((previous) => {
+      const exists = previous.includes(tooth);
 
-    if (selected.includes(tooth)) {
-      // حذف دندان
-      updated = selected.filter(
-        (item) => item !== tooth
-      );
-    } else {
-      // اضافه کردن دندان
-      updated = [...selected, tooth];
-    }
+      const updated = exists
+        ? previous.filter(
+            (item) => item !== tooth
+          )
+        : [...previous, tooth];
 
-    console.log("DentalChart changed:", updated);
+      console.log("TOOTH:", tooth);
+      console.log("UPDATED TEETH:", updated);
 
-    onChange(updated);
+      // Send to parent
+      onChange(updated);
+
+      return updated;
+    });
   };
 
-  // =========================================
+  // =====================================================
   // Clear
-  // =========================================
+  // =====================================================
 
   const clearSelection = () => {
+    setSelected([]);
+
     onChange([]);
   };
 
-  // =========================================
-  // Tooth Component
-  // =========================================
+  // =====================================================
+  // Tooth
+  // =====================================================
 
   const Tooth = ({ number }) => {
-    const isSelected = selected.includes(number);
+    const isSelected =
+      selected.includes(number);
 
     return (
       <button
         type="button"
-        onClick={() => toggleTooth(number)}
+        onClick={() =>
+          toggleTooth(number)
+        }
         title={`دندان ${number}`}
         className={`
           group
           relative
           flex
-          h-16
-          w-12
+          h-14
+          w-11
           shrink-0
-          cursor-pointer
           flex-col
           items-center
           justify-center
@@ -106,15 +127,14 @@ export default function DentalChart({
           }
         `}
       >
-        {/* Tooth Shape */}
         <div
           className={`
             mb-1
-            h-8
-            w-8
+            h-7
+            w-7
             rounded-[45%]
             border
-            transition-all
+            transition
 
             ${
               isSelected
@@ -124,7 +144,6 @@ export default function DentalChart({
           `}
         />
 
-        {/* Tooth Number */}
         <span className="text-[11px] font-bold">
           {number}
         </span>
@@ -132,9 +151,9 @@ export default function DentalChart({
     );
   };
 
-  // =========================================
-  // Jaw Row
-  // =========================================
+  // =====================================================
+  // Jaw
+  // =====================================================
 
   const JawRow = ({
     right,
@@ -143,7 +162,6 @@ export default function DentalChart({
     return (
       <div className="flex items-center justify-center gap-1">
 
-        {/* Right Side */}
         <div className="flex gap-1">
           {right.map((tooth) => (
             <Tooth
@@ -153,12 +171,10 @@ export default function DentalChart({
           ))}
         </div>
 
-        {/* Midline */}
-        <div className="mx-3 flex h-16 items-center">
-          <div className="h-14 border-l-2 border-dashed border-slate-300" />
+        <div className="mx-3 flex h-14 items-center">
+          <div className="h-12 border-l-2 border-dashed border-slate-300" />
         </div>
 
-        {/* Left Side */}
         <div className="flex gap-1">
           {left.map((tooth) => (
             <Tooth
@@ -172,9 +188,9 @@ export default function DentalChart({
     );
   };
 
-  // =========================================
+  // =====================================================
   // Render
-  // =========================================
+  // =====================================================
 
   return (
     <div
@@ -190,9 +206,7 @@ export default function DentalChart({
       "
     >
 
-      {/* =====================================
-          Header
-      ===================================== */}
+      {/* Header */}
 
       <div
         dir="rtl"
@@ -203,7 +217,7 @@ export default function DentalChart({
           justify-between
         "
       >
-        {/* Title */}
+
         <div className="flex items-center gap-3">
 
           <div
@@ -224,6 +238,7 @@ export default function DentalChart({
           </div>
 
           <div>
+
             <h3 className="font-bold text-slate-800">
               Dental Chart
             </h3>
@@ -231,11 +246,11 @@ export default function DentalChart({
             <p className="text-xs text-slate-500">
               دندان‌های مورد نظر را انتخاب کنید
             </p>
+
           </div>
 
         </div>
 
-        {/* Clear */}
         {selected.length > 0 && (
           <Button
             type="button"
@@ -256,9 +271,7 @@ export default function DentalChart({
 
       </div>
 
-      {/* =====================================
-          Chart
-      ===================================== */}
+      {/* Chart */}
 
       <div
         className="
@@ -269,9 +282,7 @@ export default function DentalChart({
         "
       >
 
-        {/* ================================
-            Upper Jaw
-        ================================= */}
+        {/* Upper */}
 
         <div className="mb-3 text-center">
           <span
@@ -296,9 +307,7 @@ export default function DentalChart({
           left={upperLeft}
         />
 
-        {/* ================================
-            Center
-        ================================= */}
+        {/* Midline */}
 
         <div className="my-6 flex items-center gap-3">
 
@@ -312,9 +321,7 @@ export default function DentalChart({
 
         </div>
 
-        {/* ================================
-            Lower Jaw
-        ================================= */}
+        {/* Lower */}
 
         <div className="mb-3 text-center">
           <span
@@ -341,9 +348,7 @@ export default function DentalChart({
 
       </div>
 
-      {/* =====================================
-          Selected Teeth
-      ===================================== */}
+      {/* Selected */}
 
       <div
         dir="rtl"
@@ -359,7 +364,6 @@ export default function DentalChart({
 
         <div className="flex items-center justify-between">
 
-          {/* Selected Teeth */}
           <div>
 
             <p className="text-xs text-slate-500">
@@ -374,7 +378,6 @@ export default function DentalChart({
 
           </div>
 
-          {/* Count */}
           <div
             className="
               flex

@@ -1,19 +1,10 @@
 import { useEffect, useState } from "react";
 import { ClipboardList, Plus, Wallet } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import WirzadForm from "@/components/form/WizrdForm";
-
 import ServiceApi from "@/features/service/api/ServiceApi";
 import StaffApi from "@/features/staff/api/StaffApi";
-
-import RequirementForm from "../serviceSelectionStep/RequirementForm";
 import SelectedServicesTable from "../serviceSelectionStep/SelectedServicesTable";
-
 import { TreatmentPlanFields } from "../../fields/TreatmentPlanFields";
-
-
-import { Dialog, DialogTitle, DialogHeader, DialogContent } from "@/components/ui/dialog";
 import TrServiceDetailsDialog from "./trServiceDetailsDialog";
 
 
@@ -78,9 +69,6 @@ export default function TreatmentPlanServiceSelectionStep({
   const selectedServices =
     formData.patientServices ?? [];
 
-  const currentRequirements =
-    formData.currentRequirements ?? [];
-
   
     // -----------------------------------------
   // Open modal for Add Fee for every Service
@@ -107,14 +95,99 @@ export default function TreatmentPlanServiceSelectionStep({
   // Treatment Plan Change
   // -----------------------------------------
 
-  const handleTreatmentPlanChange = (e) => {
-    const { name, value } = e.target;
+// const handleTreatmentPlanChange = (e) => {
+//     const { name, value } = e.target;
+
+//     console.log("Treatmentplan Change:" , name,value)
+
+//     updateSection("treatmentPlan", {
+//       ...treatmentPlan,
+//       [name]: value,
+//     });
+//   };  
+
+const handleTreatmentPlanChange = (e) => {
+  const { name, value } = e.target;
+
+  console.log("TreatmentPlan Change:", name, value);
+
+  // =================================================
+  // Service Selection
+  // =================================================
+
+  if (name === "serviceId") {
+    const selectedIds = Array.isArray(value)
+      ? value.map(Number)
+      : [Number(value)];
+
+    const currentServices = Array.isArray(
+      formData.patientServices
+    )
+      ? formData.patientServices
+      : [];
+
+    const updatedServices = selectedIds.map((serviceId) => {
+      // اگر قبلاً در patientServices وجود دارد
+      // requirements و fee آن حفظ شود
+      const existingService = currentServices.find(
+        (item) =>
+          Number(item.serviceId) === Number(serviceId)
+      );
+
+      if (existingService) {
+        return existingService;
+      }
+
+      // Service از لیست اصلی
+      const service = services.find(
+        (item) =>
+          Number(item.value) === Number(serviceId)
+      );
+
+      return {
+        serviceId: Number(serviceId),
+        serviceName: service?.label ?? "",
+        description: service?.description ?? "",
+        fee: Number(service?.fee ?? 0),
+        requirements: [],
+      };
+    });
+
+    console.log(
+      "UPDATED PATIENT SERVICES:",
+      updatedServices
+    );
+
+    // -----------------------------
+    // Update Treatment Plan
+    // -----------------------------
 
     updateSection("treatmentPlan", {
       ...treatmentPlan,
-      [name]: value,
+      serviceId: selectedIds,
     });
-  };
+
+    // -----------------------------
+    // Update Patient Services
+    // -----------------------------
+
+    updateSection(
+      "patientServices",
+      updatedServices
+    );
+
+    return;
+  }
+
+  // =================================================
+  // Other Treatment Plan Fields
+  // =================================================
+
+  updateSection("treatmentPlan", {
+    ...treatmentPlan,
+    [name]: value,
+  });
+};
 
   // -----------------------------------------
   // Selected Service IDs
@@ -136,32 +209,49 @@ export default function TreatmentPlanServiceSelectionStep({
   // Add Service
   // -----------------------------------------
 
-  const handleAddService = (service) => {
-    if (!service) return;
-
-    const exists = selectedServices.some(
-      (item) =>
-        Number(item.serviceId) === Number(service.value)
-    );
-
-    if (exists) return;
-
-    const newService = {
-      serviceId: service.value,
-      serviceName: service.label,
-      description: service.description,
-      fee: service.fee,
-      requirements: currentRequirements,
-    };
-
-
-    updateSection("patientServices",[
-      ...selectedServices,
-      newService,
-    ]);
-
   
+  const handleAddService = (service) => {
+  if (!service) return;
+
+  const serviceId = Number(service.value);
+
+  const exists = selectedServices.some(
+    (item) =>
+      Number(item.serviceId) === serviceId
+  );
+
+  if (exists) return;
+
+  const newService = {
+    serviceId,
+    serviceName: service.label,
+    description: service.description ?? "",
+    fee: Number(service.fee ?? 0),
+
+    // مهم
+    requirements: [],
   };
+
+  const updatedServices = [
+    ...selectedServices,
+    newService,
+  ];
+
+  console.log(
+    "SERVICE SELECTED:",
+    newService
+  );
+
+  console.log(
+    "UPDATED PATIENT SERVICES:",
+    updatedServices
+  );
+
+  updateSection(
+    "patientServices",
+    updatedServices
+  );
+};
 
     useEffect(() => {
   console.log("Patient Services:", formData.patientServices);
@@ -172,16 +262,32 @@ export default function TreatmentPlanServiceSelectionStep({
   // Remove Service
   // -----------------------------------------
 
-  const handleRemoveService = (id) => {
-    updateSection("services", {
-      ...(formData.services ?? {}),
+const handleRemoveService = (id) => {
+  const updatedServices =
+    selectedServices.filter(
+      (item) =>
+        Number(item.serviceId) !== Number(id)
+    );
 
-      patientServices: selectedServices.filter(
-        (item) =>
-          Number(item.serviceId) !== Number(id)
-      ),
-    });
-  };
+  updateSection(
+    "patientServices",
+    updatedServices
+  );
+
+  const totalFee = updatedServices.reduce(
+    (sum, service) =>
+      sum + Number(service.fee || 0),
+    0
+  );
+
+  updateSection(
+    "payment",
+    {
+      ...(formData.payment ?? {}),
+      totalFee,
+    }
+  );
+};
 
 
   
@@ -195,50 +301,57 @@ const handleSaveFee = () => {
   const feeValue = Number(fee) || 0;
 
   const exists = selectedServices.some(
-    (service) => Number(service.serviceId) === serviceId
+    (service) =>
+      Number(service.serviceId) === serviceId
   );
 
   let updatedServices;
 
   if (exists) {
-    // اگر قبلاً اضافه شده، فقط Fee را تغییر بده
-    updatedServices = selectedServices.map((service) =>
-      Number(service.serviceId) === serviceId
-        ? {
-            ...service,
-            fee: feeValue,
-          }
-        : service
+    // فقط Fee همان Service تغییر کند
+    updatedServices = selectedServices.map(
+      (service) =>
+        Number(service.serviceId) === serviceId
+          ? {
+              ...service,
+              fee: feeValue,
+            }
+          : service
     );
   } else {
-    // اگر هنوز اضافه نشده، Service را اضافه کن
+    // Service جدید
     updatedServices = [
       ...selectedServices,
       {
-        serviceId: serviceId,
+        serviceId,
         serviceName: selectedServiceFee.label,
-        description: selectedServiceFee.description,
+        description:
+          selectedServiceFee.description ?? "",
         fee: feeValue,
         requirements: [],
       },
     ];
   }
 
-  // محاسبه مجموع فیس
   const totalFee = updatedServices.reduce(
     (sum, service) =>
       sum + Number(service.fee || 0),
     0
   );
 
-  updateSection("patientServices",updatedServices);
-  updateSection("payment",{
-    ...(formData.payment ?? {}),
+  updateSection(
+    "patientServices",
+    updatedServices
+  );
 
+  updateSection(
+    "payment",
+    {
+      ...(formData.payment ?? {}),
       totalFee,
-  })
+    }
+  );
 
-  // بستن Modal
   setOpenFeeModal(false);
   setSelectedServicesFee(null);
   setFee("");
@@ -276,136 +389,6 @@ const handleSaveFee = () => {
         )}
       </div>
 
-      {/* =====================================
-          Selected Services / Requirements
-      ===================================== */}
-
-      {activeServices.length > 0 && (
-        <div
-          className="
-            bg-white
-            border
-            border-slate-200
-            rounded-[10px]
-            p-1
-            shadow-sm
-          "
-        >
-
-          <div className="mb-2">
-            <h3 className="font-bold text-lg">
-              خدمات انتخاب شده
-            </h3>
-
-            <p className="text-sm text-slate-500 mt-1">
-              برای هر خدمت می ‌توانید فیس و نیازمندی‌های آن را مشخص کنید.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-
-            {activeServices.map((service) => {
-
-              const alreadyAdded =
-                selectedServices.some(
-                  (item) =>
-                    Number(item.serviceId) ===
-                    Number(service.value)
-                );
-
-              return (
-                <div
-                  key={service.value}
-                  className="
-                    border
-                    border-slate-200
-                    rounded-[10px]
-                    p-4
-                    bg-slate-50
-                  "
-                >
-
-                  {/* Service Header */}
-
-                  <div className="flex items-center justify-between">
-
-                    <div className="flex items-center gap-3">
-
-                      <div
-                        className="
-                          h-10
-                          w-10
-                          rounded-full
-                          bg-blue-100
-                          flex
-                          items-center
-                          justify-center
-                        "
-                      >
-                        <ClipboardList
-                          size={20}
-                          className="text-blue-600"
-                        />
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold">
-                          {service.label}
-                        </h4>
-
-                        <p className="text-xs text-slate-500">
-                          فیس اصلی:{" "}
-                          {Number(
-                            service.fee ?? 0
-                          ).toLocaleString()}{" "}
-                          AFN
-                        </p>
-                      </div>
-
-                    </div>
-
-                    {/* Add Fee Button */}
-
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="add"
-                      disabled={alreadyAdded}
-                      onClick={() =>
-                        handleAddService(service)
-                      }
-                    >
-                      <Wallet
-                        size={16}
-                        className="ms-1"
-                      />
-
-                      {alreadyAdded
-                        ? "اضافه شده"
-                        : "افزودن فیس"}
-                    </Button>
-
-                  </div>
-
-                  {/* Requirements */}
-
-                  <div className="mt-4">
-
-                    <RequirementForm
-                      service={service.data}
-                      formData={formData}
-                      updateSection={updateSection}
-                    />
-
-                  </div>
-
-                </div>
-              );
-            })}
-
-          </div>
-        </div>
-      )}
 
       {/* =====================================
           Selected Services Table
@@ -453,7 +436,7 @@ const handleSaveFee = () => {
 
       </div>
 
-<div className="min-w-[800px]">
+
    <TrServiceDetailsDialog
       open={openFeeModal}
       onOpenChange={setOpenFeeModal}
@@ -462,10 +445,11 @@ const handleSaveFee = () => {
       formData={formData}
       updateSection={updateSection}
       fee={fee}
+      setFee={setFee}
     
      
     />
-</div>
+
    
     
      

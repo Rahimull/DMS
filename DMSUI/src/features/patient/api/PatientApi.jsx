@@ -11,7 +11,8 @@ const PatientApi = {
   ...base,
 
   register: (data) => Api.post("/Patient/PatientRegistration", data),
-  appointment: (data) => Api.post("/Patient/appointment", data)
+  appointment: (data) => Api.post("/Patient/appointment", data),
+
 };
 
 export default PatientApi;

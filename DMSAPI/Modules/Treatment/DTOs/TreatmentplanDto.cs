@@ -3,8 +3,6 @@ public class TreatmentplanDto
 {
     public int? PatientId { get; set; }
 
-    public int? ServiceId { get; set; }
-
     public int Installment { get; set; }
 
     public int Round { get; set; }

@@ -1,0 +1,83 @@
+export const InventoryFields = [
+  {
+    name: "name1",
+    label: "نام دوا",
+    type: "text",
+    required: true,
+    placeholder: "نام دوا",
+  },
+  {
+    name: "name2",
+    label: "نام جنریک",
+    type: "text",
+    required: false,
+    placeholder: "نام جنریک دوا",
+  },
+  {
+  name: "type",
+  label: "نوع دوا",
+  type: "select",
+  required: false,
+  placeholder: "نوع دوا را انتخاب کنید",
+
+  options: [
+    { value: "Tablet", label: "قرص (Tablet)" },
+    { value: "Capsule", label: "کپسول (Capsule)" },
+    { value: "Syrup", label: "شربت (Syrup)" },
+    { value: "Injection", label: "آمپول (Injection)" },
+    { value: "Cream", label: "کریم (Cream)" },
+    { value: "Ointment", label: "پماد (Ointment)" },
+    { value: "Drops", label: "قطره (Drops)" },
+    { value: "Powder", label: "پودر (Powder)" },
+    { value: "Suspension", label: "سوسپانسیون (Suspension)" },
+  ],
+},
+  {
+    name: "strength",
+    label: "قدرت دوا",
+    type: "text",
+    required: false,
+    placeholder: "مثلاً 500mg",
+  },
+  {
+    name: "qtyInStock",
+    label: "مقدار موجودی",
+    type: "number",
+    required: true,
+    placeholder: "مقدار موجودی",
+  },
+  {
+    name: "dosage",
+    label: "دوز",
+    type: "text",
+    required: false,
+    placeholder: "مثلاً 1 tablet",
+  },
+  
+  {
+    name: "issueDate",
+    label: "تاریخ ورود",
+    type: "date",
+    required: false,
+  },
+  {
+    name: "expireDate",
+    label: "تاریخ انقضا",
+    type: "date",
+    required: false,
+  },
+  {
+    name: "unitPrice",
+    label: "قیمت فی واحد",
+    type: "number",
+    required: true,
+    placeholder: "قیمت",
+  },
+  {
+    name: "notes",
+    label: "یادداشت",
+    type: "textarea",
+    required: false,
+    placeholder: "یادداشت",
+  },
+];

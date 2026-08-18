@@ -83,6 +83,8 @@ public class DMSContext : IdentityDbContext<ApplicationUser>
     #region Pharmacy
     public DbSet<MedicineInventory> MedicineInventories => Set<MedicineInventory>();
     public DbSet<MedicineSale> MedicineSales => Set<MedicineSale>();
+    public DbSet<Prescription> Prescriptions => Set<Prescription>();
+    public DbSet<PrescriptionItem> PrescriptionItems => Set<PrescriptionItem>();
     #endregion
 
     #region Expenses

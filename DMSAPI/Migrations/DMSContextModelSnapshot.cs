@@ -974,6 +974,11 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("name2");
 
+                    b.Property<string>("Notes")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("notes");
+
                     b.Property<int>("QtyInStock")
                         .HasColumnType("INTEGER")
                         .HasColumnName("qty_in_stock");
@@ -991,11 +996,6 @@ namespace DMSAPI.Migrations
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("unit_price");
-
-                    b.Property<string>("notes")
-                        .HasMaxLength(200)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("notes");
 
                     b.HasKey("Id");
 
@@ -1051,6 +1051,103 @@ namespace DMSAPI.Migrations
                     b.HasIndex("StaffId");
 
                     b.ToTable("medicine_sales", (string)null);
+                });
+
+            modelBuilder.Entity("DMS.Modules.Pharmacy.Entities.Prescription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("PrescriptionDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("Prescription", (string)null);
+                });
+
+            modelBuilder.Entity("DMS.Modules.Pharmacy.Entities.PrescriptionItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Dosage")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("dosage");
+
+                    b.Property<string>("Duration")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("duration");
+
+                    b.Property<string>("Frequency")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("frequency");
+
+                    b.Property<string>("Instructions")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("instructions");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MedicineInventoryId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("medicine_inventory_id");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("notes");
+
+                    b.Property<int>("PrescriptionId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("prescription_id");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("quantity");
+
+                    b.Property<string>("Route")
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("route");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicineInventoryId");
+
+                    b.HasIndex("PrescriptionId");
+
+                    b.ToTable("PrescriptionItem", (string)null);
                 });
 
             modelBuilder.Entity("DMS.Modules.Staffs.Entities.Staff", b =>
@@ -1964,6 +2061,44 @@ namespace DMSAPI.Migrations
                     b.Navigation("Staff");
                 });
 
+            modelBuilder.Entity("DMS.Modules.Pharmacy.Entities.Prescription", b =>
+                {
+                    b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
+                        .WithMany("Prescriptions")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DMS.Modules.Staffs.Entities.Staff", "Staff")
+                        .WithMany("Prescriptions")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("DMS.Modules.Pharmacy.Entities.PrescriptionItem", b =>
+                {
+                    b.HasOne("DMS.Modules.Pharmacy.Entities.MedicineInventory", "MedicineInventory")
+                        .WithMany("PrescriptionItem")
+                        .HasForeignKey("MedicineInventoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DMS.Modules.Pharmacy.Entities.Prescription", "Prescription")
+                        .WithMany("PrescriptionItem")
+                        .HasForeignKey("PrescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MedicineInventory");
+
+                    b.Navigation("Prescription");
+                });
+
             modelBuilder.Entity("DMS.Modules.Treatments.Entities.ConditionDetail", b =>
                 {
                     b.HasOne("DMS.Modules.Treatments.Entities.Condition", "Condition")
@@ -2242,6 +2377,8 @@ namespace DMSAPI.Migrations
 
                     b.Navigation("PatientXrays");
 
+                    b.Navigation("Prescriptions");
+
                     b.Navigation("Retreatments");
 
                     b.Navigation("SupplySales");
@@ -2251,7 +2388,14 @@ namespace DMSAPI.Migrations
 
             modelBuilder.Entity("DMS.Modules.Pharmacy.Entities.MedicineInventory", b =>
                 {
+                    b.Navigation("PrescriptionItem");
+
                     b.Navigation("Sales");
+                });
+
+            modelBuilder.Entity("DMS.Modules.Pharmacy.Entities.Prescription", b =>
+                {
+                    b.Navigation("PrescriptionItem");
                 });
 
             modelBuilder.Entity("DMS.Modules.Staffs.Entities.Staff", b =>
@@ -2271,6 +2415,8 @@ namespace DMSAPI.Migrations
                     b.Navigation("Patients");
 
                     b.Navigation("Payments");
+
+                    b.Navigation("Prescriptions");
 
                     b.Navigation("Retreatments");
 

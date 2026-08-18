@@ -6,6 +6,7 @@ export const createCrudApi = (endpoint) => ({
   create: (data) => Api.post(endpoint, data),
 
   getById: (id, data) => Api.get(`${endpoint}/${id}`),
+  getAll: () => Api.get(`${endpoint}/getAll`),
   update: (id, data) => Api.put(`${endpoint}/${id}`, data),
 
   delete: (id) => Api.delete(`${endpoint}/${id}`),

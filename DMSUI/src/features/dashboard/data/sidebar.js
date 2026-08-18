@@ -173,9 +173,23 @@ export const sidebarItems= [
 
     items: [
       {
+        title: " نسخه ها",
+
+        path: "/Prescription",
+
+        icon: Pill,
+      },
+      {
+        title: "دوا ها",
+
+        path: "/PrescriptionItem",
+
+        icon: Pill,
+      },
+      {
         title: "موجودی دوا",
 
-        path: "/medicine-inventory",
+        path: "/MedicineInventory",
 
         icon: Pill,
       },

@@ -18,6 +18,7 @@ const TreatmentPlanApi = {
     Api.put(`/TreatmentPlan/${id}/status`, {
       status,
     }),
+   treatmentPlan: (data) => Api.post("/TreatmentPlan/treatmentplan", data)
 };
 
 export default TreatmentPlanApi;

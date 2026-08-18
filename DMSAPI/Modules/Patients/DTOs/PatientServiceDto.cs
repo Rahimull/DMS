@@ -9,7 +9,5 @@ public class PatientServiceDto
     public int? TreatmentPlanId { get; set; }
     public int ServiceId { get; set; }
     public int ServiceRequirementId { get; set; }
-    public string Description { get; set; } = null!;
-
     public List<ServiceRequirementDto> Requirements { get; set; } = new();
 }

@@ -92,4 +92,5 @@ public class Patient : BaseEntity
       public ICollection<SupplySale> SupplySales { get; set; } = new List<SupplySale>();
       public ICollection<MedicineSale> MedicineSales { get; set; } = new List<MedicineSale>();
       public ICollection<PatientXray> PatientXrays { get; set; } = new List<PatientXray>();
+      public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 }
