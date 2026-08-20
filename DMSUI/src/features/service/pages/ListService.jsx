@@ -1,21 +1,32 @@
-import { DataTable, DataTableToolbar } from "@/components/dataTable";
-import { Button } from "@/components/ui/button";
 
-import { ServiceColumns } from "@/features/service/columns/ServiceColumns";
+import { useMemo, useState } from "react";
+import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { Plus } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { DataTableToolbar } from "@/components/dataTable";
+
 import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
 import useLoadData from "@/hooks/useLoadData";
 
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { Plus } from "lucide-react";
-import { useMemo, useState } from "react";
-import ServiceForm from "@/features/service/components/ServiceForm";
-import { ServiceActionColumn } from "@/features/service/columns/ServiceActionColumn";
 import ServiceApi from "../api/ServiceApi";
+import ServiceForm from "@/features/service/components/ServiceForm";
+import ServiceCardList from "@/features/service/components/ServiceCardList";
+
+import { ServiceColumns } from "@/features/service/columns/ServiceColumns";
+import { ServiceActionColumn } from "@/features/service/columns/ServiceActionColumn";
 
 export default function ListService() {
+  // ==========================================
+  // Filters
+  // ==========================================
+
   const [filterStatus, setFilterStatus] = useState("all");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+
+  const [selectedService, setSelectedService] =
+    useState(null);
 
   const filters = useMemo(
     () => ({
@@ -23,21 +34,37 @@ export default function ListService() {
       fromDate,
       toDate,
     }),
-    [filterStatus, fromDate, toDate],
+    [filterStatus, fromDate, toDate]
   );
 
-  const [selectedService, setSelectedService] = useState(null);
+  // ==========================================
+  // Messages
+  // ==========================================
 
   const messages = {
-    create: "خدامات با موفقیت ثبت شد.",
-    update: "اطلاعات خدامات با موفقیت ویرایش شد.",
-    delete: "خدامات با موفقیت حذف شد.",
+    create: "خدمات با موفقیت ثبت شد.",
+    update: "اطلاعات خدمات با موفقیت ویرایش شد.",
+    delete: "خدمات با موفقیت حذف شد.",
   };
 
-  const curd = useCreatUpdateForm(ServiceApi, messages, {useFormData:false});
+  // ==========================================
+  // CRUD
+  // ==========================================
+
+  const curd = useCreatUpdateForm(
+    ServiceApi,
+    messages,
+    {
+      useFormData: false,
+    }
+  );
+
+  // ==========================================
+  // Load Data
+  // ==========================================
 
   const {
-    data,
+    data = [],
     totalCount,
     pagination,
     setPagination,
@@ -45,26 +72,28 @@ export default function ListService() {
     setSorting,
     search,
     setSearch,
-    setRefreshKey,
     loading,
   } = useLoadData(ServiceApi, {
     filters,
     refreshKey: curd.refreshKey,
   });
 
+  // ==========================================
   // Columns
+  // ==========================================
+
   const columns = useMemo(
     () => [
       ...ServiceColumns,
 
       ServiceActionColumn({
-        onView: (Service) => {
-          console.log("View:", Service);
+        onView: (service) => {
+          console.log("View:", service);
         },
 
-        onEdit: (Service) => {
-          setSelectedService(Service);
-          curd.openEdit(Service);
+        onEdit: (service) => {
+          setSelectedService(service);
+          curd.openEdit(service);
         },
 
         onDelete: (id) => {
@@ -72,27 +101,36 @@ export default function ListService() {
         },
       }),
     ],
-    [curd],
+    [curd]
   );
 
+  // ==========================================
   // Table
+  // فقط برای Toolbar
+  // ==========================================
+
   const table = useReactTable({
     data,
     columns,
 
-    getCoreRowModel: getCoreRowModel(),
+    getCoreRowModel:
+      getCoreRowModel(),
 
     manualPagination: true,
     manualSorting: true,
 
-    pageCount: Math.ceil(totalCount / pagination.pageSize),
+    pageCount: Math.ceil(
+      totalCount /
+        pagination.pageSize
+    ),
 
     state: {
       pagination,
       sorting,
     },
 
-    onPaginationChange: setPagination,
+    onPaginationChange:
+      setPagination,
 
     onSortingChange: (updater) => {
       setSorting(updater);
@@ -104,39 +142,189 @@ export default function ListService() {
     },
   });
 
+  // ==========================================
+  // Create
+  // ==========================================
+
+  const handleCreate = () => {
+    setSelectedService(null);
+    curd.openCreate();
+  };
+
+  // ==========================================
+  // Edit
+  // ==========================================
+
+  const handleEdit = (service) => {
+    setSelectedService(service);
+    curd.openEdit(service);
+  };
+
+  // ==========================================
+  // View
+  // ==========================================
+
+  const handleView = (service) => {
+    console.log(
+      "View Service:",
+      service
+    );
+  };
+
+  // ==========================================
+  // Delete
+  // ==========================================
+
+  const handleDelete = (id) => {
+    curd.handleDelete(id);
+  };
+
+  // ==========================================
+  // Pagination
+  // ==========================================
+
+  const totalPages = Math.ceil(
+    totalCount /
+      pagination.pageSize
+  );
+
+  const currentPage =
+    pagination.pageIndex + 1;
+
+  const nextPage = () => {
+    if (
+      currentPage <
+      totalPages
+    ) {
+      setPagination((prev) => ({
+        ...prev,
+        pageIndex:
+          prev.pageIndex + 1,
+      }));
+    }
+  };
+
+  const previousPage = () => {
+    if (currentPage > 1) {
+      setPagination((prev) => ({
+        ...prev,
+        pageIndex:
+          prev.pageIndex - 1,
+      }));
+    }
+  };
+
+  // ==========================================
+  // Render
+  // ==========================================
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت خدامات</h2>
+    <div
+      className="space-y-6"
+      dir="rtl"
+    >
+      {/* Header */}
+
+      {/* Toolbar */}
 
       <DataTableToolbar
+        title="مدیریت خدامات"
+        description="لیست خدمات برای دندان"
         table={table}
         search={search}
         onSearchChange={setSearch}
         onRefresh={() => {
-          curd.setRefreshKey((x) => x + 1);
+          curd.setRefreshKey(
+            (x) => x + 1
+          );
         }}
-        onExport={() => console.log("Export")}
-        onPrint={() => window.print()}
+        onExport={() =>
+          console.log("Export")
+        }
+        onPrint={() =>
+          window.print()
+        }
       >
         <Button
           size="sm"
-          onClick={() => {
-            setSelectedService(null);
-            curd.openCreate();
-          }}
+          onClick={handleCreate}
+          className="gap-1.5"
         >
-          ثبت خدامات
+          ثبت خدمات
           <Plus size={16} />
         </Button>
       </DataTableToolbar>
 
-      <DataTable
-        table={table}
+      {/* Service Cards */}
+
+      <ServiceCardList
+        services={data}
         loading={loading}
-        pageSize={pagination.pageSize}
+        onView={handleView}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
       />
 
-      <ServiceForm CURD={curd} />
+      {/* Pagination */}
+
+      {!loading &&
+        data.length > 0 &&
+        totalPages > 1 && (
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              rounded-2xl
+              border
+              border-slate-200
+              bg-white
+              p-4
+              shadow-sm
+            "
+          >
+            <Button
+              variant="outline"
+              disabled={
+                currentPage <= 1
+              }
+              onClick={
+                previousPage
+              }
+            >
+              قبلی
+            </Button>
+
+            <div className="text-sm text-slate-600">
+              صفحه{" "}
+              <span className="font-bold">
+                {currentPage}
+              </span>{" "}
+              از{" "}
+              <span className="font-bold">
+                {totalPages}
+              </span>
+            </div>
+
+            <Button
+              variant="outline"
+              disabled={
+                currentPage >=
+                totalPages
+              }
+              onClick={nextPage}
+            >
+              بعدی
+            </Button>
+          </div>
+        )}
+
+      {/* Form */}
+
+      <ServiceForm
+        CURD={curd}
+      />
     </div>
   );
 }
+

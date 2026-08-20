@@ -1,0 +1,6 @@
+namespace DMSAPI.Modules.User.DTOs;
+public class AssignPermissionsDto
+{
+    public int RoleId { get; set; }
+    public List<int> PermissionIds { get; set; } = new();
+}

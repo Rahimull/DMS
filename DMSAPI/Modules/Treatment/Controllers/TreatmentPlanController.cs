@@ -358,7 +358,7 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
 
     #endregion
     #region GET TREATMENT DETAILS
-    [HttpGet("{id}")]
+    [HttpGet("{id}/details")]
     public async Task<IActionResult> GetTreatmentDetails(int id)
     {
         var plan = await _context.TreatmentPlans
@@ -643,7 +643,7 @@ public class TreatmentPlanController : BaseController<TreatmentPlan>
     #endregion
 
     #region DELETE TREAMENT PLAN
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}/Delete")]
     public async Task<IActionResult> DeleteTreatment(int id)
     {
         await using var transaction =

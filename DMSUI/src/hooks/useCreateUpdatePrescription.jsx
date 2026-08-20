@@ -27,6 +27,8 @@ const useCreateUpdatePrescription = (
 
   const [printData, setPrintData] = useState(null);
 
+  console.log("use Print Data: ", printData)
+
   // ==========================================
   // Messages
   // ==========================================

@@ -8,6 +8,7 @@ using DMS.Modules.Patients.Entities;
 using DMS.Modules.Pharmacy.Entities;
 using DMS.Modules.Treatments.Entities;
 using DMS.Shared.Common;
+using DMSAPI.Modules.User.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DMS.Modules.Staffs.Entities;
@@ -73,6 +74,8 @@ public class Staff : BaseEntity
     [Column("file_type")]
     public string? FileType { get; set; }
 
+    
+
     // Navigation Properties
 
     public ICollection<TreatmentPlan> TreatmentPlans { get; set; } = new List<TreatmentPlan>();
@@ -95,5 +98,6 @@ public class Staff : BaseEntity
         public ICollection<ExpenseInvoice> ExpenseInvoices { get; set; } = new List<ExpenseInvoice>();
         public ICollection<SupplySale> SupplySales { get; set; } = new List<SupplySale>();
         public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
+        public ICollection<AppUser> AppUsers { get; set; } = new List<AppUser>();
        
 }

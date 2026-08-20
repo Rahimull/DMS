@@ -15,7 +15,7 @@ export default function PrescriptionCard({
   onDelete,
   onPrint,
 }) {
-  const items = prescription?.prescriptionItems ?? [];
+  const items = prescription?.prescriptionItem ?? [];
 
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-blue-200 p-5 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -34,9 +34,9 @@ export default function PrescriptionCard({
             </p>
 
             <p className="truncate font-semibold text-slate-800">
-              {prescription?.patient?.fullName ||
-                prescription?.patientName ||
-                "-"}
+              {prescription?.patient
+              ? `${prescription.patient.firstName} ${prescription.patient.lastName}` 
+              : "-"}
             </p>
           </div>
         </div>
@@ -52,9 +52,9 @@ export default function PrescriptionCard({
             </p>
 
             <p className="truncate font-semibold text-slate-800">
-              {prescription?.staff?.fullName ||
-                prescription?.staffName ||
-                "-"}
+              {prescription?.staff?.firstName && prescription?.staff?.lastName
+                ? `${prescription.staff.firstName} ${prescription.staff.lastName}`
+                : prescription?.staffName || "-"}
             </p>
           </div>
         </div>
@@ -123,8 +123,8 @@ export default function PrescriptionCard({
 
                 <div className="min-w-0">
                   <p className="truncate font-medium text-slate-800">
-                    {item.medicineInventory?.medicine?.name ||
-                      item.medicineName ||
+                    {item.medicineInventory?.name1 ||
+                      item.medicineInventory?.name2 ||
                       "-"}
                   </p>
 

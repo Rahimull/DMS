@@ -18,7 +18,7 @@ public class PrescriptionController : BaseController<Prescription>
     // ==========================================
     // CREATE PRESCRIPTION
     // ==========================================
-#region 
+    #region 
     [HttpPost("CreatePrescription")]
     public async Task<IActionResult> CreatePrescription([FromBody] PrescriptionCreateDto dto)
     {
@@ -100,7 +100,7 @@ public class PrescriptionController : BaseController<Prescription>
                     Quantity = item.Quantity,
                     Notes = item.Notes
                 };
-                prescription.Notes += prescriptionItem.Notes; 
+                prescription.Notes += prescriptionItem.Notes;
 
                 _context.PrescriptionItems.Add(prescriptionItem);
             }
@@ -133,6 +133,18 @@ public class PrescriptionController : BaseController<Prescription>
         }
 
     }
+    #endregion
+
+
+     #region Include Relations
+    protected override IQueryable<Prescription> IncludeRelations(IQueryable<Prescription> query)
+    {
+        return query
+            .Include(x => x.PrescriptionItem).ThenInclude(x=>x.MedicineInventory)
+            .Include(x => x.Staff)
+            .Include(x => x.Patient);
+    }
+
     #endregion
 
 

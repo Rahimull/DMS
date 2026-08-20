@@ -1,16 +1,8 @@
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
 
-import './App.css'
+const App = () => {
+  return <RouterProvider router={router} />;
+};
 
-function App() {
-  
-
-  return (
-    <>
-      <div>
-        <h1 style={{ fontFamily: 'Vazirmatn',  color: "green"}}>(DMS) سیمیتم مدیریتی کلینیک دندان عبدلواکیل نورستانی</h1>
-      </div>
-    </>
-  )
-}
-
-export default App
+export default App;

@@ -9,6 +9,7 @@ export default function PrescriptionPrint({
 }) {
   if (!data) return null;
 
+
   // =====================================================
   // LOOKUPS
   // =====================================================
@@ -21,66 +22,106 @@ export default function PrescriptionPrint({
     (x) => Number(x.id) === Number(data.staffId)
   );
 
-  const items = Array.isArray(data.items)
-    ? data.items
-    : Array.isArray(data.prescriptionItems)
-    ? data.prescriptionItems
-    : [];
-
   // =====================================================
-  // HELPERS
+  // PRESCRIPTION ITEMS
   // =====================================================
 
-  const getMedicine = (id) => {
-    return medicines.find(
-      (x) => Number(x.id) === Number(id)
-    );
-  };
+//  const items = Array.isArray(data?.prescriptionItems)
+//   ? data.prescriptionItems
+//   : [];
 
-  const getMedicineName = (id) => {
-    const medicine = getMedicine(id);
+ const items = data?.prescriptionItem ?? [];
 
-    return (
-      medicine?.name ||
-      medicine?.medicineName ||
-      medicine?.medicine?.name ||
-      "-"
-    );
-  };
+  // =====================================================
+  // MEDICINE HELPERS
+  // =====================================================
 
-  const getMedicineGenericName = (id) => {
-    const medicine = getMedicine(id);
+ const getMedicine = (medicineInventoryId) => {
+  return medicines.find(
+    (medicine) =>
+      Number(medicine.id) ===
+      Number(medicineInventoryId)
+  );
+};
 
-    return (
-      medicine?.genericName ||
-      medicine?.generic ||
-      medicine?.medicine?.genericName ||
-      ""
-    );
-  };
+const getMedicineName = (medicineInventoryId) => {
+  const medicine = getMedicine(
+    medicineInventoryId
+  );
 
-  const getMedicineStrength = (id) => {
-    const medicine = getMedicine(id);
+  return medicine?.name1 || "-";
+};
 
-    return (
-      medicine?.strength ||
-      medicine?.dosage ||
-      medicine?.medicine?.strength ||
-      ""
-    );
-  };
+const getMedicineGenericName = (
+  medicineInventoryId
+) => {
+  const medicine = getMedicine(
+    medicineInventoryId
+  );
+
+  return medicine?.name2 || "";
+};
+
+const getMedicineStrength = (
+  medicineInventoryId
+) => {
+  const medicine = getMedicine(
+    medicineInventoryId
+  );
+
+  return medicine?.strength || "";
+};
+
+  // =====================================================
+  // PATIENT
+  // =====================================================
 
   const patientName =
-    patient?.name ||
-    patient?.fullName ||
     data.patientName ||
+    (patient
+      ? `${patient.firstName || ""} ${
+          patient.lastName || ""
+        }`.trim()
+      : "-");
+
+  const patientAge =
+    data.patientAge ||
+    patient?.age ||
     "-";
 
-  const doctorName =
-    doctor?.name ||
-    doctor?.fullName ||
-    data.staffName ||
+  const patientPhone =
+    data.patientPhone ||
+    patient?.phone ||
+    patient?.phoneNumber ||
     "-";
+
+  // =====================================================
+  // DOCTOR
+  // =====================================================
+
+  const doctorName =
+    data.staffName ||
+    (doctor
+      ? `${doctor.firstName || ""} ${
+          doctor.lastName || ""
+        }`.trim()
+      : "-");
+
+  const doctorPhone = doctor
+    ? doctor.familyPhone1 ||
+      doctor.familyPhone2 ||
+      doctor.phone ||
+      "-"
+    : "-";
+
+  const doctorSpecialty =
+    doctor?.specialty ||
+    doctor?.specialization ||
+    "متخصص دندان";
+
+  // =====================================================
+  // PRESCRIPTION
+  // =====================================================
 
   const prescriptionNumber =
     data.prescriptionNumber ||
@@ -94,6 +135,8 @@ export default function PrescriptionPrint({
       ).toLocaleDateString("fa-IR")
     : new Date().toLocaleDateString("fa-IR");
 
+ 
+
   // =====================================================
   // RENDER
   // =====================================================
@@ -102,25 +145,23 @@ export default function PrescriptionPrint({
     <div
       dir="rtl"
       className="
-      prescription-page
-      mx-auto
-      min-h-[210mm]
-      w-[148mm]
-      bg-white
-      text-slate-900
-      shadow-xl
+        prescription-page
+        mx-auto
+        min-h-[210mm]
+        w-[148mm]
+        bg-white
+        text-slate-900
+        shadow-xl
       "
     >
-
-
       <div
         className="
-              mx-auto
-              w-full
-              bg-white
-              px-6
-              py-5
-              text-slate-900
+          mx-auto
+          w-full
+          bg-white
+          px-6
+          py-5
+          text-slate-900
         "
       >
         {/* =================================================
@@ -129,16 +170,16 @@ export default function PrescriptionPrint({
 
         <header
           className="
+            mb-4
             grid
             grid-cols-[1fr_2fr_1fr]
             items-center
             gap-5
-            mb-7
           "
         >
           {/* Logo */}
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center">
             <div
               className="
                 flex
@@ -149,14 +190,12 @@ export default function PrescriptionPrint({
                 justify-center
                 rounded-full
                 border-2
-                border-[#1022345]
-                text-3xl
+                border-blue-200
+                bg-blue-50
               "
             >
               <DentalLogo size="lg" />
             </div>
-
-            
           </div>
 
           {/* Clinic */}
@@ -165,7 +204,6 @@ export default function PrescriptionPrint({
             <h2
               className="
                 m-0
-               
                 font-extrabold
                 text-blue-500
               "
@@ -221,7 +259,14 @@ export default function PrescriptionPrint({
             HEADER LINE
         ================================================= */}
 
-        <div className="relative mt-[18px] h-0.5 bg-blue-300">
+        <div
+          className="
+            relative
+            mt-[18px]
+            h-0.5
+            bg-blue-300
+          "
+        >
           <div
             className="
               absolute
@@ -235,11 +280,9 @@ export default function PrescriptionPrint({
               items-center
               justify-center
               bg-white
-              text-lg
             "
           >
-            <DentalLogo size="sm" />
-        
+          
           </div>
         </div>
 
@@ -249,7 +292,7 @@ export default function PrescriptionPrint({
 
         <section
           className="
-            mt-6
+            mt-2
             grid
             grid-cols-3
             items-center
@@ -289,6 +332,7 @@ export default function PrescriptionPrint({
             </h2>
 
             <div
+              dir="ltr"
               className="
                 mt-1
                 flex
@@ -312,12 +356,12 @@ export default function PrescriptionPrint({
         </section>
 
         {/* =================================================
-            PATIENT / DOCTOR INFORMATION
+            PATIENT / DOCTOR
         ================================================= */}
 
         <section
           className="
-            mt-5
+            mt-2
             grid
             grid-cols-2
             overflow-hidden
@@ -340,6 +384,7 @@ export default function PrescriptionPrint({
               <span className="ml-1">
                 👤
               </span>
+
               مشخصات بیمار
             </div>
 
@@ -352,7 +397,7 @@ export default function PrescriptionPrint({
                 text-[10px]
               "
             >
-              <span className="text-slate-800">
+              <span>
                 نام و نام خانوادگی:
               </span>
 
@@ -370,14 +415,10 @@ export default function PrescriptionPrint({
                 text-[10px]
               "
             >
-              <span className="text-slate-800">
-                سن:
-              </span>
+              <span>سن:</span>
 
               <strong>
-                {patient?.age ||
-                  data.patientAge ||
-                  "-"}
+                {patientAge}
               </strong>
             </div>
 
@@ -390,15 +431,10 @@ export default function PrescriptionPrint({
                 text-[10px]
               "
             >
-              <span className="text-slate-800">
-                تلفن:
-              </span>
+              <span>تلفن:</span>
 
               <strong>
-                {patient?.phone ||
-                  patient?.phoneNumber ||
-                  data.patientPhone ||
-                  "-"}
+                {patientPhone}
               </strong>
             </div>
           </div>
@@ -424,6 +460,7 @@ export default function PrescriptionPrint({
               <span className="ml-1">
                 👨‍⚕️
               </span>
+
               پزشک معالج
             </div>
 
@@ -436,7 +473,7 @@ export default function PrescriptionPrint({
                 text-[10px]
               "
             >
-              <span className="text-slate-800">
+              <span>
                 نام و نام خانوادگی:
               </span>
 
@@ -454,14 +491,10 @@ export default function PrescriptionPrint({
                 text-[10px]
               "
             >
-              <span className="text-slate-800">
-                تخصص:
-              </span>
+              <span>تخصص:</span>
 
               <strong>
-                {doctor?.specialty ||
-                  doctor?.specialization ||
-                  "دندان‌پزشک"}
+                {doctorSpecialty}
               </strong>
             </div>
 
@@ -474,45 +507,35 @@ export default function PrescriptionPrint({
                 text-[10px]
               "
             >
-              <span className="text-slate-800">
-                شماره نظام داکتر:
+              <span>
+                شماره تلفن:
               </span>
 
-              <strong>
-                {doctor?.medicalLicenseNumber ||
-                  doctor?.licenseNumber ||
-                  "-"}
+              <strong dir="ltr">
+                {doctorPhone}
               </strong>
             </div>
           </div>
         </section>
 
         {/* =================================================
-            RX
+            MEDICINES
         ================================================= */}
 
-        <section className="mt-6">
-          <div
-            className="
-              mb-2
-              font-serif
-              text-[27px]
-              font-bold
-            "
-          >
-            Rx
-          </div>
+        <section className="mt-2">
 
-          {/* Medicine Header */}
+          {/* Table Header */}
 
           <div
             className="
               grid
-              min-h-[38px]
+              min-h-[25px]
               grid-cols-[0.45fr_2.1fr_1.1fr_1.2fr_1fr_1.2fr_0.7fr]
               items-center
               rounded-t-md
-              bg-gradient-to-l from-blue-500 to-blue-100
+              bg-gradient-to-l
+              from-blue-500
+              to-blue-100
               px-1
               text-center
               text-[9px]
@@ -521,117 +544,128 @@ export default function PrescriptionPrint({
             "
           >
             <div>ردیف</div>
-            <div className="text-right">نام دوا</div>
-            <div>مقدار مصرف</div>
-            <div>تعداد مصرف</div>
-            <div>مدت مصرف</div>
-            <div>طریقه مصرف</div>
-            <div>تعداد</div>
+
+            <div className="text-right">
+              نام دوا
+            </div>
+            <div>
+              مقدار مصرف
+            </div>
+
+            <div>
+              تعداد مصرف
+            </div>
+
+            <div>
+              مدت مصرف
+            </div>
+
+            <div>
+              طریقه مصرف
+            </div>
+
+            <div>
+              تعداد
+            </div>
           </div>
 
-          {/* Medicines */}
+          {/* =================================================
+              MEDICINE ROWS
+          ================================================= */}
 
           {items.map((item, index) => {
-            const genericName =
-              getMedicineGenericName(
-                item.medicineInventoryId
-              );
+  const medicine = getMedicine(
+    item.medicineInventoryId
+  );
 
-            const strength =
-              getMedicineStrength(
-                item.medicineInventoryId
-              );
+  return (
+    <div
+      key={`${item.medicineInventoryId}-${index}`}
+      className="
+        grid
+        min-h-[40px]
+        grid-cols-[0.45fr_2.1fr_1.1fr_1.2fr_1fr_1.2fr_0.7fr]
+        items-center
+        border-b
+        border-slate-300
+        text-center
+        text-[9px]
+        break-inside-avoid
+      "
+    >
+      {/* ردیف */}
 
-            return (
-              <div
-                key={index}
-                className="
-                  grid
-                  min-h-[65px]
-                  grid-cols-[0.45fr_2.1fr_1.1fr_1.2fr_1fr_1.2fr_0.7fr]
-                  items-center
-                  border-b
-                  border-slate-300
-                  text-center
-                  text-[9px]
-                  break-inside-avoid
-                "
-              >
-                {/* Number */}
+      <div className="px-1.5 py-2">
+        <span
+          className="
+            inline-flex
+            h-6
+            w-6
+            items-center
+            justify-center
+            rounded-full
+            bg-blue-500
+            text-[9px]
+            font-bold
+            text-white
+          "
+        >
+          {index + 1}
+        </span>
+      </div>
 
-                <div className="px-1.5 py-2">
-                  <span
-                    className="
-                      inline-flex
-                      h-6
-                      w-6
-                      items-center
-                      justify-center
-                      rounded-full
-                      bg-blue-500
-                      text-[9px]
-                      font-bold
-                      text-white
-                    "
-                  >
-                    {index + 1}
-                  </span>
-                </div>
+      {/* دوا */}
 
-                {/* Medicine */}
+      <div className="px-1 text-right">
+        <strong className="block text-[11px]">
+          {medicine?.name1 || "-"}
+        </strong>
 
-                <div className="px-1 text-right">
-                  <strong className="block text-[11px]">
-                    {getMedicineName(
-                      item.medicineInventoryId
-                    )}
-                  </strong>
+        {/* {medicine?.name2 && (
+          <small className="block text-[8px]">
+            {medicine.name2}
+          </small>
+        )}
 
-                  {genericName && (
-                    <small className="mt-0.5 block text-[8px] text-slate-800">
-                      {genericName}
-                    </small>
-                  )}
+        {medicine?.strength && (
+          <small className="block text-[8px]">
+            {medicine.strength}
+          </small>
+        )} */}
+      </div>
 
-                  {strength && (
-                    <small className="mt-0.5 block text-[8px] text-slate-800">
-                      {strength}
-                    </small>
-                  )}
-                </div>
+      {/* مقدار مصرف */}
 
-                {/* Dosage */}
+      <div className="px-1 py-1">
+        {item.dosage || "-"}
+      </div>
 
-                <div className="px-1 py-2">
-                  {item.dosage || "-"}
-                </div>
+      {/* تعداد مصرف */}
 
-                {/* Frequency */}
+      <div className="px-1 py-1">
+        {item.frequency || "-"}
+      </div>
 
-                <div className="px-1 py-2">
-                  {item.frequency || "-"}
-                </div>
+      {/* مدت */}
 
-                {/* Duration */}
+      <div className="px-1 py-1">
+        {item.duration || "-"}
+      </div>
 
-                <div className="px-1 py-2">
-                  {item.duration || "-"}
-                </div>
+      {/* طریقه */}
 
-                {/* Route */}
+      <div className="px-1 py-1">
+        {item.route || "-"}
+      </div>
 
-                <div className="px-1 py-2">
-                  {item.route || "-"}
-                </div>
+      {/* تعداد */}
 
-                {/* Quantity */}
-
-                <div className="px-1 py-2 font-bold">
-                  {item.quantity || "-"}
-                </div>
-              </div>
-            );
-          })}
+      <div className="px-1 py-1 font-bold">
+        {item.quantity ?? "-"}
+      </div>
+    </div>
+  );
+})}
 
           {/* Empty */}
 
@@ -644,7 +678,7 @@ export default function PrescriptionPrint({
                 p-6
                 text-center
                 text-[11px]
-                text-slate-800
+                text-slate-600
               "
             >
               هیچ دوایی در این نسخه ثبت نشده است.
@@ -653,91 +687,126 @@ export default function PrescriptionPrint({
         </section>
 
         {/* =================================================
-            INSTRUCTIONS
-        ================================================= */}
+    INSTRUCTIONS + NOTES
+================================================= */}
 
-        {items.some(
-          (item) => item.instructions
-        ) && (
-          <section
+<div className="mt-2 flex items-stretch gap-3">
+
+  {/* =================================================
+      INSTRUCTIONS
+  ================================================= */}
+
+  {items.some((item) => item.instructions) && (
+    <section
+      className="
+        flex-1
+        break-inside-avoid
+        rounded-lg
+        border-[1.5px]
+        border-blue-500
+        p-3
+      "
+    >
+      <div className="flex items-start gap-3">
+
+        <div className="shrink-0 text-[22px]">
+          📋
+        </div>
+
+        <div className="min-w-0 flex-1">
+
+          <h3
             className="
-              mt-5
-              flex
-              items-start
-              gap-4
-              rounded-lg
-              border-[1.5px]
-              border-blue-500
-              p-3.5
-              px-[18px]
-              break-inside-avoid
+              mb-1
+              text-xs
+              font-extrabold
+              text-blue-700
             "
           >
-            <div className="text-[25px]">
-              📋
-            </div>
+            توضیحات و توصیه‌ها
+          </h3>
 
-            <div className="flex-1">
-              <h3
-                className="
-                  mb-1.5
-                  text-xs
-                  font-extrabold
-                "
-              >
-                توضیحات و توصیه‌ها:
-              </h3>
-
-              <ul
-                className="
-                  m-0
-                  list-disc
-                  pr-[18px]
-                  text-[10px]
-                  leading-7
-                "
-              >
-                {items.map(
-                  (item, index) =>
-                    item.instructions && (
-                      <li
-                        key={index}
-                        className="pr-1"
-                      >
-                        {item.instructions}
-                      </li>
-                    )
-                )}
-              </ul>
-            </div>
-          </section>
-        )}
-
-        {/* =================================================
-            GENERAL NOTES
-        ================================================= */}
-
-        {data.notes && (
-          <section
+          <ul
             className="
-              mt-4
-              rounded-md
-              border
-              border-slate-300
-              p-3
-              text-[10px]
-              break-inside-avoid
+              m-0
+              list-disc
+              pr-4
+              text-[9px]
+              leading-5
             "
           >
-            <strong>
-              یادداشت پزشک:
-            </strong>
+            {items.map(
+              (item, index) =>
+                item.instructions && (
+                  <li
+                    key={index}
+                    className="pr-1"
+                  >
+                    {item.instructions}
+                  </li>
+                )
+            )}
+          </ul>
 
-            <p className="mt-1.5 leading-6">
-              {data.notes}
-            </p>
-          </section>
-        )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* =================================================
+      NOTES
+  ================================================= */}
+
+  {data.notes && (
+    <section
+      className="
+        flex-1
+        break-inside-avoid
+        rounded-lg
+        border
+        border-slate-300
+        p-3
+      "
+    >
+
+      <div className="flex items-start gap-3">
+
+        <div className="shrink-0 text-[22px]">
+          📝
+        </div>
+
+        <div className="min-w-0 flex-1">
+
+          <h3
+            className="
+              mb-1
+              text-xs
+              font-extrabold
+              text-slate-700
+            "
+          >
+            یادداشت پزشک
+          </h3>
+
+          <p
+            className="
+              m-0
+              text-[9px]
+              leading-5
+              text-slate-600
+            "
+          >
+            {data.notes}
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+  )}
+
+</div>
 
         {/* =================================================
             FOOTER
@@ -745,19 +814,13 @@ export default function PrescriptionPrint({
 
         <footer
           className="
-            mt-11
+            mt-3
             flex
             items-end
             justify-between
             break-inside-avoid
           "
         >
-          {/* Stamp */}
-
-          
-
-          {/* Signature */}
-
           <div
             className="
               flex
@@ -786,7 +849,7 @@ export default function PrescriptionPrint({
             </span>
 
             {doctor?.medicalLicenseNumber && (
-              <small className="mt-0.5 text-[8px] text-slate-800">
+              <small className="mt-0.5 text-[8px]">
                 شماره داکتر:{" "}
                 {doctor.medicalLicenseNumber}
               </small>
@@ -795,12 +858,12 @@ export default function PrescriptionPrint({
         </footer>
 
         {/* =================================================
-            BOTTOM LINE
+            BOTTOM
         ================================================= */}
 
         <div
           className="
-            mt-6
+            mt-2
             flex
             items-center
             justify-between
@@ -816,9 +879,7 @@ export default function PrescriptionPrint({
             در مراجعه بعدی همراه داشته باشید.
           </span>
 
-          <span className="text-base">
-            <DentalLogo size="sm" />
-          </span>
+          <DentalLogo size="sm" />
         </div>
       </div>
     </div>

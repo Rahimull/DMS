@@ -11,10 +11,13 @@ using DMS.Modules.Treatments.Entities;
 using DMS.Modules.Xrays.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using DMSAPI.Modules.User.Entities;
+using System.Reflection.Emit;
+using Microsoft.AspNetCore.Identity;
 
 namespace DMS.Persistence;
 
-public class DMSContext : IdentityDbContext<ApplicationUser>
+public class DMSContext : IdentityDbContext<AppUser,IdentityRole<int>, int>
 {
     public DMSContext(DbContextOptions<DMSContext> options)
         : base(options)
@@ -102,9 +105,49 @@ public class DMSContext : IdentityDbContext<ApplicationUser>
     public DbSet<ClassRevenue> ClassRevenues => Set<ClassRevenue>();
     #endregion
 
+    #region User 
+
+    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
+    public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+
+    #endregion
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        // User Modules Relations
+
+        // RolePermission    
+        builder.Entity<RolePermission>()
+            .HasIndex(x => new { x.RoleId, x.PermissionId })
+            .IsUnique();
+
+        //   RefreshToken → User relation
+        builder.Entity<RefreshToken>()
+        .HasOne(x=> x.User)
+        .WithMany(x => x.RefreshTokens)
+        .HasForeignKey(x => x.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+        // AuditLog → User relation
+        builder.Entity<AuditLog>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.AuditLogs)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // User and Staff Relations
+        builder.Entity<AppUser>()
+            .HasOne(u => u.Staff)
+            .WithMany(d => d.AppUsers)
+            .HasForeignKey(u => u.StaffId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+
+
 
         builder.ApplyConfigurationsFromAssembly(typeof(DMSContext).Assembly);
 

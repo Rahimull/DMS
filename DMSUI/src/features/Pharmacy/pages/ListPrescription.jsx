@@ -110,7 +110,7 @@ export default function ListPrescription() {
     }
   );
 
-  console.log("prescriptions", prescriptions);
+
 
   // ==========================================
   // TanStack Table
@@ -641,8 +641,8 @@ useEffect(() => {
       {/* ======================================
           Prescription Print
       ======================================= */}
-
-     <div id="prescription-print" className="flex justify-center py-8">
+    {curd.printData && (
+      <div id="prescription-print" className="flex justify-center py-8">
        <PrescriptionPrint
         data={curd.printData || previewData}
         patients={patients}
@@ -650,6 +650,8 @@ useEffect(() => {
         medicines={medicines}
       />
      </div>
+    )}
+     
     </div>
   );
 }
