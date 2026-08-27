@@ -1,79 +1,68 @@
-import { useEffect, useState } from "react";
-import UserApi from "@/api/user/UserApi";
-import FilterCard from "@/components/filter/FilterCard";
-import DataTable from "@/components/common/DataTable";
-import Input from "@/components/common/Input";
-import Button from "@/components/common/Button";
+import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import UserModal from "./UserModal";
 import UserRoleModal from "./UserRoleModel";
+import UserApi from "../api/UserApi";
 import RolePermissionModal from "./RolePermissionModal";
+import { DataTable, DataTableToolbar } from "@/components/dataTable";
+import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
+import useLoadData from "@/hooks/useLoadData";
+import { UserColumns } from "../columns/UserColumns";
+import { UserActionColumn } from "../columns/UserActionColumn";
+import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { Plus } from "lucide-react";
 
 // بعداً می‌سازیم
 // import UserModal from "../components/UserModal";
 
 const UserPage = () => {
-  const [search, setSearch] = useState("");
-  const [users, setUsers] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(false);
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-
-  const [sorting, setSorting] = useState(null);
-
+//   const [users, setUsers] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openRoleModal, setOpenRoleModal] = useState(false);
   const [openPermModal, setOpenPermModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  /* ================= LOAD DATA ================= */
-  const loadData = async () => {
-    setLoading(true);
+  // Tempratry state
+  const [users, setUsers] = useState([]);
 
-    try {
-      const res = await UserApi.getPaged({
-        pagination: {
-          pageIndex: pagination.pageIndex,
-          pageSize: pagination.pageSize,
-        },
-        sorting: sorting
-          ? {
-              sortBy: sorting.id,
-              isDescending: sorting.desc,
-            }
-          : {
-              sortBy: "id",
-              isDescending: true,
-            },
-        search: {
-          searchTerm: search,
-        },
-      });
+  const filters = useMemo(()=>
+    ({
+      status: filterStatus,
+      fromDate,
+      toDate,
+    }),[filterStatus, fromDate, toDate]);
 
-      const pagedData = res;
 
-      setUsers(pagedData?.data ?? []);
-      setTotalCount(pagedData?.totalCount ?? 0);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to load users");
-    } finally {
-      setLoading(false);
-    }
+  
+   const messages = {
+    create: "خدامات با موفقیت ثبت شد.",
+    update: "اطلاعات خدامات با موفقیت ویرایش شد.",
+    delete: "خدامات با موفقیت حذف شد.",
   };
 
-  useEffect(() => {
-    const timer = setTimeout(loadData, 300);
+  const curd = useCreatUpdateForm(UserApi, messages, {useFormData:false});
 
-    return () => clearTimeout(timer);
-  }, [pagination.pageIndex, pagination.pageSize, sorting, search]);
+  const {
+    data,
+    totalCount,
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    search,
+    setSearch,
+    setRefreshKey,
+    loading,
+    setLoading
+  }=useLoadData(UserApi,{filters, refreshKey: curd.refreshKey});
 
-  /* ================= ACTIONS ================= */
+
+
 
   const handleCreate = () => {
     setSelectedUser(null);
@@ -88,90 +77,18 @@ const UserPage = () => {
     setSelectedUser(row);
     setOpenModal(true);
   };
-
-  const handleToggle = async (row) => {
+const handleToggle = async (row) => {
     try {
-      await UserApi.toggleStatus(row.id);
-
+      await UserApi.toggleStatus(row.id, row.isActive);
+      console.log("User Status: ",row.isActive, row.id, row)
       toast.success("User status updated");
 
-      loadData();
+      curd.setRefreshKey((x)=> x + 1);
     } catch (err) {
       console.error(err);
       toast.error("Failed to update user status");
     }
   };
-
-  /* ================= TABLE COLUMNS ================= */
-
-  const columns = [
-    {
-      accessorKey: "id",
-      header: "ID",
-    },
-    {
-      accessorKey: "fullName",
-      header: "Full Name",
-    },
-    {
-      accessorKey: "userName",
-      header: "Username",
-    },
-    {
-      accessorKey: "departmentName",
-      header: "Department",
-    },
-    {
-      accessorKey: "email",
-      header: "Email",
-    },
-    {
-      accessorKey: "isActive",
-      header: "Status",
-      cell: ({ row }) => (
-        <span
-          className={
-            row.original.isActive
-              ? "text-green-600 font-medium"
-              : "text-red-600 font-medium"
-          }
-        >
-          {row.original.isActive ? "Active" : "Inactive"}
-        </span>
-      ),
-    },
-  ];
-
-  const actions = [
-    {
-      label: "Edit",
-      className: "text-blue-600",
-      icon: "✏️",
-      onClick: (row) => handleEdit(row),
-    },
-    {
-      label: "Status",
-      className: "text-orange-600",
-      icon: "🔄",
-      onClick: (row) => handleToggle(row),
-    },
-    {
-      label: "Roles",
-      className: "text-purple-600",
-      icon: "🧩",
-      onClick: (row) => handleAssignRole(row),
-    },
-    {
-      label: "Permissions",
-      className: "text-red-600",
-      icon: "🔐",
-      onClick: (row) => {
-        setSelectedRole(row);
-        setOpenPermModal(true);
-      },
-    },
-  ];
-
 
   const closeRoleModal = () => {
   setOpenRoleModal(false);
@@ -183,28 +100,82 @@ const closePermModal = () => {
   setSelectedRole(null);
 };
 
+
+
+  const columns = useMemo(()=>[
+    ...UserColumns,
+    UserActionColumn({
+      onView: (user)=>{console.log("View", user);},
+      onEdit: (user)=>{
+        setSelectedUser(user);
+        curd.openEdit(user);
+      },
+      onRole: (user)=>{handleAssignRole(user)},
+      onPermission: (user)=>{
+        setSelectedRole(user);
+        setOpenPermModal(true);
+        console.log("OnPermissions: ", user)
+      },
+      onStatus: (user)=> {handleToggle(user);},
+      onDelete: (id)=>{curd.handleDelete(id);},
+    })
+  ],[curd]);
+
+  const table = useReactTable({
+    data,
+    columns,
+
+    getCoreRowModel: getCoreRowModel(),
+
+    manualPagination: true,
+    manualSorting: true,
+
+    pageCount: Math.ceil(totalCount / pagination.pageSize),
+
+    state: {
+      pagination,
+      sorting,
+    },
+    onPaginationChange: setPagination,
+    onSortingChange: (updater)=>{
+      setSorting(updater);
+      setPagination((prev)=> ({
+        ...prev,
+        pageIndex: 0
+      }));
+    },
+  });
+
+
+
+
   return (
     <>
-      <FilterCard>
-        <Input
-          placeholder="Search users..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
 
-        <Button onClick={handleCreate}>Add User</Button>
-      </FilterCard>
+        <DataTableToolbar
+        title="مدیریت خدامات"
+        description="لیست خدمات برای دندان"
+        table={table}
+        search={search}
+        onSearchChange={setSearch}
+        onRefresh={() => {curd.setRefreshKey((x) => x + 1);}}
+        onExport={() =>console.log("Export")}
+        onPrint={() =>window.print()}
+      >
+        <Button
+          size="sm"
+          onClick={handleCreate}
+          className="gap-1.5"
+        >
+          ثبت خدمات
+          <Plus size={16} />
+        </Button>
+      </DataTableToolbar>
 
-      <DataTable
-        columns={columns}
-        data={users}
+      <DataTable 
+        table={table}
         loading={loading}
-        totalCount={totalCount}
-        actions={actions}
-        pagination={pagination}
-        onPaginationChange={setPagination}
-        tableTitle="Users"
-        subTitle="Users List"
+        pageSize={pagination.pageSize}
       />
 
       {/* بعداً اضافه می‌کنیم */}
@@ -213,25 +184,25 @@ const closePermModal = () => {
         open={openModal}
         onClose={() => setOpenModal(false)}
         user={selectedUser}
-        onSuccess={loadData}
+        // onSuccess={()=> curd.setRefreshKey((x)=> x + 1)}
       />
 
       <UserRoleModal
         open={openRoleModal}
         onClose={() => setOpenRoleModal(false)}
         user={selectedUser}
-        onSuccess={loadData}
+        // onSuccess={()=> curd.setRefreshKey((x)=> x + 1)}
       />
 
       <RolePermissionModal
-        onSuccess={loadData}
+        // onSuccess={curd.setRefreshKey((x)=> x + 1)}
         open={openPermModal}
         onClose={() => {
           setOpenPermModal(false);
           setSelectedRole(null);
         }}
         role={selectedRole}
-      />
+      /> 
     </>
   );
 };

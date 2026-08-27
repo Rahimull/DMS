@@ -1,10 +1,10 @@
 import { createCrudApi } from "@/api/crudApi";
 import Api from "@/api/Api";
 
-const endpoint = "/Peremission";
+const endpoint = "/Permissions";
 
 const base = createCrudApi(endpoint);
-const PeremissionApi = {
+const PermissionApi = {
   ...base,
 
   lookup: async (query = {}) => {
@@ -32,4 +32,4 @@ const PeremissionApi = {
   },
 };
 
-export default PeremissionApi;
+export default PermissionApi;

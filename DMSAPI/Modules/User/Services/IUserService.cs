@@ -13,5 +13,5 @@ public interface IUserService
     Task DeleteUserAsync(int id);
 
     Task AssignRolesAsync(int userId, List<string> roles);
-    Task<bool> ChangeStatusAsync(int userId, bool isActive);
+    Task<bool> ChangeStatusAsync(int userId);
 }

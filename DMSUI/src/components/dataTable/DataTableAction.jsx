@@ -3,6 +3,11 @@ import {
   Eye,
   Pencil,
   Trash2,
+  RollerCoaster,
+  PaintRoller,
+  UserPenIcon,
+  User,
+  RefreshCcw,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,12 +30,16 @@ export default function DataTableAction({
   onEdit,
 
   onDelete,
-
+  onRole,
+  onPermission,
+  onStatus,
+  
   showView = true,
-
   showEdit = true,
-
   showDelete = true,
+  showRole=false,
+  showPermission=false,
+  showStatus=false,
 
 }) {
 
@@ -61,7 +70,7 @@ export default function DataTableAction({
 
         {showView && (
 
-          <DropdownMenuItem
+          <DropdownMenuItem className="text-green-500"
             onClick={() => onView?.(item)}
           >
 
@@ -77,13 +86,52 @@ export default function DataTableAction({
 
         {showEdit && (
 
-          <DropdownMenuItem
+          <DropdownMenuItem  className="text-blue-500"
             onClick={() => onEdit?.(item)}
           >
 
             <Pencil className="mr-2 h-4 w-4"/>
 
             ویرایش
+
+          </DropdownMenuItem>
+
+        )}
+        {showRole && (
+
+          <DropdownMenuItem className="text-purple-600"
+            onClick={() => onRole?.(item)}
+          >
+
+            <PaintRoller className="mr-2 h-4 w-4 "/>
+
+            نقش (Role)
+
+          </DropdownMenuItem>
+
+        )}
+        {showPermission && (
+
+          <DropdownMenuItem className="text-gray-600"
+            onClick={() => onPermission?.(item)}
+          >
+
+            <User className="mr-2 h-4 w-4 "/>
+
+            صلاحیت (Permission)
+
+          </DropdownMenuItem>
+
+        )}
+        {showStatus && (
+
+          <DropdownMenuItem className="text-orange-600"
+            onClick={() => onStatus?.(item)}
+          >
+
+            <RefreshCcw className="mr-2 h-4 w-4 "/>
+
+            حالت (status)
 
           </DropdownMenuItem>
 

@@ -139,15 +139,12 @@ public class UserService : IUserService
     // =========================
     // CHANGE STATUS
     // =========================
-    public async Task<bool> ChangeStatusAsync(int userId, bool isActive)
+    public async Task<bool> ChangeStatusAsync(int userId)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString());
         if (user == null) return false;
-
-        user.IsActive = isActive;
-
+        user.IsActive = !user.IsActive;
         var result = await _userManager.UpdateAsync(user);
-
         return result.Succeeded;
     }
 }

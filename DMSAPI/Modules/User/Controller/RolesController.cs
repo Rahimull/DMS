@@ -1,3 +1,4 @@
+using DMS.Models;
 using DMS.Persistence;
 using DMSAPI.Modules.User.DTOs;
 using DMSAPI.Modules.User.Entities;
@@ -9,13 +10,14 @@ using Microsoft.EntityFrameworkCore;
 namespace DMSAPI.Modules.User.Controllers;
 
 [ApiController]
-[Route("api/roles")]
+[Route("api/Roles")]
 [Authorize(Roles = "Admin")]
 public class RolesController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<IdentityRole<int>> _roleManager;
     private readonly DMSContext _context;
+        private readonly DbSet<IdentityRole<int>> _db;
 
     public RolesController(
         RoleManager<IdentityRole<int>> roleManager,
@@ -25,25 +27,99 @@ public class RolesController : ControllerBase
         _roleManager = roleManager;
         _userManager = userManager;
         _context = context;
+        _db=context.Set<IdentityRole<int>>();
     }
 
-    // ================= GET ALL =================
-    [HttpGet]
-    public IActionResult GetRoles()
-    {
-        var roles = _roleManager.Roles
-            .ToList()
-            .Select(r => new RoleDto
-            {
-                Id = r.Id,
-                Name = r.Name ?? "",
-                UserCount = _userManager
-                    .GetUsersInRoleAsync(r.Name!)
-                    .Result
-                    .Count
-            });
 
-        return Ok(roles);
+
+
+    #region     // ================= GET PAGED =================
+    [HttpPost("paged")]
+    public async Task<IActionResult> GetPaged([FromBody] QueryParams query)
+    {
+        IQueryable<IdentityRole<int>> data = _db.AsNoTracking();
+        System.Console.WriteLine("App Users Data:   ", data);
+
+        // SEARCH
+        if (!string.IsNullOrWhiteSpace(query.Search?.SearchTerm))
+        {
+            data = ApplySearch(data, query.Search.SearchTerm);
+        }
+
+        // DEFAULT SORTING (lastest first)
+        if (string.IsNullOrWhiteSpace(query.Sorting?.SortBy))
+        {
+            var createdAtProperty = typeof(IdentityRole<int>).GetProperty("CreatedAt");
+
+            if (createdAtProperty != null)
+            {
+                data = data.OrderByDescending(x => EF.Property<int>(x, "Id"));
+            }
+            else
+            {
+                data = data.OrderByDescending(x => EF.Property<int>(x, "Id"));
+            }
+
+        }
+
+        // CUSTOM SORTING
+        if (!string.IsNullOrWhiteSpace(query.Sorting?.SortBy))
+        {
+            data = ApplySorting(
+                data,
+                query.Sorting.SortBy,
+                query.Sorting.IsDescending
+            );
+        }
+
+        // TOTAL COUNT 
+        var totalCount = await data.CountAsync();
+
+        System.Console.WriteLine("============== User Count ==============");
+        System.Console.WriteLine(totalCount);
+
+        // PAGING
+        var result = await data
+            .Skip(query.Pagination.PageIndex * query.Pagination.PageSize)
+            .Take(query.Pagination.PageSize)
+            .ToListAsync();
+
+        return Ok(new
+        {
+            success = true,
+            data = new
+            {
+                data = result,
+                totalCount
+            }
+        });
+
+
+    }
+
+    #endregion
+
+    // ================= GET ALL =================
+    [HttpGet("GetAll")]
+    public async Task<IActionResult> GetRoles()
+    {
+        var roles = await _roleManager.Roles
+            .AsNoTracking()
+            .ToListAsync();
+
+        var result = new List<RoleDto>();
+        foreach(var role in roles)
+        {
+            var users = await _userManager
+                .GetUsersInRoleAsync(role.Name!);
+            result.Add(new RoleDto
+            {
+                Id = role.Id,
+                Name = role.Name ?? "",
+                UserCount = users.Count
+            });
+        }
+        return Ok(result);
     }
 
     // ================= GET BY ID =================
@@ -190,6 +266,54 @@ public class RolesController : ControllerBase
             .Select(x => x.PermissionId)
             .ToListAsync();
 
+        System.Console.WriteLine("============= Permissions ================");
+        System.Console.WriteLine(permissions);
+
         return Ok(permissions);
     }
+
+
+
+    #region ================= USER RELATION  =================
+    protected IQueryable<IdentityRole> InludeRelations(IQueryable<IdentityRole> query)
+    {
+        return query;
+    }
+
+    #endregion
+
+    #region Search
+    protected IQueryable<IdentityRole<int>> ApplySearch(IQueryable<IdentityRole<int>> query, string search)
+    {
+        return query.Where(x => x.Name != null && x.Name.Contains(search));
+    }
+    #endregion
+
+
+    #region  Sortings
+    protected IQueryable<IdentityRole<int>> ApplySorting(
+        IQueryable<IdentityRole<int>> query,
+        string sortBy,
+        bool isDescending)
+    {
+        return sortBy.ToLower() switch
+        {
+            "id" => isDescending
+                ? query.OrderByDescending(x => x.Id)
+                : query.OrderBy(x => x.Id),
+
+            "name" => isDescending
+                ? query.OrderByDescending(x => x.Name)
+                : query.OrderBy(x => x.Name),
+
+            _ => query.OrderByDescending(x => x.Id)
+        };
+    }
+
+
+    #endregion
+
+
+
+
 }

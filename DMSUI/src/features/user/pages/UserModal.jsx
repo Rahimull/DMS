@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import UserApi from "@/api/user/UserApi";
-import DepartmentApi from "@/api/DepartmentApi";
-import RolesApi from "@/api/user/RolesApi";
+
+
+
 
 import Modal from "@/components/modal/Modal";
 import Input from "@/components/common/Input";
-import Button from "@/components/common/Button";
+import { Button } from "@/components/ui/button";
 
 import { toast } from "react-toastify";
+import StaffApi from "@/features/staff/api/StaffApi";
+import UserApi from "../api/UserApi";
 
 const UserModal = ({
   open,
@@ -38,7 +40,7 @@ const loadLookups = async () => {
    
 
     const [depRes, roleRes] = await Promise.all([
-      DepartmentApi.getPaged({
+      StaffApi.getPaged({
         pagination: { pageIndex: 0, pageSize: 100 },
       }),
       RolesApi.getAll(),

@@ -51,13 +51,18 @@ const useLoadData = (
 
       const result = res.data.data;
 
+      console.log("Resposne data: ", res)
+
       setData(result.data ?? []);
       setTotalCount(result.totalCount ?? 0);
 
     } catch (err) {
+       console.log("API Response: ",err.response)
+       console.log("API Response: ", err)
 
       if (err.name !== "CanceledError") {
         console.error(err);
+       
       }
 
     } finally {
@@ -103,6 +108,7 @@ const useLoadData = (
     search,
     setSearch,
     loading,
+    setLoading,
     error,
   };
 };

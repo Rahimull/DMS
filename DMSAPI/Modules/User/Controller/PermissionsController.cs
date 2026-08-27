@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DMSAPI.Modules.User.Controllers;
 
 [ApiController]
-[Route("api/permissions")]
+[Route("api/Permissions")]
 [Authorize(Roles = "Admin")]
 public class PermissionsController : ControllerBase
 {
@@ -20,7 +20,7 @@ public class PermissionsController : ControllerBase
     }
 
     // ================= GET ALL =================
-    [HttpGet]
+    [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll()
     {
         var permissions = await _context.Permissions
@@ -34,6 +34,7 @@ public class PermissionsController : ControllerBase
 
         return Ok(permissions);
     }
+
     [HttpPost("{id}/permissions")]
     public async Task<IActionResult> AssignPermissions(
     int id,

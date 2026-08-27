@@ -7,7 +7,7 @@ const base = createCrudApi(endpoint);
 const UserApi = {
   ...base,
 
-  toggleStatus: (id)=> Api.put(`${endpoint}/${id}/toggle-status`),
+  toggleStatus: (id, isActive)=> Api.put(`${endpoint}/${id}/toggleStatus`),
   assignRoles: (id, data)=> Api.post(`${endpoint}/${id}/roles`, data),
 };
 

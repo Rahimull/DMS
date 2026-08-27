@@ -26,6 +26,8 @@ import TreatmentPlanWizard from "@/pages/patient/TreatmentPlanWizard";
 import PrescriptionPage from "@/features/Pharmacy/pages/PrescriptionPage";
 import PrescriptionItemPage from "@/features/Pharmacy/pages/PrescriptionItemPage";
 import InventoryPage from "@/features/Pharmacy/pages/InventoryPage";
+import UserPage from "./features/user/pages/UsersPage";
+import RolePage from "./features/user/pages/RolePage";
 
 
 export const router = createBrowserRouter([
@@ -145,6 +147,23 @@ export const router = createBrowserRouter([
             path: "MedicineInventory",
             element: <InventoryPage />,
           },
+
+          // ==========================
+          // USERS
+          // ==========================
+
+          {
+            path: "Users",
+            element: <UserPage />,
+          },
+          {
+            path: "permession",
+            element: <RolePage />,
+          },
+
+          
+
+          
         ],
       },
     ],

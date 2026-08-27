@@ -1,14 +1,14 @@
-
 import {
     Badge,
   Eye,
   Pencil,
   Trash2,
 } from "lucide-react";
+
 import DataTableColumnHeader from "@/components/dataTable/DataTableColumnHeader";
 
-export const ServiceColumns= [
-    
+
+export const RoleColumns= [
   {
     accessorKey: "id",
 
@@ -27,31 +27,31 @@ export const ServiceColumns= [
   header: ({ column }) => (
     <DataTableColumnHeader
       column={column}
-      title="نام خدامات"
+      title="نام صلاحیت"
+    />
+  ),
+ enableSorting:true,
+},
+  {
+  accessorKey: "normalizedName",
+  meta: {sticky: "right"},
+
+  header: ({ column }) => (
+    <DataTableColumnHeader
+      column={column}
+      title="نام نارمل شده"
     />
   ),
  enableSorting:true,
 },
  
   {
-  accessorKey: "fee",
+  accessorKey: "userCount",
 
   header: ({ column }) => (
     <DataTableColumnHeader
       column={column}
-      title="فیس"
-    />
-  ),
-},
- 
-
-  {
-  accessorKey: "description",
-
-  header: ({ column }) => (
-    <DataTableColumnHeader
-      column={column}
-      title="توضیحات"
+      title="تعداد کارمندان"
     />
   ),
 },

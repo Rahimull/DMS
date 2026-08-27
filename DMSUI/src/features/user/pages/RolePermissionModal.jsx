@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import PermissionApi from "@/api/user/PermissionApi";
-import RolesApi from "@/api/user/RolesApi";
+
+
 import Modal from "@/components/modal/Modal";
-import Button from "@/components/common/Button";
+import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
+import RolesApi from "../api/RolesApi";
+import PermissionApi from "../api/PermissionApi";
 
 const RolePermissionModal = ({ open, onClose, role }) => {
   const [permissions, setPermissions] = useState([]);
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  console.log("Roles: ", role)
 
   useEffect(() => {
     if (!open || !role?.id) return;
@@ -17,10 +21,14 @@ const RolePermissionModal = ({ open, onClose, role }) => {
       try {
         setLoading(true);
 
+        
+
         const [permRes, rolePermRes] = await Promise.all([
-          PermissionApi.getAll(),
-          RolesApi.getPermissions(role.id),
+           PermissionApi.getAll(),
+          RolesApi.getPermessions(role.id),
         ]);
+
+       
 
         setPermissions(permRes.data ?? []);
         setSelected(rolePermRes.data ?? []);
@@ -63,9 +71,10 @@ const RolePermissionModal = ({ open, onClose, role }) => {
 
   if (!open || !role) return null;
 
+
+
   return (
     <Modal open={open} onClose={onClose} title="Role Permissions">
-
       <div className="space-y-2 max-h-[400px] overflow-y-auto">
         {loading ? (
           <p>Loading...</p>

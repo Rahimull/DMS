@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import RolesApi from "@/api/user/RolesApi";
-import UserApi from "@/api/user/UserApi";
+
 import Modal from "@/components/modal/Modal";
-import Button from "@/components/common/Button";
+
 import { toast } from "react-toastify";
+import RolesApi from "../api/RolesApi";
+import UserApi from "../api/UserApi";
+import { Button } from "@/components/ui/button";
 
 const UserRoleModal = ({ open, onClose, user }) => {
   const [roles, setRoles] = useState([]);

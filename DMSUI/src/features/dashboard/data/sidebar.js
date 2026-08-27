@@ -276,6 +276,29 @@ export const sidebarItems= [
     ],
   },
 
+  // ================= Users =================
+
+  {
+    title: "مدیریت کاربران",
+
+    items: [
+      {
+        title: "کابران",
+
+        path: "/users",
+
+        icon: Users,
+      },
+
+      {
+        title: "صلاحیت",
+
+        path: "/permession",
+
+        icon: Settings,
+      },
+    ],
+  },
   // ================= System =================
 
   {
