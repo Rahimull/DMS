@@ -94,15 +94,15 @@ const DoctorsPreview = () => {
             داکترانی که
 
             <span className="block bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 bg-clip-text text-transparent">
-              به لبخند شما اهمیت می‌دهند
+              به لبخند شما اهمیت می‌ دهند
             </span>
 
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-8 text-slate-500 sm:text-base">
             تیمی از داکتران متخصص و باتجربه که با استفاده از دانش
-            تخصصی، تکنولوژی مدرن و مراقبت فردی، بهترین خدمات دندان
-            و زیبایی را برای شما فراهم می‌کنند.
+            تخصصی، تکنالوژی عصری و مراقبت فردی، بهترین خدمات دندان
+            و زیبایی را برای شما فراهم می‌ کنند.
           </p>
 
         </div>
@@ -329,7 +329,7 @@ const DoctorsPreview = () => {
             <Sparkles size={16} />
 
             <span className="text-xs font-bold">
-              مراقبت حرفه‌ای برای لبخندی سالم و زیبا
+              مراقبت حرفه‌ ای برای لبخند سالم و زیبا
             </span>
 
             <Sparkles size={16} />

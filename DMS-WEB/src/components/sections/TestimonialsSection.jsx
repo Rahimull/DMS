@@ -86,7 +86,7 @@ const TestimonialsSection = () => {
 
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-8 text-slate-500 sm:text-base">
             رضایت مریضان برای ما تنها یک امتیاز نیست؛ بلکه انگیزه‌ای است
-            برای ارائه خدمات بهتر، دقیق‌تر و حرفه‌ای‌تر.
+            برای ارائه خدمات بهتر، دقیق‌ تر و حرفه‌ای ‌تر.
           </p>
 
         </div>

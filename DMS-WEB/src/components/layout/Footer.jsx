@@ -28,11 +28,11 @@ const quickLinks = [
 
 const services = [
   "معاینه دندان",
-  "پاک‌کاری دندان",
+  "پاک‌ کاری دندان",
   "پرکردن دندان",
   "درمان ریشه دندان",
   "جراحی دندان",
-  "دندان‌پزشکی زیبایی",
+  " زیبای دندان",
 ];
 
 const Footer = () => {
@@ -184,7 +184,7 @@ const Footer = () => {
                 </h2>
 
                 <p className="mt-0.5 text-[11px] font-semibold text-slate-400">
-                  سیستم مدیریت دندان‌پزشکی
+                  سیستم مدیریت دندان و زیبای
                 </p>
 
               </div>
@@ -194,7 +194,7 @@ const Footer = () => {
             {/* Description */}
 
             <p className="mt-6 max-w-sm text-sm leading-8 text-slate-500">
-              سیستم مدرن مدیریت دندان‌پزشکی برای ساده‌سازی روند
+              سیستم مدرن مدیریت دندان و زیبای برای ساده‌ سازی روند
               گرفتن نوبت، مدیریت مریضان، داکتران و خدمات کلینیکی
               در یک محیط ساده، آرام و حرفه‌ای.
             </p>
@@ -372,6 +372,9 @@ const Footer = () => {
                   <p className="mt-1 text-sm font-semibold text-slate-700">
                     کابل، افغانستان
                   </p>
+                  <p className="mt-1 text-sm font-semibold text-slate-700">
+                    ناحیه 7، چهلستون
+                  </p>
 
                 </div>
 
@@ -396,7 +399,7 @@ const Footer = () => {
                     شماره تماس
                   </p>
 
-                  <p className="mt-1 text-sm font-semibold text-slate-700 transition-colors group-hover:text-blue-700">
+                  <p dir="ltr" className="mt-1 text-sm font-semibold text-slate-700 transition-colors group-hover:text-blue-700">
                     +93 700 000 000
                   </p>
 
@@ -448,7 +451,7 @@ const Footer = () => {
                   </p>
 
                   <p className="mt-1 text-sm font-semibold text-slate-700">
-                    شنبه تا پنج‌شنبه
+                    شنبه تا پنج‌ شنبه
                   </p>
 
                   <p className="mt-0.5 text-xs font-medium text-slate-400">

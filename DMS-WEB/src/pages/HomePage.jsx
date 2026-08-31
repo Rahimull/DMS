@@ -22,37 +22,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-
-// import AppointmentCTA from "../components/homeSection/AppointmentCTA";
-// import HomeFeatures from "../components/homeSection/HomeFeatures";
-// import HomeHero from "../components/homeSection/HomeHero";
-// import ServicesPreview from "../components/homeSection/ServicePreview";
-// import StatsSection from "../components/homeSection/StatsSection";
-// import TestimonialsSection from "../components/homeSection/TestimonialsSection";
-
-
-
-
-
-// const HomePage = () => {
-//   return (
-//     <main dir="rtl">
-
-//       <HomeHero />
-
-//       <HomeFeatures />
-
-//       <ServicesPreview />
-
-//       <StatsSection />
-
-//       <TestimonialsSection />
-
-//       <AppointmentCTA />
-
-//     </main>
-//   );
-// };
-
-// export default HomePage;

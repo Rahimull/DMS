@@ -199,7 +199,7 @@ const StatsSection = () => {
                 <span className="h-2 w-2 animate-pulse rounded-full bg-blue-600" />
 
                 <span className="text-xs font-semibold text-slate-500">
-                  اعتماد شما، بزرگ‌ترین افتخار ماست
+                  اعتماد شما، بزرگ‌ ترین افتخار ماست
                 </span>
 
               </div>
@@ -208,7 +208,7 @@ const StatsSection = () => {
 
                 <span className="h-px w-8 bg-gradient-to-r from-transparent to-blue-400" />
 
-                مراقبت مسلکی و مدرن
+                مراقبت مسلکی و عصری
 
                 <span className="h-px w-8 bg-gradient-to-l from-transparent to-indigo-400" />
 

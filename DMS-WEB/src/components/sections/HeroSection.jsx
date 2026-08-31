@@ -21,11 +21,11 @@ const slides = [
   {
     id: 1,
     image: dental1,
-    badge: "مراقبت مدرن دندان",
+    badge: "مراقبت عصری دندان",
     title: "لبخند شما،",
     highlight: "افتخار ماست",
     description:
-      "با استفاده از خدمات مدرن دندان و زیبایی، داکتران مسلکی و تکنالوژی پیشرفته، برای داشتن دندان‌های سالم‌تر و لبخندی زیباتر در کنار شما هستیم.",
+      "با استفاده از خدمات عصری دندان و زیباییی، داکتران مسلکی و تکنالوژی پیشرفته، برای داشتن دندان‌ های سالم‌ تر و لبخندی زیباتر در کنار شما هستیم.",
   },
 
   {
@@ -35,17 +35,17 @@ const slides = [
     title: "سلامت دندان‌های شما،",
     highlight: "اولویت ماست",
     description:
-      "ما با استفاده از روش‌های مدرن درمانی و تجهیزات پیشرفته، خدمات باکیفیت دندان‌پزشکی را در یک محیط آرام و مناسب ارائه می‌کنیم.",
+      "ما با استفاده از روش‌ های عصری درمانی و تجهیزات پیشرفته، خدمات باکیفیت دندان و زیبایی را در یک محیط آرام و مناسب ارائه می‌ کنیم.",
   },
 
   {
     id: 3,
     image: dental3,
-    badge: "تجربه متفاوت دندان‌پزشکی",
+    badge: "تجربه متفاوت دندان و زیبایی",
     title: "لبخندی زیبا،",
     highlight: "اعتماد بیشتر",
     description:
-      "از معاینه و پیشگیری تا درمان‌های تخصصی و زیبایی، تیم مسلکی ما در تمام مراحل مراقبت از دندان‌های شما همراه‌تان است.",
+      "از معاینه و پیشگیری تا درمان‌های تخصصی و زیباییی، تیم مسلکی ما در تمام مراحل مراقبت از دندان‌های شما همراه ‌تان است.",
   },
 ];
 
@@ -147,58 +147,7 @@ const HeroSection = () => {
           TOP HEADER
       ====================================================== */}
 
-      <div className="relative z-30 mx-auto flex max-w-7xl items-center justify-between px-4 pt-6 sm:px-6 lg:px-8">
-
-        {/* Logo */}
-
-        <div className="flex items-center gap-3">
-
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-white shadow-xl backdrop-blur-xl">
-
-            <span className="text-lg font-extrabold">
-              DMS
-            </span>
-
-          </div>
-
-          <div className="hidden sm:block">
-
-            <p className="text-sm font-bold text-white">
-              کلینیک دندان و زیبایی نورستانی
-            </p>
-
-            <p className="mt-1 text-[11px] text-blue-100/60">
-              مراقبت مسلکی • تکنالوژی مدرن
-            </p>
-
-          </div>
-
-        </div>
-
-        {/* Phone */}
-
-        <a
-          href="tel:+93700000000"
-          className="group flex items-center gap-3 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-white shadow-lg backdrop-blur-xl transition-all duration-300 hover:bg-white hover:text-indigo-700 sm:px-4"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-blue-700 transition group-hover:bg-blue-700 group-hover:text-white">
-            <Phone size={15} />
-          </div>
-
-          <div className="hidden text-right sm:block">
-
-            <p className="text-[10px] text-white/50 group-hover:text-indigo-400">
-              تماس با ما
-            </p>
-
-            <p className="text-xs font-bold">
-              +93 700 000 000
-            </p>
-
-          </div>
-        </a>
-
-      </div>
+    
 
       {/* =====================================================
           MAIN CONTENT
@@ -248,7 +197,7 @@ const HeroSection = () => {
                 BUTTONS
             ================================================== */}
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 mr-10 flex flex-col gap-3 sm:flex-row">
 
               {/* Appointment */}
 
@@ -290,7 +239,7 @@ const HeroSection = () => {
                 TRUST ITEMS
             ================================================== */}
 
-            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <div className="mt-10 mr-10 flex flex-wrap items-center gap-x-10 gap-y-4">
 
               <div className="flex items-center gap-2 text-xs text-white/85">
 
@@ -400,7 +349,7 @@ const HeroSection = () => {
               <div className="h-4 w-px bg-white/20" />
 
               <p className="text-xs text-white/70">
-                تجربه‌ای مطمئن برای بیماران
+                تجربه‌ ای مطمئن برای مریضان
               </p>
 
             </div>
