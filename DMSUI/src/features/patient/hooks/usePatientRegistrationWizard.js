@@ -15,9 +15,7 @@ export default function usePatientRegistrationWizard() {
     conditions: {
       conditionDetails: {},
     },
-
-    services: {
-      appointment: {
+    appointment: {
         patientId: null,
         serviceId: null, // در صورت نیاز (Service اصلی)
         installment: 1,
@@ -31,6 +29,7 @@ export default function usePatientRegistrationWizard() {
         details: "",
       },
 
+    services: {
       patientServices: [],
     },
 
@@ -52,6 +51,7 @@ export default function usePatientRegistrationWizard() {
   const goToStep = (stepNumber) => {
     setStep(stepNumber);
   };
+
 
   const updateSection = (section, value) => {
     setFormData((prev) => {
@@ -75,16 +75,8 @@ export default function usePatientRegistrationWizard() {
     });
   };
 
-  const resetWizard = () => {
-    setStep(1);
-    setFormData(initialFormData);
-  };
 
-  console.log("Form Data", formData);
 
-  const handleSubmit = async () => {
-    await PatientApi.create(formData);
-  };
 
   const updateValue = (path, value) => {
     setFormData((prev) => {
@@ -105,6 +97,19 @@ export default function usePatientRegistrationWizard() {
     });
   };
 
+
+    const resetWizard = () => {
+    setStep(1);
+    setFormData(initialFormData);
+  };
+
+  
+  console.log("Form Data", formData);
+
+  const handleSubmit = async () => {
+    await PatientApi.create(formData);
+  };
+
   // ولیدیشن برای فیلد های ضروری برای هر مرحله
   const validateCurrentStep = () => {
     let validationError = {};
@@ -123,7 +128,7 @@ export default function usePatientRegistrationWizard() {
       case 3:
         validationError = validateFields(
           AppointmentFields([], []), // یا fields فعلی
-          formData.services.appointment,
+          formData.appointment,
         );
         break;
 

@@ -3,6 +3,7 @@ using System;
 using DMS.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMSAPI.Migrations
 {
     [DbContext(typeof(DMSContext))]
-    partial class DMSContextModelSnapshot : ModelSnapshot
+    [Migration("20260901060238_FixedLabCase1")]
+    partial class FixedLabCase1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
@@ -745,7 +748,7 @@ namespace DMSAPI.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("lab_ID");
 
-                    b.Property<DateTime?>("PaymentDate")
+                    b.Property<DateOnly>("PaymentDate")
                         .HasColumnType("TEXT")
                         .HasColumnName("payment_date");
 
@@ -2111,7 +2114,7 @@ namespace DMSAPI.Migrations
             modelBuilder.Entity("DMS.Modules.Labs.Entities.LabPayment", b =>
                 {
                     b.HasOne("DMS.Modules.Labs.Entities.LabCase", "LabCase")
-                        .WithMany("LabPayments")
+                        .WithMany("Payments")
                         .HasForeignKey("LabCaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2501,7 +2504,7 @@ namespace DMSAPI.Migrations
 
             modelBuilder.Entity("DMS.Modules.Labs.Entities.LabCase", b =>
                 {
-                    b.Navigation("LabPayments");
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("DMS.Modules.Patients.Entities.Patient", b =>

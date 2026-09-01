@@ -28,6 +28,8 @@ import PrescriptionItemPage from "@/features/Pharmacy/pages/PrescriptionItemPage
 import InventoryPage from "@/features/Pharmacy/pages/InventoryPage";
 import UserPage from "./features/user/pages/UsersPage";
 import RolePage from "./features/user/pages/RolePage";
+import LabPage from "./features/Lab/Pages/LabPage";
+import LabCasePage from "./features/LabCase/Pages/LabCasePage";
 
 
 export const router = createBrowserRouter([
@@ -148,6 +150,18 @@ export const router = createBrowserRouter([
             element: <InventoryPage />,
           },
 
+          // ==========================
+          // LABS
+          // ==========================
+
+          {
+            path: "Lab",
+            element: <LabPage />,
+          },
+          {
+            path: "LabCase",
+            element: <LabCasePage />,
+          },
           // ==========================
           // USERS
           // ==========================

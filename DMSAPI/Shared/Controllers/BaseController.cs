@@ -119,6 +119,9 @@ public abstract class BaseController<TEntity> : ControllerBase
     [HttpPost]
     public virtual async Task<IActionResult> Create([FromBody] TEntity entity)
     {
+
+        System.Console.WriteLine("=============================== Entity ======================");
+        System.Console.WriteLine(entity);
         await _db.AddAsync(entity);
 
         await _context.SaveChangesAsync();

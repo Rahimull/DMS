@@ -3,7 +3,12 @@ import Api from "./Api";
 export const createCrudApi = (endpoint) => ({
   getPaged: (queryParams) => Api.post(`${endpoint}/paged`, queryParams),
 
-  create: (data) => Api.post(endpoint, data),
+  create: (data) => {
+    console.log("Creating data:", data);
+    console.log("Is Form data:", data instanceof FormData);
+    Api.post(endpoint, data)
+  },
+
 
   getById: (id, data) => Api.get(`${endpoint}/${id}`),
   getAll: () => Api.get(`${endpoint}/getAll`),

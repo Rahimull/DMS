@@ -17,7 +17,7 @@ public class LabPaymentConfiguration : IEntityTypeConfiguration<LabPayment>
 
 
         builder.HasOne(x => x.LabCase)
-            .WithMany(x => x.Payments)
+            .WithMany(x => x.LabPayments)
             .HasForeignKey(x => x.LabCaseId)
             .OnDelete(DeleteBehavior.Cascade);
 

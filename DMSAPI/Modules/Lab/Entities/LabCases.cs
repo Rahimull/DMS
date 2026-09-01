@@ -15,22 +15,22 @@ public class LabCase : BaseEntity
     public string? Material { get; set; }
 
     [Column("patient_ID")]
-    public int PatientId { get; set; }
+    public int? PatientId { get; set; }
     [Column("lab_ID")]
     public int LabId { get; set; }
     [Column("staff_ID")]
-    public int StaffId { get; set; }
+    public int? StaffId { get; set; }
 
 
     [Column("case_type")]
-    public int CaseType { get; set; }
+    public int? CaseType { get; set; }
 
     [Column("case_status")]
     public string CaseStatus { get; set; } = null!;
     [Column("date_sent")]
-    public DateOnly DateSent { get; set; }
+    public DateTime? DateSent { get; set; }
     [Column("date_received")]
-    public DateOnly DateReceived { get; set; }
+    public DateTime? DateReceived { get; set; }
 
     [Required]
      [Column("quantity")]
@@ -57,5 +57,5 @@ public class LabCase : BaseEntity
     public Staff? Staff { get; set; }
     public Service? Service { get; set; }
 
-    public ICollection<LabPayment> Payments { get; set; } = new List<LabPayment>();
+    public ICollection<LabPayment> LabPayments { get; set; } = new List<LabPayment>();
 }

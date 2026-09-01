@@ -56,6 +56,7 @@ export default function useAppointmentWizard() {
     setStep(stepNumber);
   };
 
+  
   const updateSection = (section, value) => {
     setFormData((prev) => {
       if (Array.isArray(value)) {

@@ -20,7 +20,7 @@ public class LabPayment : BaseEntity
     public int PaymentStatus { get; set; }
 
     [Column("payment_date")]
-    public DateOnly PaymentDate { get; set; }
+    public DateTime? PaymentDate { get; set; }
 
     [Column("amount_paid")]
     public decimal AmountPaid { get; set; }

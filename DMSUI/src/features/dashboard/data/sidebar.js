@@ -67,16 +67,6 @@ export const sidebarItems= [
 
         icon: Users,
       },
-
-      {
-        title: "نوبت‌ها",
-
-        path: "/appointments",
-
-        icon: Calendar,
-
-        badge: 8,
-      },
       {
         title: "کلینیک",
 
@@ -92,7 +82,7 @@ export const sidebarItems= [
   // ================= Treatment =================
 
   {
-    title: "درمان",
+    title: "تداوی",
 
     items: [
       {
@@ -131,14 +121,6 @@ export const sidebarItems= [
 
         icon: ClipboardList,
       },
-
-      {
-        title: "درمان مجدد",
-
-        path: "/retreatment",
-
-        icon: RefreshCcw,
-      },
     ],
   },
 
@@ -149,9 +131,16 @@ export const sidebarItems= [
 
     items: [
       {
-        title: "کیس‌های لابراتوار",
+        title: "مدیریت لابراتوار",
 
-        path: "/lab-cases",
+        path: "/lab",
+
+        icon: FlaskConical,
+      },
+      {
+        title: "کیس‌ های لابراتوار",
+
+        path: "/labCase",
 
         icon: FlaskConical,
       },
@@ -305,15 +294,7 @@ export const sidebarItems= [
     title: "سیستم",
 
     items: [
-      {
-        title: "کلینیک‌ها",
-
-        path: "/clinics",
-
-        icon: Building2,
-      },
-
-      {
+     {
         title: "تنظیمات",
 
         path: "/settings",

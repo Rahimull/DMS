@@ -41,7 +41,7 @@ public class PatientController : BaseController<Patient>
             // ======================
 
             var patient = dto.Patient.ToPatient();
-            patient.StaffId = dto.Services.Appointment.StaffId ?? 1;
+            patient.StaffId = dto.Appointment.StaffId ?? 1;
             _context.Patients.Add(patient);
             await _context.SaveChangesAsync();
 
@@ -83,17 +83,17 @@ public class PatientController : BaseController<Patient>
 
                 appointment = new Appointment
                 {
-                    PatientId = patient.Id,
+                    PatientId = patient!.Id,
                     ServiceId = dto.Services.Appointment.ServiceId,
-                    StaffId = dto.Services.Appointment.StaffId,
-                    Installment = dto.Services.Appointment.Installment,
-                    Round = dto.Services.Appointment.Round,
-                    Discount = dto.Services.Appointment.Discount,
-                    ServiceFee = dto.Services.Appointment.ServiceFee,
-                    TotalFee = dto.Services.Appointment.TotalFee,
-                    MeetDate = dto.Services.Appointment.MeetDate,
-                    Status = dto.Services.Appointment.Status,
-                    Details = dto.Services.Appointment.Details,
+                    StaffId = dto.Appointment.StaffId,
+                    Installment = dto.Appointment.Installment,
+                    Round = dto.Appointment.Round,
+                    Discount = dto.Appointment.Discount,
+                    ServiceFee = dto.Appointment.ServiceFee,
+                    TotalFee = dto.Appointment.TotalFee,
+                    MeetDate = dto.Appointment.MeetDate,
+                    Status = dto.Appointment.Status,
+                    Details = dto.Appointment.Details,
                 };
                 _context.Appointments.Add(appointment);
                 await _context.SaveChangesAsync();
