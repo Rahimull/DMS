@@ -226,7 +226,7 @@ export const sidebarItems= [
       {
         title: "مصارف",
 
-        path: "/expenses",
+        path: "/expense",
 
         icon: Wallet,
       },

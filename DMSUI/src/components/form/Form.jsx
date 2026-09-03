@@ -122,8 +122,27 @@ const Form = ({
 
     try {
       setLoading(true);
+      const submitData = { ...formData };
 
-      await onSubmit(formData);
+      fields.forEach((field) => {
+        if (typeof field.value === "function") {
+          submitData[field.name] = field.value(submitData);
+        }
+
+        
+        if (
+        (field.type === "number" || field.type === "select") &&
+        submitData[field.name] === ""
+        ) {
+          submitData[field.name] = null;
+        }
+        if((field.type === "datetime-local") && submitData[field.name] === ""){
+          submitData[field.name] = null;
+        }
+    
+      });
+
+      await onSubmit(submitData);
 
       if (!initialValues) {
         setFormData(initialState);
@@ -133,6 +152,8 @@ const Form = ({
       setServerErrors({});
     } catch (error) {
       const response = error?.response?.data;
+      console.error("Form submission error:", response);
+      console.error("Full error object:", error);
 
       if (response?.errors) {
         const formattedErrors = {};
@@ -212,7 +233,12 @@ const Form = ({
               required={field.required}
               name={field.name}
               type={field.type || "text"}
-              value={formData[field.name]}
+              // value={formData[field.name]}
+              value={ typeof field.value === "function"
+                ? field.value(formData)
+                : formData[field.name]
+              }
+              
               placeholder={field.placeholder}
               autoFocus={field.autoFocus}
               maxLength={field.maxLength}

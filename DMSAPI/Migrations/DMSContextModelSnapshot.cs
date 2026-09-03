@@ -664,7 +664,7 @@ namespace DMSAPI.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LabId")
+                    b.Property<int?>("LabId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("lab_ID");
 
@@ -2086,8 +2086,7 @@ namespace DMSAPI.Migrations
                     b.HasOne("DMS.Modules.Labs.Entities.Lab", "Lab")
                         .WithMany("LabCases")
                         .HasForeignKey("LabId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DMS.Modules.Patients.Entities.Patient", "Patient")
                         .WithMany("LabCases")

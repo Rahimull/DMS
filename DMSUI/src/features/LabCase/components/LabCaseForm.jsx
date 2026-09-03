@@ -2,7 +2,7 @@ import FormModal from "@/components/modal/FormModal";
 import { LabCaseFields } from "./LabCaseFields";
 
 
-const LabCaseForm = ({ CURD, patients=[], doctors=[], labs=[] }) => {
+const LabCaseForm = ({ CURD, patients=[], doctors=[], labs=[], services=[] }) => {
 
   return (
     <>
@@ -14,7 +14,7 @@ const LabCaseForm = ({ CURD, patients=[], doctors=[], labs=[] }) => {
         loading={CURD.loading}
         submitText={CURD.editing ? "اپدیت کیس لب" : "اضاف کردن کیس لب"}
         initialValues={CURD.editing}
-        fields={LabCaseFields(patients, doctors, labs)}
+        fields={LabCaseFields(patients, doctors, labs, services)}
       />
     </>
   );

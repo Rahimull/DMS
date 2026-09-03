@@ -17,10 +17,10 @@ public class LabCase : BaseEntity
     [Column("patient_ID")]
     public int? PatientId { get; set; }
     [Column("lab_ID")]
-    public int LabId { get; set; }
+    public int? LabId { get; set; }
     [Column("staff_ID")]
     public int? StaffId { get; set; }
-
+  
 
     [Column("case_type")]
     public int? CaseType { get; set; }
@@ -41,8 +41,6 @@ public class LabCase : BaseEntity
     [Required]
      [Column("total_price")]
     public decimal TotalPrice { get; set; }
-
-   
 
     [MaxLength(200)]
     [Column("otherService_details")]

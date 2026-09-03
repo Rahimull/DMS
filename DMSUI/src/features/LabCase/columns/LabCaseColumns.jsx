@@ -2,8 +2,12 @@ import {
   BadgeCheck,
   CalendarDays,
   DollarSign,
+  DraftingCompass,
   FlaskConical,
+  LucideStarOff,
   Package,
+  User2,
+  UserCheck,
   UserRound,
 } from "lucide-react";
 
@@ -82,7 +86,7 @@ export const LabCaseColumns = [
   /* ================= PATIENT ================= */
 
  {
-  accessorKey: "patient",
+  accessorKey: "patientName",
 
   meta: {
     sticky: "right",
@@ -98,17 +102,12 @@ export const LabCaseColumns = [
   enableSorting: false,
 
   cell: ({ row }) => {
-    const patient = row.original.patient;
-
-    const patientName = patient
-      ? `${patient.firstName || ""} ${patient.lastName || ""}`.trim()
-      : "-";
 
     return (
       <div className="flex min-w-[180px] items-center gap-3">
 
         {/* Avatar */}
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-200 via-blue-400 to-indigo-800 text-white shadow-md shadow-blue-500/20">
           <UserRound size={18} />
         </div>
 
@@ -116,7 +115,7 @@ export const LabCaseColumns = [
         <div className="min-w-0">
 
           <p className="truncate font-bold text-slate-800">
-            {patientName}
+            {row.original.patientName || "-"}
           </p>
 
           <p className="mt-0.5 text-xs text-slate-400">
@@ -163,7 +162,7 @@ export const LabCaseColumns = [
   /* ================= LAB ================= */
 
   {
-    accessorKey: "lab",
+    accessorKey: "labName",
 
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -182,7 +181,7 @@ export const LabCaseColumns = [
         </div>
 
         <span className="font-semibold text-slate-700">
-          {row.original.lab?.name || "-"}
+          {row.original.labName || "-"}
         </span>
 
       </div>
@@ -191,32 +190,45 @@ export const LabCaseColumns = [
 
   /* ================= DOCTOR ================= */
 
-  {
-    accessorKey: "staffName",
+   {
+  accessorKey: "staffName",
 
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="نام داکتر"
-      />
-    ),
+  header: ({ column }) => (
+    <DataTableColumnHeader
+      column={column}
+      title="نام داکتر"
+    />
+  ),
 
-    enableSorting: true,
+  enableSorting: true,
 
-    cell: ({ row }) => (
-      <div className="min-w-[140px]">
+  cell: ({ row }) => {
+    return (
+      <div className="flex min-w-[180px] items-center gap-3">
 
-        <p className="font-semibold text-slate-700">
-          {row.original.staffName || "-"}
-        </p>
+        {/* Avatar */}
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-green-400 via-green-400 to-indigo-900 text-white shadow-md shadow-blue-500/20">
+          <UserCheck size={14} />
+        </div>
 
-        <p className="mt-0.5 text-xs text-slate-400">
-          داکتر مسئول
-        </p>
+        {/* staff Information */}
+        <div className="min-w-0">
+
+          <p className="truncate font-bold text-slate-800">
+            {row.original.staffName || "-"}
+          </p>
+
+          <p className="mt-0.5 text-xs text-slate-400">
+            داکتر مسول
+          </p>
+
+        </div>
 
       </div>
-    ),
+    );
   },
+},
+
 
   /* ================= CASE TYPE ================= */
 

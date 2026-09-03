@@ -57,11 +57,17 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
     } catch (err) {
       const message = err?.response?.data?.message || "Create failed";
 
-      console.log(err.response?.data);
+        console.log("FULL ERROR:", err);
+        console.log("STATUS:", err.response?.status);
+        console.log("RESPONSE DATA:", err.response?.data);
 
       notify.error(message);
 
-      return false;
+      console.log("❌ ERROR STATUS:", err.response?.status);
+      console.log(
+    "❌ ERROR RESPONSE DATA:",
+    JSON.stringify(err.response?.data, null, 2)
+  );
     } finally {
       setLoading(false);
     }

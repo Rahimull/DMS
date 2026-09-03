@@ -1,7 +1,8 @@
 export const LabCaseFields = (
   patients = [],
   doctors = [],
-  labs = []
+  labs = [],
+  services = [],
 ) => [
   {
     name: "material",
@@ -10,58 +11,23 @@ export const LabCaseFields = (
     maxLength: 150,
     placeholder: "نوع مورد",
   },
-  {
-    name: "patient",
-    label: " نام مریض",
-    type: "select",
-
-    options: patients.map((patient) => ({
-      value: patient.id,
-      label: `${patient.firstName} ${patient.lastName}`,
-    })),
-
-    
-  },
-  {
-    name: "staff",
-    label: " نام داکتر",
-    type: "select",
-    placeholder: "نام داکتر",
-    options: doctors.map((doctor) => ({
-      value: doctor.id,
-      label: `${doctor.firstName} ${doctor.lastName}`,
-    })),
-  },
-  {
-    name: "lab",
-    label: "  لابراتوار",
-    type: "select",
-    placeholder: "لابراتوار",
-    options: labs.map((lab) => ({
-      value: lab.id,
-      label: lab.name,
-    })),
-  },
- {
+   {
   name: "caseType",
   label: "نوع مورد",
   type: "select",
+  defaultValue: null,
   placeholder: "نوع مورد را انتخاب کنید",
-  options: [
-    { value: "Crown", label: "روکش (Crown)" },
-    { value: "Bridge", label: "بریج (Bridge)" },
-    { value: "Veneer", label: "ونیر (Veneer)" },
-    { value: "Implant", label: "ایمپلنت (Implant)" },
-    { value: "Denture", label: "دندان مصنوعی (Denture)" },
-    { value: "Orthodontic", label: "ارتودنسی" },
-    { value: "Other", label: "سایر" },
-  ],
+  options: services.map((service) => ({
+    value: service.id,
+    label: service.name,
+  })),
 },
 {
   name: "caseStatus",
   label: "وضعیت مورد",
   type: "select",
   placeholder: "وضعیت مورد را انتخاب کنید",
+  required: true,
   options: [
     { value: "Pending", label: "در انتظار" },
     { value: "Sent", label: "ارسال شده" },
@@ -71,6 +37,40 @@ export const LabCaseFields = (
     { value: "Cancelled", label: "لغو شده" },
   ],
 },
+  {
+    name: "labId",
+    label: "  لابراتوار",
+    type: "select",
+      defaultValue: null,
+    placeholder: "لابراتوار",
+    options: labs.map((lab) => ({
+      value: lab.id,
+      label: lab.name,
+    })),
+  },
+  {
+    name: "patientId",
+    label: " نام مریض",
+    type: "select",
+
+    options: patients.map((patient) => ({
+      value: patient.id || null,
+      label: `${patient.firstName} ${patient.lastName}`,
+    })),
+  },
+  
+  {
+    name: "staffId",
+    label: " نام داکتر",
+    type: "select",
+    placeholder: "نام داکتر",
+    options: doctors.map((doctor) => ({
+      value: doctor.id,
+      label: `${doctor.firstName} ${doctor.lastName}`,
+    })),
+  },
+  
+
   {
     name: "dateSent",
     label: "تاریخ ارسال",
@@ -97,6 +97,16 @@ export const LabCaseFields = (
     required: true,
     placeholder: "قیمت واحد",
   },
+    {
+    name: "totalPrice",
+    label: "قیمت کل",
+    type: "number",
+    value: (formData) => {
+      return Number(formData.quantity || 1) * Number(formData.unitPrice || 1);
+    },
+    maxLength: 200,
+    placeholder: "قیمت کل",
+  },
   {
     name: "otherServiceDetails",
     label: " جزئیات خدمات دیگر",
@@ -113,4 +123,5 @@ export const LabCaseFields = (
     col: 2,
     placeholder: " توضیحات",
   },
+
 ];

@@ -30,6 +30,8 @@ import UserPage from "./features/user/pages/UsersPage";
 import RolePage from "./features/user/pages/RolePage";
 import LabPage from "./features/Lab/Pages/LabPage";
 import LabCasePage from "./features/LabCase/Pages/LabCasePage";
+import ViewLabCase from "./features/LabCase/Pages/ViewLabCase";
+import ExpensePage from "./features/Expense/Pages/ExpensePage";
 
 
 export const router = createBrowserRouter([
@@ -162,10 +164,14 @@ export const router = createBrowserRouter([
             path: "LabCase",
             element: <LabCasePage />,
           },
+          {
+            path: "LabCase/view/:id",
+            element: <ViewLabCase />,
+          },
+
           // ==========================
           // USERS
           // ==========================
-
           {
             path: "Users",
             element: <UserPage />,
@@ -173,6 +179,14 @@ export const router = createBrowserRouter([
           {
             path: "permession",
             element: <RolePage />,
+          },
+
+          // ==========================
+          // Expense
+          // ==========================
+          {
+            path: "Expense",
+            element: <ExpensePage />,
           },
 
           

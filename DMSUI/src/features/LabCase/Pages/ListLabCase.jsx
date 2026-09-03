@@ -13,7 +13,9 @@ import { LabCaseActionColumn } from "@/features/LabCase/columns/LabCaseActionCol
 import PatientApi from "@/features/patient/api/PatientApi";
 import StaffApi from "@/features/staff/api/StaffApi";
 import LabApi from "@/features/Lab/api/LabApi";
-import { array } from "zod";
+import ServiceApi from "@/features/service/api/ServiceApi";
+import { useNavigate } from "react-router-dom";
+
 
 export default function ListLabCase() {
   const [filterStatus, setFilterStatus] = useState("all");
@@ -23,7 +25,10 @@ export default function ListLabCase() {
   const [patients, setPatients] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [labs, setLabs] = useState([]);
+  const [services, setServices] = useState([]);
   const [lookupLoading, setLookupLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const filters = useMemo(
     () => ({
@@ -67,6 +72,7 @@ export default function ListLabCase() {
 
       LabCaseActionColumn({
         onView: (LabCase) => {
+          navigate(`/LabCase/view/${LabCase.id}`);
           console.log("View:", LabCase);
         },
 
@@ -121,14 +127,16 @@ export default function ListLabCase() {
     const loadlabCasesLookupData = async () =>{
       try{
         setLookupLoading(true);
-        const [patientsData, doctorsData, labsData] = await Promise.all([
+        const [patientsData, doctorsData, labsData, servicesData] = await Promise.all([
           PatientApi.getAll(),
           StaffApi.getAll(),
           LabApi.getAll(),
+          ServiceApi.getAll(),
         ]);
         setPatients(getArrayData(patientsData));
         setDoctors(getArrayData(doctorsData));
         setLabs(getArrayData(labsData));
+        setServices(getArrayData(servicesData));
       } catch (error) {
         console.error("Error fetching lookup data:", error);
       } finally {
@@ -181,7 +189,7 @@ export default function ListLabCase() {
         pageSize={pagination.pageSize}
       />
 
-      <LabCaseForm CURD={curd} patients={patients} doctors={doctors} labs={labs} />
+      <LabCaseForm CURD={curd} patients={patients} doctors={doctors} labs={labs} services={services} />
     </div>
   );
 }
