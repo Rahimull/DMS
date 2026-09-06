@@ -1,8 +1,11 @@
 import FormModal from "@/components/modal/FormModal";
-import { ExpenseFields } from "./ExpenseFields";
+import { ExpenseDetailsFields } from "./ExpenseDetailsFields";
 
 
-const ExpenseForm = ({ CURD, patients=[], doctors=[], labs=[], services=[] }) => {
+
+const ExpenseDetailsForm = ({ CURD, expense=[], staff=[] }) => {
+
+
 
   return (
     <>
@@ -14,10 +17,10 @@ const ExpenseForm = ({ CURD, patients=[], doctors=[], labs=[], services=[] }) =>
         loading={CURD.loading}
         submitText={CURD.editing ? "اپدیت مصرف" : "اضاف کردن مصرف"}
         initialValues={CURD.editing}
-        fields={ExpenseFields(patients, doctors, labs, services)}
+        fields={ExpenseDetailsFields(expense, staff)}
       />
     </>
   );
 };
 
-export default ExpenseForm;
+export default ExpenseDetailsForm;

@@ -13,32 +13,24 @@ public class ExpenseDetail : BaseEntity
     [Column("purchased_by")]
     public int StaffId { get; set; }
 
+    [Column("name")]
+    public string? Name { get; set; }
 
-    [Required]
-    [Column("item_name")]
-    public string? ItemName { get; set; }
-
-
-    [Required]
     [Column("quantity")]
-    public int Quantity { get; set; }
+    public int? Quantity { get; set; }
 
     [Column("qty_unit")]
     public string? QuantityUnit { get; set; }
 
-    [Required]
+
     [Column("unit_price")]
-    public int UnitPrice { get; set; }
+    public decimal? UnitPrice { get; set; }
     [Column("total")]
-    [Required]
-    public Decimal Total { get; set; }
 
-    [Column("purchase_date")]
-    [Required]
-    public DateOnly PurchaseDate { get; set; }
-
+    public decimal? Total { get; set; }
+    
     [Column("invoice")]
-    public string? Inoice { get; set; }
+    public string? Invoice { get; set; }
     [Column("note")]
     public string? Note { get; set; }
 

@@ -32,6 +32,7 @@ import LabPage from "./features/Lab/Pages/LabPage";
 import LabCasePage from "./features/LabCase/Pages/LabCasePage";
 import ViewLabCase from "./features/LabCase/Pages/ViewLabCase";
 import ExpensePage from "./features/Expense/Pages/ExpensePage";
+import ExpenseDetailsPage from "./features/Expense/Pages/ExpenseDetailsPage";
 
 
 export const router = createBrowserRouter([
@@ -187,6 +188,10 @@ export const router = createBrowserRouter([
           {
             path: "Expense",
             element: <ExpensePage />,
+          },
+          {
+            path: "ExpenseDetails",
+            element: <ExpenseDetailsPage />,
           },
 
           

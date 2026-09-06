@@ -8,9 +8,9 @@ using AutoMapper;
 namespace DMS.Modules.Finances.Controllers;
 
 [Route("api/[controller]")]
-public class ExpenseDetailController : BaseDtoController<ExpenseDto, ExpenseCreateDto, ExpenseUpdateDto, Expense>
+public class ExpenseController : BaseDtoController<ExpenseDto, ExpenseCreateDto, ExpenseUpdateDto, Expense>
 {
-    public ExpenseDetailController(DMSContext context, IMapper mapper)
+    public ExpenseController(DMSContext context, IMapper mapper)
         : base(context, mapper)
     {
     }

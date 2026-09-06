@@ -1,31 +1,29 @@
 import { DataTable, DataTableToolbar } from "@/components/dataTable";
 import { Button } from "@/components/ui/button";
-import ExpenseApi from "@/features/Expense/api/ExpenseApi";
-import { ExpenseColumns } from "@/features/Expense/columns/ExpenseColumns";
+import ExpenseDetailsApi from "@/features/Expense/api/ExpenseDetailsApi";
+import { ExpenseDetailsColumns } from "@/features/Expense/columns/ExpenseDetailsColumns";
 import useCreatUpdateForm from "@/hooks/useCreateEditFrom";
 import useLoadData from "@/hooks/useLoadData";
 
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import ExpenseForm from "@/features/Expense/components/ExpenseForm";
-import { ExpenseActionColumn } from "@/features/Expense/columns/ExpenseActionColumn";
-import PatientApi from "@/features/patient/api/PatientApi";
-import StaffApi from "@/features/staff/api/StaffApi";
-import LabApi from "@/features/Lab/api/LabApi";
-import ServiceApi from "@/features/service/api/ServiceApi";
+import ExpenseDetailsForm from "@/features/Expense/components/expenseDetails/ExpenseDetailsForm";
+import { ExpenseDetailsActionColumn } from "@/features/Expense/columns/ExpenseDetailsActionColumn";
+
 import { useNavigate } from "react-router-dom";
+import ExpenseApi from "../api/ExpenseApi";
+import StaffApi from "@/features/staff/api/StaffApi";
 
 
-export default function ListExpense() {
+export default function ListExpenseDetails() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
-  const [patients, setPatients] = useState([]);
-  const [doctors, setDoctors] = useState([]);
-  const [labs, setLabs] = useState([]);
-  const [services, setServices] = useState([]);
+  const [expense, setExpense] = useState([]);
+  const [staff, setStaff] = useState([]);
+
   const [lookupLoading, setLookupLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -39,7 +37,7 @@ export default function ListExpense() {
     [filterStatus, fromDate, toDate],
   );
 
-  const [selectedExpense, setSelectedExpense] = useState(null);
+  const [selectedExpenseDetails, setSelectedExpenseDetails] = useState(null);
 
   const messages = {
     create: "مصرف با موفقیت ثبت شد.",
@@ -47,7 +45,7 @@ export default function ListExpense() {
     delete: "مصرف با موفقیت حذف شد.",
   };
 
-  const curd = useCreatUpdateForm(ExpenseApi, messages);
+  const curd = useCreatUpdateForm(ExpenseDetailsApi, messages);
 
   const {
     data,
@@ -60,7 +58,7 @@ export default function ListExpense() {
     setSearch,
     setRefreshKey,
     loading,
-  } = useLoadData(ExpenseApi, {
+  } = useLoadData(ExpenseDetailsApi, {
     filters,
     refreshKey: curd.refreshKey,
   });
@@ -68,18 +66,18 @@ export default function ListExpense() {
   // Columns
   const columns = useMemo(
     () => [
-      ...ExpenseColumns,
+      ...ExpenseDetailsColumns,
 
-      ExpenseActionColumn({
-        onView: (Expense) => {
-          navigate(`/Expense/view/${Expense.id}`);
-          console.log("View:", Expense);
+      ExpenseDetailsActionColumn({
+        onView: (ExpenseDetails) => {
+          navigate(`/Expense/view/${ExpenseDetails.id}`);
+          console.log("View:", ExpenseDetails);
         },
 
-        onEdit: (Expense) => {
-          setSelectedExpense(Expense);
-          console.log("Expense: ", Expense)
-          curd.openEdit(Expense);
+        onEdit: (ExpenseDetails) => {
+          setSelectedExpenseDetails(ExpenseDetails);
+          console.log("ExpenseDetails: ", ExpenseDetails)
+          curd.openEdit(ExpenseDetails);
         },
 
         onDelete: (id) => {
@@ -120,30 +118,28 @@ export default function ListExpense() {
   });
 
   // ==========================================
-  // Load Patients / Doctors / Labs for Select Options
+  // Load expense / staff / Labs for Select Options
   // ==========================================
 
   useEffect(() => {
-    const loadExpensesLookupData = async () =>{
+    const loadExpenseDetailssLookupData = async () =>{
       try{
         setLookupLoading(true);
-        const [patientsData, doctorsData, labsData, servicesData] = await Promise.all([
-          PatientApi.getAll(),
+        const [expenseData, staffData] = await Promise.all([
+          ExpenseApi.getAll(),
           StaffApi.getAll(),
-          LabApi.getAll(),
-          ServiceApi.getAll(),
         ]);
-        setPatients(getArrayData(patientsData));
-        setDoctors(getArrayData(doctorsData));
-        setLabs(getArrayData(labsData));
-        setServices(getArrayData(servicesData));
+        setExpense(getArrayData(expenseData));
+        setStaff(getArrayData(staffData));
+    
       } catch (error) {
-        console.error("Error fetching lookup data:", error);
       } finally {
         setLookupLoading(false);
       }
     };
-    loadExpensesLookupData();
+    loadExpenseDetailssLookupData();
+
+    console.log("ExpenseDetails Lookup Data:", { expense, staff });
   }, []);
 
   const getArrayData = (response) => {
@@ -177,7 +173,7 @@ export default function ListExpense() {
           size="sm"
           variant="add"
           onClick={() => {
-            setSelectedExpense(null);
+            setSelectedExpenseDetails(null);
             curd.openCreate();
           }}
         >
@@ -192,7 +188,7 @@ export default function ListExpense() {
         pageSize={pagination.pageSize}
       />
 
-      <ExpenseForm CURD={curd} patients={patients} doctors={doctors} labs={labs} services={services} />
+      <ExpenseDetailsForm CURD={curd} expense={expense} staff={staff} />
     </div>
   );
 }
