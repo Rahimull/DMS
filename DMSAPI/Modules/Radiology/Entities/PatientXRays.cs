@@ -16,10 +16,8 @@ public class PatientXray : BaseEntity
     public string XrayName { get; set; } = null!;
 
     [Column("xray_type")]
-    public string Xraytype { get; set; } = null!;
+    public string? Xraytype { get; set; }
 
-    [Column("reg_date")]
-    public DateOnly RegDate { get; set; }
 
     [MaxLength(200)]
     [Column("description")]
