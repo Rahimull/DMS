@@ -243,8 +243,8 @@ const Input = ({
 
       {type === "file" && (
         <div
-          className="relative rounded-[5px] border-2 border-dashed border-slate-300 bg-slate-50
-           p-8 text-center transition hover:bg-slate-100"
+          className="relative p-4 rounded-[5px] border-2 border-dashed border-slate-300 bg-slate-50
+            text-center transition hover:bg-slate-100"
         >
           <input
             id={name}

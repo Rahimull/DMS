@@ -6,7 +6,7 @@ export const createCrudApi = (endpoint) => ({
   create: (data) => {
     console.log("Creating data:", data);
     console.log("Is Form data:", data instanceof FormData);
-    Api.post(endpoint, data)
+    return Api.post(endpoint, data)
   },
 
 

@@ -15,9 +15,8 @@ public class PatientXray : BaseEntity
     [Column("xray_name")]
     public string XrayName { get; set; } = null!;
 
-    [Column("xray_type")]
-    public string? Xraytype { get; set; }
-
+    [MaxLength(300)]
+    public string? FilePath { get; set; }
 
     [MaxLength(200)]
     [Column("description")]

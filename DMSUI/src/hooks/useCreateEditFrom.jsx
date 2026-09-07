@@ -42,8 +42,6 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
           }
         });
 
-        console.log("FORM DATA:");
-
         for (let pair of payload.entries()) {
           console.log(pair[0], pair[1]);
         }
@@ -53,22 +51,22 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
 
       notify.success(msg.create);
 
+      console.log("Recored Created on the CreateRecord function")
+
       return true;
     } catch (err) {
-      const message = err?.response?.data?.message || "Create failed";
+        const message = err?.response?.data?.message || "Create failed";
 
         console.log("FULL ERROR:", err);
         console.log("STATUS:", err.response?.status);
         console.log("RESPONSE DATA:", err.response?.data);
 
-      notify.error(message);
+        notify.error(message);
 
-      console.log("❌ ERROR STATUS:", err.response?.status);
-      console.log(
-    "❌ ERROR RESPONSE DATA:",
-    JSON.stringify(err.response?.data, null, 2)
-  );
-    } finally {
+        console.log("❌ ERROR STATUS:", err.response?.status);
+        console.log("❌ ERROR RESPONSE DATA:", JSON.stringify(err.response?.data, null, 2));
+        return false
+      } finally {
       setLoading(false);
     }
   };
@@ -165,21 +163,31 @@ const useCreatUpdateForm = (ApiService, messages = {}, option = {}) => {
       console.log("CREATE MODE");
       success = await createRecord(data);
     }
-    if (success) {
-      closeModal();
-      refresh();
+    if (!success) {
+     return;
     }
+
+    closeModal();
+    refresh();
+
     if(onSuccess){
-      onSuccess();
+      await onSuccess();
     }
   };
 
   const handleDelete = async (id) => {
-    const ok = window.confirm("Are you sure?");
+    const ok = window.confirm("آیا از حذف این اطلاعات مطمئن هستید");
     if (!ok) return;
 
     const success = await deleteRecord(id);
-    if (success) refresh();
+    if (!success) {return;}
+
+    refresh();
+
+    if(onSuccess)
+    {
+      await onSuccess();
+    }
   };
 
   const defaultAction = [

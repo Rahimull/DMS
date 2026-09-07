@@ -1598,6 +1598,10 @@ namespace DMSAPI.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("description");
 
+                    b.Property<string>("FilePath")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
@@ -1610,10 +1614,6 @@ namespace DMSAPI.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT")
                         .HasColumnName("xray_name");
-
-                    b.Property<string>("Xraytype")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("xray_type");
 
                     b.HasKey("Id");
 

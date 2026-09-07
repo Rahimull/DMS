@@ -9,10 +9,10 @@ public class PatientXrayDto
 
     [Required]
     public string XrayName { get; set; } = null!;
-    public string? Xraytype { get; set; }
 
     [MaxLength(200)]
     public string? Description { get; set; }
+    public string? FilePath { get; set; }
     public DateTime CreatedAt { get; set; }
 
 }

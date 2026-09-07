@@ -228,3 +228,5 @@ D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\refint\DMSAPI.dll
 D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\DMSAPI.pdb
 D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\DMSAPI.genruntimeconfig.cache
 D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\ref\DMSAPI.dll
+D:\Dr. Norstani\DMSAPI\bin\Debug\net10.0\DMSAPI.staticwebassets.runtime.json
+D:\Dr. Norstani\DMSAPI\obj\Debug\net10.0\compressed\520njslitb-{0}-7pdqqnz0or-7pdqqnz0or.gz

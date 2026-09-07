@@ -10,10 +10,17 @@ public class RadiologyProfile : Profile
         /* ==========================================================================================
               PatientXray:  CREATE DTO → ENTITY , ENTITY → DTO,   UPDATE DTO → ENTITY
            ============================================================================================= */
-        CreateMap<PatientXrayCreateDto, PatientXray>();
+        CreateMap<PatientXrayCreateDto, PatientXray>()
+            .ForMember(
+                dest => dest.FilePath,
+                opt => opt.Ignore()
+            );
         CreateMap<PatientXrayUpdateDto, PatientXray>()
             .ForMember(
                 dest => dest.Id,
+                opt => opt.Ignore()
+            ).ForMember(
+                dest => dest.FilePath,
                 opt => opt.Ignore()
             );
         CreateMap<PatientXray, PatientXrayDto>()

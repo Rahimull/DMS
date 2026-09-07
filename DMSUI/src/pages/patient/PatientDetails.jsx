@@ -235,7 +235,7 @@ export default function PatientDetails() {
 
       {/* فایل ها و تصاویر */}
 
-      <XrayCard />
+      <XrayCard patient={patient} />
        {/*نسخه ها */}
       <PrescriptionCard />
     </div>

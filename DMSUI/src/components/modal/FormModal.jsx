@@ -15,6 +15,7 @@ const FormModal = ({
   columns,
   children,
 }) => {
+  const formKey = `${open}-${initialValues?.id ?? "new"}`
   return (
     <Modal
       open={open}
@@ -22,6 +23,7 @@ const FormModal = ({
       title={title}
     >
       <Form
+        key={formKey}
         title=""
         description={discription}
         fields={fields}
