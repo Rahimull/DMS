@@ -27,4 +27,28 @@ public class LabCaseController : BaseDtoController<LabCaseDto, LabCaseCreateDto,
                     .Include(x => x.Service);
     }
     #endregion
+
+
+        #region Search
+    protected override IQueryable<LabCase> ApplySearch(IQueryable<LabCase> query, string search)
+    {
+        search = search.Trim().ToLower();
+        if (int.TryParse(search, out var id))
+        {
+            return query.Where(x => 
+                    x.Id == id ||
+                    (x.Material ?? "").Contains(search) ||
+                    (x.CaseStatus ?? "").Contains(search)
+                    
+                );
+        }
+        return query.Where(x => 
+            (x.Material ?? "").Contains(search) ||
+            (x.CaseStatus ?? "").Contains(search)
+        );
+       
+    }
+    #endregion
+
+
 }

@@ -1,3 +1,5 @@
+using AutoMapper;
+using DMS.Modules.Treatments.Dtos;
 using DMS.Modules.Treatments.Entities;
 using DMS.Persistence;
 using DMS.Shared.Controllers;
@@ -7,10 +9,10 @@ using Microsoft.EntityFrameworkCore;
 namespace DMS.Modules.Treatments.Controllers;
 
 [Route("api/[controller]")]
-public class ConditionDetailController : BaseController<ConditionDetail>
+public class ConditionDetailController : BaseDtoController<ConditionDetailsDto,ConditionDetailsCreateDto,ConditionDetailsUpdateDto,ConditionDetail>
 {
-    public ConditionDetailController(DMSContext context)
-        : base(context)
+    public ConditionDetailController(DMSContext context, IMapper mapper)
+        : base(context, mapper)
     {
     }
 

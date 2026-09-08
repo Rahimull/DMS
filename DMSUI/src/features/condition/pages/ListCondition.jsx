@@ -29,9 +29,9 @@ export default function ListCondition() {
   const [selectedCondition, setSelectedCondition] = useState(null);
 
   const messages = {
-    create: "عارضه با موفقیت ثبت شد.",
-    update: "اطلاعات عارضه با موفقیت ویرایش شد.",
-    delete: "عارضه با موفقیت حذف شد.",
+    create: "تشخیص با موفقیت ثبت شد.",
+    update: "اطلاعات تشخیص با موفقیت ویرایش شد.",
+    delete: "تشخیص با موفقیت حذف شد.",
   };
 
   const curd = useCreatUpdateForm(ConditionApi, messages, {useFormData:false});
@@ -106,9 +106,9 @@ export default function ListCondition() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت عارضه</h2>
-
       <DataTableToolbar
+        title="اطلاعات تشخیص"
+        description="مدیریت و مشاهده اطلاعات تشخیص"
         table={table}
         search={search}
         onSearchChange={setSearch}
@@ -120,12 +120,13 @@ export default function ListCondition() {
       >
         <Button
           size="sm"
+          variant="add"
           onClick={() => {
             setSelectedCondition(null);
             curd.openCreate();
           }}
         >
-          ثبت عارضه
+          ثبت تشخیص
           <Plus size={16} />
         </Button>
       </DataTableToolbar>

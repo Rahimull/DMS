@@ -148,4 +148,22 @@ public class PrescriptionController : BaseController<Prescription>
     #endregion
 
 
+        #region Search
+    protected override IQueryable<Prescription> ApplySearch(IQueryable<Prescription> query, string search)
+    {
+        search = search.Trim().ToLower();
+        if (int.TryParse(search, out var id))
+        {
+            return query.Where(x => 
+                    x.Id == id ||
+                    (x.Patient.FirstName ?? "").Contains(search)
+                    
+                );
+        }
+        return query.Where(x => 
+            (x.Patient.FirstName ?? "").Contains(search)
+        );
+       
+    }
+    #endregion
 }

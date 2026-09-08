@@ -29,9 +29,9 @@ export default function ListServiceRequirment() {
   const [selectedServiceRequirment, setSelectedServiceRequirment] = useState(null);
 
   const messages = {
-    create: "خدامات با موفقیت ثبت شد.",
-    update: "اطلاعات خدامات با موفقیت ویرایش شد.",
-    delete: "خدامات با موفقیت حذف شد.",
+    create: "ضروریات خدمات با موفقیت ثبت شد.",
+    update: "اطلاعات ضروریات خدمات با موفقیت ویرایش شد.",
+    delete: "ضروریات خدمات با موفقیت حذف شد.",
   };
 
   const curd = useCreatUpdateForm(ServiceRequirmentApi, messages, {useFormData:false});
@@ -106,9 +106,10 @@ export default function ListServiceRequirment() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت خدامات</h2>
 
       <DataTableToolbar
+        title="اطلاعات ضروریات خدمات"
+        description="مدیریت ضروریات خدمات"
         table={table}
         search={search}
         onSearchChange={setSearch}
@@ -120,12 +121,13 @@ export default function ListServiceRequirment() {
       >
         <Button
           size="sm"
+          variant="add"
           onClick={() => {
             setSelectedServiceRequirment(null);
             curd.openCreate();
           }}
         >
-          ثبت خدامات
+          ثبت ضروریات خدمات
           <Plus size={16} />
         </Button>
       </DataTableToolbar>

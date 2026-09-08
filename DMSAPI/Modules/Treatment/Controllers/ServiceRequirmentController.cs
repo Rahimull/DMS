@@ -12,4 +12,24 @@ public class ServiceRequirmentController : BaseController<ServiceRequirement>
         : base(context)
     {
     }
+
+
+    #region Search
+    protected override IQueryable<ServiceRequirement> ApplySearch(IQueryable<ServiceRequirement> query, string search)
+    {
+        search = search.Trim().ToLower();
+        if (int.TryParse(search, out var id))
+        {
+            return query.Where(x => 
+                    x.Id == id ||
+                    (x.RequirmentName ?? "").Contains(search)
+                    
+                );
+        }
+        return query.Where(x => 
+            (x.RequirmentName ?? "").Contains(search)
+        );
+       
+    }
+    #endregion
 }

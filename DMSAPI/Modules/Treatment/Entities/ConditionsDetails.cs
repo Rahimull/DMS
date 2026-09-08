@@ -24,7 +24,7 @@ public class ConditionDetail : BaseEntity
 
     public int? TreatmentPlanId { get; set; }
 
-    [MaxLength(1000)]
+    [MaxLength(300)]
     [Column("notes")]
     public string? Notes { get; set; }
 

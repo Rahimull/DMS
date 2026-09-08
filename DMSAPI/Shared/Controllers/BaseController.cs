@@ -25,8 +25,6 @@ public abstract class BaseController<TEntity> : ControllerBase
     [HttpPost("paged")]
     public virtual async Task<IActionResult> GetPaged([FromBody] QueryParams query)
     {
-        // IQueryable<TEntity> data = _db.AsNoTracking()
-        //                               .Where(x => !x.IsDeleted);
 
         IQueryable<TEntity> data = IncludeRelations(_db.AsNoTracking().Where(x => !x.IsDeleted));
 

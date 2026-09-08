@@ -12,4 +12,21 @@ public class MedicineSaleController : BaseController<MedicineSale>
         : base(context)
     {
     }
+
+
+        #region Search
+    protected override IQueryable<MedicineSale> ApplySearch(IQueryable<MedicineSale> query, string search)
+    {
+        search = search.Trim().ToLower();
+        if (int.TryParse(search, out var id))
+        {
+            return query.Where(x => 
+                    x.Id == id 
+                    
+                );
+        }
+        return query;
+       
+    }
+    #endregion
 }

@@ -9,12 +9,10 @@ const ConditionDetailApi = {
 
     ...base,
 
-
     getByPatient:(patientId)=>
         Api.get(
           `/ConditionDetail/patient/${patientId}`
         ),
-
 
     getDetails:(patientId)=>
         Api.get(

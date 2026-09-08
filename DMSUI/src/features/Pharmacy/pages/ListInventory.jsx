@@ -32,9 +32,9 @@ export default function ListInventory() {
   const [selectedInventory, setSelectedInventory] = useState(null);
 
   const messages = {
-    create: "خدامات با موفقیت ثبت شد.",
-    update: "اطلاعات خدامات با موفقیت ویرایش شد.",
-    delete: "خدامات با موفقیت حذف شد.",
+    create: "گدام دارو با موفقیت ثبت شد.",
+    update: "اطلاعات گدام دارو با موفقیت ویرایش شد.",
+    delete: "گدام دارو با موفقیت حذف شد.",
   };
 
   const curd = useCreatUpdateForm(InventoryApi, messages, {useFormData:false});
@@ -109,9 +109,9 @@ export default function ListInventory() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت خدامات</h2>
-
       <DataTableToolbar
+        title="اطلاعات گدام دارو"
+        description="مدیریت و مشاهده گدام دارو"
         table={table}
         search={search}
         onSearchChange={setSearch}
@@ -123,12 +123,13 @@ export default function ListInventory() {
       >
         <Button
           size="sm"
+          variant="add"
           onClick={() => {
             setSelectedInventory(null);
             curd.openCreate();
           }}
         >
-          ثبت خدامات
+          ثبت گدام دارو
           <Plus size={16} />
         </Button>
       </DataTableToolbar>

@@ -223,11 +223,11 @@ export default function PatientDetails() {
     
 
       {/* سوابق بیماری با جزییات */}
-      <ConditionCard />
+      <ConditionCard patient={patient} />
 
       {/* خدامات درمانی */}
 
-     <ServicesCard />
+     <ServicesCard patient={patient} />
 
       
 
@@ -236,6 +236,7 @@ export default function PatientDetails() {
       {/* فایل ها و تصاویر */}
 
       <XrayCard patient={patient} />
+      
        {/*نسخه ها */}
       <PrescriptionCard />
     </div>

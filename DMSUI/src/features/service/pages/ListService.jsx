@@ -247,6 +247,7 @@ export default function ListService() {
       >
         <Button
           size="sm"
+          variant="add"
           onClick={handleCreate}
           className="gap-1.5"
         >

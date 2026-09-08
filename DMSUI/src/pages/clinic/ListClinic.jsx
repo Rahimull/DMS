@@ -104,10 +104,10 @@ export default function Listclinic() {
   });
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت کلینیک</h2>
-
+    <div className="space-y-2">
       <DataTableToolbar
+        title=" اطلاعات کلینیک"
+        description="مشاهده و مدریت اطلاعات کلینیک"
         table={table}
         search={search}
         onSearchChange={setSearch}
@@ -119,6 +119,7 @@ export default function Listclinic() {
       >
         <Button
           size="sm"
+          variant="add"
           onClick={() => {
             setSelectedClinic(null);
             curd.openCreate();

@@ -64,14 +64,9 @@ export default function ListPrescription() {
   // ==========================================
 
   const messages = {
-    create:
-      "نسخه با موفقیت ثبت شد.",
-
-    update:
-      "نسخه با موفقیت ویرایش شد.",
-
-    delete:
-      "نسخه با موفقیت حذف شد.",
+    create:"نسخه با موفقیت ثبت شد.",
+    update:"نسخه با موفقیت ویرایش شد.",
+    delete:"نسخه با موفقیت حذف شد.",
   };
 
   // ==========================================
@@ -201,21 +196,15 @@ export default function ListPrescription() {
   // Edit
   // ==========================================
 
-  const handleEdit = (
-    prescription
-  ) => {
-    curd.openEdit(
-      prescription
-    );
+  const handleEdit = (prescription) => {
+    curd.openEdit(prescription);
   };
 
   // ==========================================
   // Delete
   // ==========================================
 
-  const handleDelete = (
-    id
-  ) => {
+  const handleDelete = (id) => {
     curd.handleDelete(id);
   };
 
@@ -224,9 +213,7 @@ export default function ListPrescription() {
   // ==========================================
 
   const handleCreate = () => {
-    curd.openCreate({
-      prescriptionItems: [],
-    });
+    curd.openCreate({prescriptionItems: [],});
   };
 
   // ==========================================
@@ -505,6 +492,8 @@ useEffect(() => {
       ======================================= */}
 
       <DataTableToolbar
+        title="اطلاعات نسخه ها"
+        description="مدیریت و مشاهده نسخه ها"
         table={table}
         search={search}
         onSearchChange={
@@ -526,6 +515,7 @@ useEffect(() => {
       >
         <Button
           size="sm"
+          variant="add"
           onClick={
             handleCreate
           }
@@ -627,15 +617,9 @@ useEffect(() => {
 
       <PrescriptionForm
         CURD={curd}
-        patients={
-          patients
-        }
-        doctors={
-          doctors
-        }
-        medicines={
-          medicines
-        }
+        patients={patients}
+        doctors={doctors}
+        medicines={medicines}
       />
 
       {/* ======================================

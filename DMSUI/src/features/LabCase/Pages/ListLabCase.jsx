@@ -162,6 +162,8 @@ export default function ListLabCase() {
   return (
     <div className="space-y-6">
       <DataTableToolbar
+        title="اطلاعات کیس های لب"
+        description="مدیریت و مشاهده کیس های لب"
         table={table}
         search={search}
         onSearchChange={setSearch}
@@ -173,6 +175,7 @@ export default function ListLabCase() {
       >
         <Button
           size="sm"
+          variant="add"
           onClick={() => {
             setSelectedLabCase(null);
             curd.openCreate();

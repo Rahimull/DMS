@@ -32,9 +32,9 @@ export default function ListPrescriptionItem() {
   const [selectedPrescriptionItem, setSelectedPrescriptionItem] = useState(null);
 
   const messages = {
-    create: "خدامات با موفقیت ثبت شد.",
-    update: "اطلاعات خدامات با موفقیت ویرایش شد.",
-    delete: "خدامات با موفقیت حذف شد.",
+    create: "دارو با موفقیت ثبت شد.",
+    update: "اطلاعات دارو با موفقیت ویرایش شد.",
+    delete: "دارو با موفقیت حذف شد.",
   };
 
   const curd = useCreatUpdateForm(PrescriptionItemApi, messages, {useFormData:false});
@@ -109,9 +109,11 @@ export default function ListPrescriptionItem() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت خدامات</h2>
+      <h2 className="text-3xl font-bold text-slate-800">مدیریت دارو</h2>
 
       <DataTableToolbar
+        title="اطلاعات دارو"
+        description="مدیریت و مشاهده دارو"
         table={table}
         search={search}
         onSearchChange={setSearch}
@@ -123,12 +125,13 @@ export default function ListPrescriptionItem() {
       >
         <Button
           size="sm"
+          variant="add"
           onClick={() => {
             setSelectedPrescriptionItem(null);
             curd.openCreate();
           }}
         >
-          ثبت خدامات
+          ثبت دارو
           <Plus size={16} />
         </Button>
       </DataTableToolbar>

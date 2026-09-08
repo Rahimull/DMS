@@ -106,9 +106,9 @@ export default function ListLab() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-slate-800">مدیریت لب</h2>
-
       <DataTableToolbar
+        title="اطلاعات لب"
+        description="مدریت و مشاهده اطلاعات لب"
         table={table}
         search={search}
         onSearchChange={setSearch}
@@ -120,6 +120,7 @@ export default function ListLab() {
       >
         <Button
           size="sm"
+          variant="add"
           onClick={() => {
             setSelectedLab(null);
             curd.openCreate();

@@ -7,16 +7,28 @@ import {
   Plus,
   Pill,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import PrescriptionApi from "@/features/Pharmacy/api/PerscriptionApi";
 
 
 import usePatientDetails from "../hooks/usePatientDetails";
+import PrescriptionForm from "@/features/Pharmacy/form/PrescirptionForm";
+import PatientApi from "../api/PatientApi";
+import StaffApi from "@/features/staff/api/StaffApi";
+import InventoryApi from "@/features/Pharmacy/api/InventoryApi";
 
 export default function PrescriptionCard() {
   const [openPrescription, setOpenPrescription] =
     useState(false);
+      // ==========================================
+  // Lookup Data
+  // ==========================================
+
+  const [patients, setPatients] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [medicines, setMedicines] =  useState([]);
+  const [lookupLoading, setLookupLoading] = useState(false);
 
   const {
     patient,
@@ -38,18 +50,86 @@ export default function PrescriptionCard() {
     }
   );
 
-  const prescriptions =
-    patient?.prescriptions ?? [];
+    // ==========================================
+  // Create
+  // ==========================================
 
   const handlePrescription = () => {
-    curdPrescription.openCreate({
-      patientId: patient?.id,
-      staffId: null,
-      prescriptionDate:
-        new Date().toISOString(),
-      notes: "",
-      items: [],
-    });
+    curdPrescription.openCreate({prescriptionItems: [],});
+  };
+
+  // const prescriptions = patient?.prescriptions ?? [];
+
+  // const handlePrescription = () => {
+  //   curdPrescription.openCreate({
+  //     patientId: patient?.id,
+  //     staffId: null,
+  //     prescriptionDate:
+  //       new Date().toISOString(),
+  //     notes: "",
+  //     items: [],
+  //   });
+  // };
+
+   // ==========================================
+  // Load Patients / Doctors / Medicines
+  // ==========================================
+
+  useEffect(() => {
+    const loadPrescriptionLookups =
+      async () => {
+        try {
+          setLookupLoading(true);
+
+          const [patientRes, doctorRes, medicineRes] = await Promise.all([
+            PatientApi.getAll(),
+            StaffApi.getAll(),
+            InventoryApi.getAll(),
+          ]);
+
+          const patientData =getArrayData(patientRes);
+          const doctorData =getArrayData(doctorRes);
+          const medicineData =getArrayData(medicineRes);
+          setPatients( patientData);
+          setDoctors( doctorData);
+          setMedicines(medicineData);
+         
+        } catch (error) {
+          console.error("Error loading prescription lookups:",error);
+        } finally {
+          setLookupLoading(false);
+        }
+      };
+
+    loadPrescriptionLookups();
+  }, []);
+
+
+  console.log("Patient:", patients)
+
+
+    // ==========================================
+  // Normalize API Response
+  // ==========================================
+
+  const getArrayData = (response) => {
+    if (Array.isArray(response)) {
+      return response;
+    }
+
+    if (Array.isArray(response?.data)) {
+      return response.data;
+    }
+
+    if (
+      Array.isArray(
+        response?.data?.data
+      )
+    ) {
+      return response.data.data;
+    }
+
+    return [];
   };
 
   return (
@@ -339,9 +419,12 @@ export default function PrescriptionCard() {
         </CardContent>
       </Card>
 
-      {/* <PrescriptionForm
+      <PrescriptionForm
         CURD={curdPrescription}
-      /> */}
+        patients={patients}
+        doctors={doctors}
+        medicines={medicines}
+      />
     </>
   );
 }

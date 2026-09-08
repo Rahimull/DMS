@@ -328,3 +328,165 @@ body {
 }
 
 
+
+
+
+/* برای میسج بعد از هر عملیات */
+
+
+/* ========================================
+   DMS Toast Animations
+======================================== */
+
+@keyframes dms-toast-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(120px) scale(0.85);
+    filter: blur(6px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateX(-8px) scale(1.02);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes dms-toast-icon {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-30deg);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.15) rotate(8deg);
+  }
+
+  80% {
+    transform: scale(0.95) rotate(-3deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes dms-toast-content {
+  0% {
+    opacity: 0;
+    transform: translateX(25px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes dms-toast-accent {
+  0% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+
+  100% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes dms-toast-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes dms-toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* Toast */
+.dms-toast {
+  animation:
+    dms-toast-enter
+    0.65s
+    cubic-bezier(0.16, 1, 0.3, 1)
+    forwards;
+}
+
+/* Icon */
+.dms-toast-icon {
+  animation:
+    dms-toast-icon
+    0.65s
+    cubic-bezier(0.34, 1.56, 0.64, 1)
+    0.08s
+    both;
+}
+
+/* Text */
+.dms-toast-content {
+  animation:
+    dms-toast-content
+    0.45s
+    ease-out
+    0.18s
+    both;
+}
+
+/* Accent */
+.dms-toast-accent {
+  animation:
+    dms-toast-accent
+    0.5s
+    ease-out
+    0.1s
+    both;
+}
+
+/* Dot */
+.dms-toast-dot {
+  animation:
+    dms-toast-dot
+    1.4s
+    ease-in-out
+    0.5s
+    infinite;
+}
+
+/* Progress */
+.dms-toast-progress {
+  transform-origin: right;
+  animation:
+    dms-toast-progress
+    3.5s
+    linear
+    forwards;
+}
+
+/* Close button */
+.dms-toast-close:hover {
+  transform: rotate(8deg);
+}
+
+
